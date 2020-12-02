@@ -1,0 +1,19 @@
+Package: linearsdr
+Type: Package
+Title: Forward and Inverse Linear Sufficient Reduction Methods
+Version: 1.0
+Date: 2020-10-9
+Author: Harris Quach
+Maintainer: Harris Quach <yourfault@somewhere.net>
+Description: Contains methods for OPCG and MADE (and OPG and MAVE), as well as Inverse methods modified from Dr. Bing Li's reference book (2019)
+License: What license is it under?
+Imports: 
+    doParallel,
+    Rcpp (>= 1.0.5),
+    foreach,
+    iterators,
+    parallel,
+    ggplot2,
+    plotly
+LinkingTo: 
+    Rcpp (>= 1.0.5), RcppArmadillo, foreach, parallel, doParallel, ggplot2, plotly
