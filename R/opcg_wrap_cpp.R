@@ -10,6 +10,13 @@
 # that we will replicate
 
 # OPCG-MADE Wrapper ####
+#' This is an internal function called by opcg 
+#' 
+#'
+#'
+#' @keywords internal
+#' @noRd
+#' 
 opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous', 
                       method="newton", parallelize=F, r_mat=NULL, 
                       control_list=list()) {
@@ -243,7 +250,13 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 #           method="newton", parallelize, r_mat, control_list)
 
 ############### OPCG Candidate Matrix #########################
-
+#' This is an internal function called by opcg 
+#' 
+#'
+#'
+#' @keywords internal
+#' @noRd
+#' 
 opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous', 
                     method="newton", parallelize=F, r_mat=NULL, 
                     control_list=list()) {
@@ -273,20 +286,56 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 
 ############### OPCG wrapper #########################
 
+#' Outer Product of Canonical Gradients
+#'
+#' This implements the Outer Product of Canonical Gradients (OPCG) in a forth coming
+#' paper Quach and Li (2021).
+#' 
+#' The kernel for the local linear regression is fixed at a gaussian kernel.
+#' 
+#' For large 'p', we strongly recommend using the Conjugate Gradients implement, 
+#' by setting method="cg".
+#' For method="cg", the hybrid conjugate gradient of Dai and Yuan is implemented,
+#' but only the armijo rule is implemented through backtracking, like in Bertsekas'
+#' "Convex Optimization Algorithms".
+#' A weak Wolfe condition can also be enforced by adding setting c_wolfe > 0 
+#' in the control_list, but since c_wolfe is usually set to 0.1 (Wikipedia)
+#' and this drastically slows down the algorithm relative to newton for small to 
+#' moderate p, we leave the default as not enforcing a Wolfe condition, since we 
+#' assume that our link function gives us a close enough initial point that local
+#' convergence is satisfactory. Should the initial values be suspect, then maybe
+#' enforcing the Wolfe condition is a reasonable trade-off.  
+#' 
+#' @param d specified the reduced dimension 
+#' @param x_matrix a 'pxn' matrix of predictors;
+#' @param y_matrix a 'mxn' matrix response 
+#' @param bw the bandwidth parameter for the kernel; the default kernel is gaussian
+#' @param method "newton" or "cg" methods; for carrying out the optimization using
+#' the standard newton-raphson (i.e. Fisher Scoring) or using Congugate Gradients 
+#' @param parallelize Default is False; to run in parallel, you will need to have
+#' foreach and some parallel backend loaded; parallelization is strongly recommended
+#' and encouraged.
+#' @param control_list a list of control parameters for the Newton-Raphson 
+#' or Conjugate Gradient methods
+#' @param ytype specify the response as 'continuous', 'multinomial', or 'ordinal' 
+#'
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item opcg - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item opcg_wls - A 'pxd' matrix that estimates a basis for the central subspace based 
+#'   on the initial value of the optimization problem; useful for examining bad starting 
+#'   values.
+#'   \item cand_mat - A list that contains both the candidate matrix for OPCG and for
+#'   the initial value; this is used in other functions for order determination
+#'   \item gradients - The estimated local gradients; used in regularization of OPCG
+#'   \item weights - The kernel weights in the local-linear GLM. 
+#' }
+#'  
+#' @export
+#' 
 opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
                  method="newton", parallelize=F,
                  control_list=list()) {
-  
-  #' For method="cg", the hybrid conjugate gradient of Dai and Yuan is implemented,
-  #' but only the armijo rule is implemented through backtracking, like in Bertsekas'
-  #' "Convex Optimization Algorithms".
-  #' A weak Wolfe condition can also be enforced by adding setting c_wolfe > 0 
-  #' in the control_list, but since c_wolfe is usually set to 0.1 (Wikipedia)
-  #' and this drastically slows down the algorithm relative to newton for small to 
-  #' moderate p, we leave the default as not enforcing a Wolfe condition, since we 
-  #' assume that our link function gives us a close enough initial point that local
-  #' convergence is satisfactory. Should the initial values be suspect, then maybe
-  #' enforcing the Wolfe condition is a reasonable trade-off.  
   
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
   cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 

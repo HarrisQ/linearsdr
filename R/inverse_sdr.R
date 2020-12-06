@@ -4,9 +4,25 @@
 #           Sufficient Dimension Reduction with R (Li, 2018)
 ################################################################
 
+# roxygen2::roxygenise("C:/Users/Harri/Dropbox (Personal)/linearsdr")
+# devtools::document("C:/Users/Harri/Dropbox (Personal)/linearsdr/R")
+
 ################################################################
 #                       discretize
 ################################################################
+#' This is an internal function called by sir, save, and dr used for discretizing
+#' continuous responses.
+#' 
+#' Taken from Li (2018).
+#' 
+#'
+#' @param y response 
+#' @param nslices number of slices to generate 
+#'
+#' @return a discrete version of the response y
+#' @keywords internal
+#' @noRd
+#' 
 discretize=function(y,h){
   n=length(y);m=round(n/h)
   y=y+.00001*mean(y)*rnorm(n)
@@ -21,8 +37,39 @@ discretize=function(y,h){
 ################################################################
 #                           SIR
 ################################################################
-
+#' Sliced Inverse Regression
+#'
+#' 
+#' This conducts a sliced inverse regression as in Li (2018) with modifications
+#' to improve speed and to allow for the option of standardizing and regularizing 
+#' 
+#' Standardizing is the default as it is necessary for recovering the properly scaled
+#' central subspace. However, in certain contexts, the standardization is not necessary,
+#' and so we leave this option open to the practitioner. 
+#' 
+#' The L2-regularization option corresponds to the SIR regularization idea 
+#' by Zhang et al.(2005).
+#' 
+#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param y a scalar response
+#' @param nslices specify the number of slices to conduct; 
+#' @param d specify the reduced dimension 
+#' @param ytype specify the response as 'continuous' or 'categorical' 
+#' @param std should the predictors be standardized? Default is 'TRUE'
+#' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
+#' default is '0', i.e. no regularization
+#' 
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item beta - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item cand_mat - The candidate matrix for SIR; this is used in other functions 
+#'   for order determination.
+#' }
+#'  
+#' @export
+#' 
 sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
+  
   p=ncol(x);n=nrow(x)
   if (std) {
     signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
@@ -51,7 +98,40 @@ sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
 ################################################################
 #                          save
 ################################################################
+#' Sliced Average Variance Estimation
+#' 
+#' 
+#' This conducts a sliced average variance estimation (SAVE) as in Li (2018) with modifications
+#' to improve speed and to allow for the option of standardizing and regularizing 
+#' 
+#' Standardizing is the default as it is necessary for recovering the properly scaled
+#' central subspace. However, in certain contexts, the standardization is not necessary,
+#' and so we leave this option open to the practitioner. 
+#' 
+#' The L2-regularization option corresponds to the SIR regularization idea 
+#' by Zhang et al.(2005). While they do not apply the idea to SAVE, we find that the 
+#' context is analogous and that such a regularization works. 
+#' 
+#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param y a scalar response
+#' @param nslices specify the number of slices to conduct; 
+#' @param d specify the reduced dimension 
+#' @param ytype specify the response as 'continuous' or 'categorical' 
+#' @param std should the predictors be standardized? Default is 'TRUE'
+#' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
+#' default is '0', i.e. no regularization
+#' 
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item beta - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item cand_mat - The candidate matrix for SAVE; this is used in other functions 
+#'   for order determination.
+#' }
+#' 
+#' @export
+#' 
 save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
+  
   p=ncol(x);n=nrow(x)
   if (std) {
     signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
@@ -83,8 +163,38 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
 ################################################################
 #                                 dr 
 ################################################################
-# x=Reduce('rbind', y.R.0); y=Reduce('c', phi.R.0)
-# x=t(X_std);y=Y;nslices=m;d=d ;ytype="categorical"; std=F; lambda = 7
+#' Directional Regression
+#' 
+#' 
+#' This conducts directional regression (DR) as in Li (2018) with modifications
+#' to improve speed and to allow for the option of standardizing and regularizing 
+#' 
+#' Standardizing is the default as it is necessary for recovering the properly scaled
+#' central subspace. However, in certain contexts, the standardization is not necessary,
+#' and so we leave this option open to the practitioner. 
+#' 
+#' The L2-regularization option corresponds to the SIR regularization idea 
+#' by Zhang et al.(2005). While they do not apply the idea to SAVE, we find that the 
+#' context is analogous and that such a regularization works. 
+#' 
+#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param y a scalar response
+#' @param nslices specify the number of slices to conduct; 
+#' @param d specify the reduced dimension 
+#' @param ytype specify the response as 'continuous' or 'categorical' 
+#' @param std should the predictors be standardized? Default is 'TRUE'
+#' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
+#' default is '0', i.e. no regularization
+#' 
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item beta - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item cand_mat - The candidate matrix for DR; this is used in other functions 
+#'   for order determination.
+#' }
+#' 
+#' @export
+#' 
 dr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   p=ncol(x);n=nrow(x)
   if (std) {
@@ -97,20 +207,6 @@ dr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   if(ytype=="continuous") ydis=discretize(y,nslices)
   if(ytype=="categorical") ydis=y
   ylabel=unique(ydis)
-  # prob=numeric() 
-  # for(i in 1:nslices) prob=c(prob,length(ydis[ydis==ylabel[i]])/n)
-  # vxy = array(0,c(p,p,nslices)); 
-  #* vxy Cannot be done for very large data
-  #* eg. p=10000, n=1350
-  #* rather than making a cube, maybe 
-  #* make a list instead (still gets too large)
-  #* or create and overwrite vxy as needed
-  # vxy=list()
-  # exy=numeric()
-  # for(i in 1:nslices) { # at i=19, vxy is already too large.
-  #   # vxy[[i]] = var(xst[ydis==ylabel[i],])
-  #   # vxy[,,i]=var(xst[ydis==ylabel[i],])
-  #   exy=rbind(exy,apply(xst[ydis==ylabel[i],],2,mean))}  # This is fine; just a matrix
   mat1 = matrix(0,p,p);mat2 = matrix(0,p,p); 
   for(i in 1:nslices){ #var(xst[ydis==ylabel[i],])
     prb_i = length(ydis[ydis==ylabel[i]])/n;
@@ -118,11 +214,7 @@ dr=function(x,y,nslices,d,ytype,std=T,lambda=0){
     exy_i = apply(xst[ydis==ylabel[i],],2,mean) ;
     
     mat1 = mat1+prb_i*( vxy_i+exy_i%*%t( exy_i ))%*% ( vxy_i+ exy_i %*%t( exy_i ))
-    mat2 = mat2+prb_i*exy_i%*%t( exy_i)
-    
-    # mat1 = mat1+prob[i]*(vxy[,,i]+exy[i,]%*%t(exy[i,]))%*%
-    #   (vxy[,,i]+exy[i,]%*%t(exy[i,]))
-    # mat2 = mat2+prob[i]*exy[i,]%*%t(exy[i,])
+    mat2 = mat2+prb_i*exy_i%*%t( exy_i) 
   }
   drmat = 2*mat1+2*mat2%*%mat2+2*sum(diag(mat2))*mat2-2*diag(p)
   

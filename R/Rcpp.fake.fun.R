@@ -1,4 +1,0 @@
-Rcpp.fake.fun <-
-function () 
-{
-}

@@ -1,10 +1,21 @@
 #######################################################################
 #           Boxcox transformation to multivariate normality
+#                             Modified from 
+#           Sufficient Dimension Reduction with R (Li, 2018)
 #######################################################################
+
+# Not ready for use
 
 #######################################################################
 #                  function 1: evaluate likelihood
 #######################################################################
+
+
+#'
+#' @keywords internal
+#' @noRd
+#' 
+#' 
 likelihood = function(x,lam,eps, xmar, paralleize=F){ 
   n=dim(x)[1]; 
   # xmar=standmar(x,eps); # moved to a higher level to avoid redundancy
@@ -34,6 +45,10 @@ likelihood = function(x,lam,eps, xmar, paralleize=F){
 #                              treating each row as a random vector
 #                              in an iid sample
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 standmat = function(x){
   mu = colMeans(x) 
   signrt = matpower_cpp(var(x),-1/2)
@@ -46,6 +61,10 @@ standmat = function(x){
 #                              in an iid sample, and then transform 
 #                              it to be positive
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 standmar = function(x,eps){
   mu = colMeans(x)
   # sig = diag(diag(var(x)))
@@ -57,6 +76,10 @@ standmar = function(x,eps){
 #######################################################################
 #                  function 4: standardize a vector
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 standvec = function(x) (x - mean(x))/sd(x); 
 
 #######################################################################
@@ -65,6 +88,10 @@ standvec = function(x) (x - mean(x))/sd(x);
 #                              lam is box cox parameter
 #                              eps is distance above 0
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 bocotranvec = function(x,lam,eps){
   n = length(x)
   x1 = standvec(x)
@@ -80,6 +107,10 @@ bocotranvec = function(x,lam,eps){
 #                              lam is p vector
 #                              eps is 0.5 say
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 bocotranmat = function(x,lam,eps){
   n = dim(x)[1]
   p = dim(x)[2]
@@ -89,10 +120,18 @@ bocotranmat = function(x,lam,eps){
 #######################################################################
 #                  function 7: find maximizer
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 argmax = function(x,y) x[ order(y)[length(x)] ]; 
 #######################################################################
 #       function 8: maximizing over one lambda in gauss seidel
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 gaussonestep=function(x,lam,eps,ilam,mlam, xmar, lam_bd, parallelize){
 # ilam <- 1
 # Stand the Margins here to avoid doing it mlam times
@@ -110,6 +149,10 @@ gaussonestep=function(x,lam,eps,ilam,mlam, xmar, lam_bd, parallelize){
 #######################################################################
 #                function 9:  gauss seidel iterations
 #######################################################################
+#'
+#' @keywords internal
+#' @noRd
+#' 
 gauss=function(x,lam,eps,mlam,lam_bd = 2, n_iter=5, parallelize=F){
   # x; lam=rep(1,p); eps=.5; mlam=20; lam.bd = 2; n.iter=5; mc=FALSE
   # p = length(lam); lam=rep(1,p);

@@ -13,6 +13,13 @@ tuning_km=function(x_datta, n_hlist, edr_list, centers, iter.max=100, nstart = 5
   return(Reduce('c', tune_km))
 }
 
+#' This is an internal function called by opcg 
+#' 
+#'
+#'
+#' @keywords internal
+#' @noRd
+#' 
 tuning_skm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
                        iter.max = 100, nstart = 100) {
   # x=X_tune; y=Y_tune; d=km_d; n_classes=m; n_cpc=1; n_hlist=length(h_list);
@@ -81,7 +88,13 @@ tuning_skm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
 }
 
 # ### Weighted Supervised km tuning
-
+#' This is an internal function called by opcg 
+#' 
+#'
+#'
+#' @keywords internal
+#' @noRd
+#' 
 tuning_skmkm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
                          iter.max = 100, nstart = 100) {
   # x=X_tune; y=Y_tune; d=km_d; n_classes=m; n_cpc=1; n_hlist=length(h_list);
@@ -134,7 +147,58 @@ tuning_skmkm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
 ############################################################################
 ###                       K-fold K-Means Tuning
 ############################################################################
-
+#' K-fold Tuning with K-means
+#'
+#' This implements the tuning procedure for SDR and classification problems 
+#' in the forth coming paper Quach and Li (2021).
+#' 
+#' The kernel for the local linear regression is fixed at a gaussian kernel.
+#' 
+#' For large 'p', we strongly recommend using the Conjugate Gradients implement, 
+#' by setting method="cg".
+#' For method="cg", the hybrid conjugate gradient of Dai and Yuan is implemented,
+#' but only the armijo rule is implemented through backtracking, like in Bertsekas'
+#' "Convex Optimization Algorithms".
+#' A weak Wolfe condition can also be enforced by adding setting c_wolfe > 0 
+#' in the control_list, but since c_wolfe is usually set to 0.1 (Wikipedia)
+#' and this drastically slows down the algorithm relative to newton for small to 
+#' moderate p, we leave the default as not enforcing a Wolfe condition, since we 
+#' assume that our link function gives us a close enough initial point that local
+#' convergence is satisfactory. Should the initial values be suspect, then maybe
+#' enforcing the Wolfe condition is a reasonable trade-off.  
+#' 
+#' @param d specified the reduced dimension 
+#' @param method "newton" or "cg" methods; for carrying out the optimization using
+#' the standard newton-raphson (i.e. Fisher Scoring) or using Congugate Gradients 
+#' @param parallelize Default is False; to run in parallel, you will need to have
+#' foreach and some parallel backend loaded; parallelization is strongly recommended
+#' and encouraged.
+#' @param control_list a list of control parameters for the Newton-Raphson 
+#' or Conjugate Gradient methods
+#' @param ytype specify the response as 'continuous', 'multinomial', or 'ordinal' 
+#' @param h_list 
+#' @param k 
+#' @param x_datta 
+#' @param y_datta 
+#' @param class_labels 
+#' @param n_cpc 
+#' @param iter.max 
+#' @param nstart 
+#'
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item opcg - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item opcg_wls - A 'pxd' matrix that estimates a basis for the central subspace based 
+#'   on the initial value of the optimization problem; useful for examining bad starting 
+#'   values.
+#'   \item cand_mat - A list that contains both the candidate matrix for OPCG and for
+#'   the initial value; this is used in other functions for order determination
+#'   \item gradients - The estimated local gradients; used in regularization of OPCG
+#'   \item weights - The kernel weights in the local-linear GLM. 
+#' }
+#'  
+#' @export
+#' 
 kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
                          class_labels, n_cpc, method="newton", parallelize = F,
                          control_list=list(),
