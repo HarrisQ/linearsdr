@@ -317,6 +317,16 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 #' and encouraged.
 #' @param control_list a list of control parameters for the Newton-Raphson 
 #' or Conjugate Gradient methods
+#' \itemize{
+#'   \item opcg - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item opcg_wls - A 'pxd' matrix that estimates a basis for the central subspace based 
+#'   on the initial value of the optimization problem; useful for examining bad starting 
+#'   values.
+#'   \item cand_mat - A list that contains both the candidate matrix for OPCG and for
+#'   the initial value; this is used in other functions for order determination
+#'   \item gradients - The estimated local gradients; used in regularization of OPCG
+#'   \item weights - The kernel weights in the local-linear GLM. 
+#' }
 #' @param ytype specify the response as 'continuous', 'multinomial', or 'ordinal' 
 #'
 #' @return A list containing both the estimate and candidate matrix.
