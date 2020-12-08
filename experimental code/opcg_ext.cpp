@@ -9,8 +9,8 @@ using namespace arma;
  * An OPCG-oriented alternative to MAVE/MADE
  */
 
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export]]
+// // [[Rcpp::depends(RcppArmadillo)]]
+// // [[Rcpp::export]]
 Rcpp::List rade(Rcpp::List grad_list,  
                 arma::mat init_est,
                 arma::mat sigma_mat,

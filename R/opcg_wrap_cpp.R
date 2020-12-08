@@ -358,9 +358,11 @@ opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
   wls_sdr=eigen_cpp(cand_mat$wls_mat)$vec[,1:d]
   
   return( list( opcg=opcg_sdr,  
-                opcg_wls=wls_sdr,
+                # opcg_wls=wls_sdr,
                 cand_mat=cand_mat,
-                gradients=cand_mat$gradients,
-                weights=cand_mat$weights)  ) 
+                # ,
+                gradients=cand_mat$gradients#,
+                # weights=cand_mat$weights
+                )  ) 
 }
 
