@@ -8,12 +8,6 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
                         show_legend=T, 
                         y_colors=NULL, y_symbols=NULL 
                         ) {
-
-  #' Produces ggplot objects for a one dimensional response and up to 2 
-  #' sufficient predictors. 
-  #' 
-  #' 
-  #' 
   
   # y_datta=Y_test; x_datta=t( B_hat_list[[type]] )%*%(X_test);
   # y_on_axis=F; ytype="multinomial";

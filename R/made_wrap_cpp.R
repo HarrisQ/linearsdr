@@ -11,9 +11,6 @@
 
 # source("opcg_wrap_cpp.R")
 
-# OPCG-MADE Wrapper ####
-
-
 ############################## MADE wrappers ##################################
 
 
