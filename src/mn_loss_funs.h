@@ -1,5 +1,5 @@
-#ifndef lossfuns_H    
-#define lossfuns_H
+#ifndef mn_loss_funs_H    
+#define mn_loss_funs_H
 
 using namespace Rcpp;
 using namespace arma;
@@ -7,31 +7,7 @@ using namespace arma;
 // ##################################################################
 // ############## Loss Functions for OPCG and MADE ##################
 // ##################################################################
-
-// #######################################################################
-// #                MADE for Continuous Response (i.e. MAVE)    
-// #######################################################################
-
-arma::mat nm_loss_j_made(arma::vec c, 
-                         arma::mat xj, 
-                         arma::mat y_matrix, 
-                         arma::vec wj, 
-                         arma::vec ahat,
-                         arma::mat Dhat);
-
-arma::mat nm_score_j_made(arma::vec c, 
-                          arma::mat xj, 
-                          arma::mat y_matrix, 
-                          arma::vec wj, 
-                          arma::vec ahat,
-                          arma::mat Dhat);
-
-arma::mat nm_info_j_made(arma::vec c, 
-                         arma::mat xj, 
-                         arma::mat y_matrix, 
-                         arma::vec wj, 
-                         arma::vec ahat,
-                         arma::mat Dhat);
+ 
 // #######################################################################
 // #                  Empirical Logit and Culmit Transforms
 // #######################################################################
@@ -101,7 +77,18 @@ arma::mat mn_info_j(arma::vec c,
                     arma::vec k);  
 
 
-// ################## Loss functions for MADE #################
+// ################## Loss functions for MADE ################# 
+
+arma::mat mn_loss_made(arma::vec c, 
+                       arma::mat x_matrix, 
+                       arma::mat y_matrix, 
+                       double bw,
+                       Rcpp::List ahat_list,
+                       Rcpp::List Dhat_list,
+                       Rcpp::String link, 
+                       arma::vec k,
+                       arma::mat r_mat); 
+  
 arma::mat mn_loss_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
@@ -111,6 +98,17 @@ arma::mat mn_loss_j_made(arma::vec c,
                          Rcpp::String link, 
                          arma::vec k);
 
+ 
+arma::mat mn_score_made(arma::vec c, 
+                        arma::mat x_matrix, 
+                        arma::mat y_matrix, 
+                        double bw,
+                        Rcpp::List ahat_list,
+                        Rcpp::List Dhat_list,
+                        Rcpp::String link, 
+                        arma::vec k,
+                        arma::mat r_mat);
+  
 arma::mat mn_score_j_made(arma::vec c, 
                           arma::mat xj, 
                           arma::mat y_matrix, 

@@ -101,7 +101,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     
     m_classes=as.numeric(levels(as.factor(y_matrix)));
     m=length(m_classes); 
-    mv_Y = mnY_to_mvY( y_matrix, m_classes, ytype);
+    mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
     if (ytype=="multinomial" ) { 
       linktype="expit";
       
@@ -109,7 +109,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
       
       # Empirical Logit Transform of the response
-      link_mv_y=emp_logit( mv_Y, k_vec, tune=0.05 ) ;
+      link_mv_y=linearsdr:::emp_logit( mv_Y, k_vec, tune=0.05 ) ;
       
       
     } else if (ytype=="ordinal" ) {
@@ -119,7 +119,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
       
       # Empirical Culmit Transform of the reponse
-      link_mv_y=emp_culmit( mv_Y, k_vec, tune=0.05 );
+      link_mv_y=linearsdr:::emp_culmit( mv_Y, k_vec, tune=0.05 );
       
     }
     
@@ -142,7 +142,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     aD_j = function(j, test=F) {
       
       # centering data at obs j 
-      Xj = matcenter_cpp(x_matrix, index=j,x0=NULL); #(x_matrix - x_matrix[,j])
+      Xj = linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL); #(x_matrix - x_matrix[,j])
       B_Xj=t(B)%*%Xj;
       Vj=rbind(rep(1,n), B_Xj);
       
@@ -151,16 +151,16 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
         # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
         # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
         # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
-        Wj=gauss_kern_cpp(Xj,bw)
+        Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
       } else { 
         rXj = t(r_mat)%*%Xj; 
-        Wj=gauss_kern_cpp(rXj,bw)
+        Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
       }
       
       # Initial Value
       # WLS gives a (d+1)x(m-1) matrix; 
       # We want its transpose, a (m-1)x(d+1) matrix wls_reg
-      c_j_ls=as.vector(t(wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
+      c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
 
       # c_j_0=as.vector(t(wls_cpp(Vj,logit_Y,Wj)));
       
@@ -173,7 +173,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (method=="cg") { 
         # Run Conjugate Gradients
-        c_j_1=aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
+        c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter, 
                                         init_stepsize=init_stepsize,
@@ -185,7 +185,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                       test);
       } else if (method=="newton") {
         # Run Newton-Raphson
-        c_j_1=aD_j_newton(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec, 
+        c_j_1=linearsdr:::aD_j_newton(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec, 
                           tol_val,max_iter, test);
       }
       

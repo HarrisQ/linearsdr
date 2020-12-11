@@ -39,6 +39,10 @@
 #'   \item gradients - The estimated local gradients; used in regularization of OPCG
 #'   \item weights - The kernel weights in the local-linear GLM. 
 #' }
+#' @param bw2 Default is NULL; NULL refers to not using refined weights in the MADE step
+#' If bw2 is a scalar, then refined weights is used with bandwidth bw2
+#' @param init_mat Default is NULL; refers to the initial matrix in the MADE step. NULL
+#' means that the OPCG estimate is used as the initial value; 
 #'
 #' @return
 #' 
@@ -46,7 +50,7 @@
 #'
 #' @examples
 #' 
-rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous', 
+rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='continuous', 
                method="newton", parallelize=F, 
                l2_pen=0, l1_pen=0, control_list=list() ){
   
@@ -69,10 +73,19 @@ rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous',
   # l2_pen=0; l1_pen=1;
   
   opcg_obj=opcg(x_matrix, y_matrix, d, bw, ytype, method, parallelize, control_list)
-  b_hat_opcg=opcg_obj$opcg
-  opcg_grad=opcg_obj$gradients
-  made_grad=opcg_made(x_matrix, y_matrix, bw, B_mat=b_hat_opcg, ytype, method, 
-                      parallelize, r_mat=b_hat_opcg, control_list)$Dhat;
+  b_hat_opcg=opcg_obj$opcg;
+  opcg_grad=opcg_obj$gradients;
+  
+  if (is.null(init_mat) ) init_mat=b_hat_opcg;
+  
+  if (is.null(bw2)) { #diag(1, p, d)
+    made_grad=opcg_made(x_matrix, y_matrix, bw, B_mat=init_mat, ytype, method, 
+                        parallelize, r_mat=NULL, control_list)$Dhat;
+  } else {
+    made_grad=opcg_made(x_matrix, y_matrix, bw2, B_mat=init_mat, ytype, method, 
+                        parallelize, r_mat=b_hat_opcg, control_list)$Dhat;
+  }
+  
   
   # made_grad_kp = lapply(1:n, function(j) kronecker( t(made_grad[[j]]), diag(1,p,p) ));
   # made_grad_tkp = lapply(1:n, function(j) t(made_grad_kp[[j]]) );
@@ -88,7 +101,7 @@ rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous',
   
   # LASSO update for Gamma
   
-  if(l1_pen != 0){
+  if(l1_pen[1] != 0){
     # i=1
     vvt0=list_sum(made_grad,made_grad);
     Gamma_hat=t(solve_cpp(vvt0, list_sum(made_grad, opcg_grad) ) )
@@ -104,20 +117,32 @@ rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous',
         # print(pen_obj)
         # pen_obj$lambda
         cv_obj=glmnet::cv.glmnet(x_star[[i]], y_star[[i]], intercept=F, 
-                                 family="gaussian", alpha=1)
+                                 family="gaussian", alpha=1, standardize = F)
         # coef(pen_obj, s=cv_obj$lambda.min)
         # pen_obj$beta
         gamma_hat_l0_i=as.vector(glmnet::glmnet(x_star[[i]], y_star[[i]], intercept=F, 
                                                 family="gaussian", 
-                                        alpha=1, lambda=cv_obj$lambda.min)$beta)
+                                        alpha=1, lambda=cv_obj$lambda.min,
+                                        standardize = F)$beta)
         return(gamma_hat_l0_i);
       }
       Gamma_hat = matrix(Gamma_hat_l0, p, d);
     } else if (l1_pen[1] > 0) {
       Gamma_hat_l0=foreach(i=1:p, .combine = 'rbind', .packages =  "glmnet" ) %dopar% {
         # i=1
-        gamma_hat_l0_i=as.vector(glmnet::glmnet(x_star[[i]], y_star[[i]], intercept=F,
-                                        family="gaussian", alpha=1, lambda = l1_pen)$beta)
+        # gamma_hat_l0_i=as.vector(glmnet::glmnet(x_star[[i]], y_star[[i]], intercept=F,
+        #                                 family="gaussian", alpha=1, lambda = l1_pen,
+        #                                 standardize = F)$beta)
+        cv_obj=glmnet::cv.glmnet(x_star[[i]], y_star[[i]], intercept=F, 
+                                 family="gaussian", alpha=1, lambda = l1_pen,
+                                 standardize = F)
+        # coef(pen_obj, s=cv_obj$lambda.min)
+        # pen_obj$beta
+        gamma_hat_l0_i=as.vector(glmnet::glmnet(x_star[[i]], y_star[[i]], intercept=F, 
+                                                family="gaussian", 
+                                                alpha=1, lambda=cv_obj$lambda.min,
+                                                standardize = F)$beta)
+        
         return(gamma_hat_l0_i);
       }
       Gamma_hat = Gamma_hat_l0;
@@ -125,7 +150,7 @@ rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous',
     
   } else if (l1_pen==0 & l2_pen < 0) { # Just L2 penalty, using glmnet
     # made_grad_kp = lapply(1:n, function(j) kronecker( t(made_grad[[j]]), diag(1,p,p) ));
-    x_star = lapply(1:p, function(i) kronecker( t(made_grad[[j]]), diag(1,p,p) ) )
+    x_star = lapply(1:p, function(i) kronecker( t(made_grad[[i]]), diag(1,p,p) ) )
     y_star = lapply(1:p, function(i) c( opcg_grad[[i]] ) )  
     
     Gamma_hat_l1=foreach(i=1:p, .combine='rbind', .packages =  "glmnet" ) %dopar% {
@@ -134,12 +159,13 @@ rade<-function(x_matrix, y_matrix, d, bw, ytype='continuous',
       # print(pen_obj)
       # pen_obj$lambda
       cv_obj=glmnet::cv.glmnet(x_star[[i]], y_star[[i]], intercept=F, 
-                               family="gaussian", alpha=0)
+                               family="gaussian", alpha=0, standardize = F)
       # coef(pen_obj, s=cv_obj$lambda.min)
       # pen_obj$beta
       gamma_hat_l0_i=as.vector(glmnet::glmnet(x_star[[i]], y_star[[i]], intercept=F, 
                                               family="gaussian", 
-                                              alpha=1, lambda=cv_obj$lambda.min)$beta)
+                                              alpha=0, lambda=cv_obj$lambda.min,
+                                              standardize = F)$beta)
       return(gamma_hat_l0_i);
     }
     Gamma_hat = matrix(Gamma_hat_l1, p, d);

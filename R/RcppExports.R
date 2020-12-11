@@ -65,6 +65,10 @@ nm_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
     .Call(`_linearsdr_nm_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
 
+nm_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
+    .Call(`_linearsdr_nm_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
+}
+
 nm_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
     .Call(`_linearsdr_nm_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
@@ -105,24 +109,20 @@ mn_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
     .Call(`_linearsdr_mn_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
 }
 
+mn_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat) {
+    .Call(`_linearsdr_mn_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
+}
+
 mn_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
     .Call(`_linearsdr_mn_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
 }
 
+mn_score_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat) {
+    .Call(`_linearsdr_mn_score_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
+}
+
 mn_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
     .Call(`_linearsdr_mn_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
-}
-
-rade <- function(grad_list, init_est, sigma_mat, l2_pen, control_list) {
-    .Call(`_linearsdr_rade`, grad_list, init_est, sigma_mat, l2_pen, control_list)
-}
-
-nm_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
-    .Call(`_linearsdr_nm_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
-}
-
-mn_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat) {
-    .Call(`_linearsdr_mn_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
 }
 
 list_mean <- function(est_list) {
@@ -139,6 +139,10 @@ vecB_hat <- function(c0, score_list, info_list) {
 
 aD_j_cg <- function(init, vj, y_datta, wj, link, k, control_list, test) {
     .Call(`_linearsdr_aD_j_cg`, init, vj, y_datta, wj, link, k, control_list, test)
+}
+
+vecB_cg <- function(init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test) {
+    .Call(`_linearsdr_vecB_cg`, init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test)
 }
 
 rcpparma_hello_world <- function() {
