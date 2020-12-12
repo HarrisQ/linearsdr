@@ -341,44 +341,6 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   if (is.null(B_mat)) B_mat= diag(1,p,d);
   if (is.null(r_mat)) r_mat= diag(1,p,p);
   
-  # Setting up the response ----
-  if (ytype=='continuous'){
-    # y_matrix should be m x n, m can be >= 1
-    # This is just OPG, with the WLS as the exact solution per j
-    mv_Y=y_matrix; m=dim(y_matrix)[1];
-    
-    # # Loss function
-    # loss_made = function(c_param){ 
-    #   mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
-    #                link=linktype, k=k_vec, r_mat)
-    # } # End of Loss function
-    # loss_made(c_init)
-    
-    
-  } else if (ytype %in% c( "multinomial", "ordinal")) {
-    # y.matrix should be 1 x n
-    
-    m_classes=as.numeric(levels(as.factor(y_matrix)));
-    m=length(m_classes);
-    mv_Y = mnY_to_mvY( y_matrix, m_classes, ytype);
-    
-    # Don't need Empirical Link Transforms for MADE block step
-    if (ytype=="multinomial" ) {
-      linktype="expit";
-      k_vec = colSums(mv_Y);
-      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
-      
-    } else if (ytype=="ordinal" ) {
-      linktype="culmit";
-      k_vec = as.vector(y_matrix);
-      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
-    }
-    
-    
-    # loss_made(c_init)
-    
-  } # end of setting up response
-  
   # Block step for aD parameter
   aDhat=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
                   method, parallelize, r_mat=NULL,
