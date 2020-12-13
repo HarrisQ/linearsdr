@@ -208,6 +208,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
     c_ag=if ( "c_ag" %in% control_names ) control_args$c_ag else 10e-4;
     c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; # 0.1 wiki-recom 
+    eps_wolfe=if ( "eps_wolfe" %in% control_names ) control_args$eps_wolfe else 0.01; # 0.1 wiki-recom 
     max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100; 
     # l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
     
@@ -223,6 +224,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                                      beta_bt=beta_bt,
                                      c_ag=c_ag,
                                      c_wolfe=c_wolfe,
+                                     eps_wolfe=eps_wolfe,
                                      max_iter_line=max_iter_line),
                    test) 
   } # End of CG   

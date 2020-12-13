@@ -213,8 +213,8 @@ arma::vec aD_j_cg(arma::vec init,
   // inital step size s_k that will be adjusted by backtracking 
   arma::vec s=control_list["init_stepsize"]; 
   double beta_bt=control_list["beta_bt"]; //backtracking beta
-  double c_ag=control_list["c_ag"]; //parameter for Armijo condition
-  double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition
+  double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   int max_iter_line=control_list["max_iter_line"];
   //int l2_pen=control_list["l2_pen"]; //penalty parameter for ridge regression
   
@@ -264,7 +264,7 @@ arma::vec aD_j_cg(arma::vec init,
         double curv_wolfe;
         curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,link,k) );
         
-        wolfe_cond =+ (curv_wolfe <= wolfe_bound);
+        wolfe_cond =+ (curv_wolfe >= wolfe_bound);
       }  
       
       
@@ -376,8 +376,9 @@ arma::vec vecB_cg(arma::vec init,
   // inital step size s_k that will be adjusted by backtracking
   arma::vec s=control_list["init_stepsize"];
   double beta_bt=control_list["beta_bt"]; //backtracking beta
-  double c_ag=control_list["c_ag"]; //parameter for Armijo condition
-  double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition
+  double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
+  double eps_wolfe=control_list["eps_wolfe"]; // eps parameter in Dai-Kou improved line search
   int max_iter_line=control_list["max_iter_line"]; 
   
   // Step 0: Set the initial value, and compute the loss and score
@@ -400,10 +401,20 @@ arma::vec vecB_cg(arma::vec init,
     int m_cg;
     for (m_cg = 1; m_cg < max_iter_line; m_cg++ ) {
 
-      // the Armijo rule
-      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
-                                      (p_now.t()*grad_now));
+      // // the Armijo rule
+      // double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+      //                                 (p_now.t()*grad_now));
       
+      // for the improved Wolfe line search of Dai-Kou (2013)
+      // But still uses the backtracking step-size selection.
+      double armijo_bound1 = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+                                       (p_now.t()*grad_now)) + pow(iter+1,-2);
+      double armijo_bound2 = as_scalar(eps_wolfe*abs(p_now.t()*grad_now));
+      
+      arma::vec armijo_improved(2);  
+      armijo_improved(0)=armijo_bound1; armijo_improved(1)=armijo_bound2;
+      double armijo_bound_imp = min(armijo_improved);  
+        
       // evaluation for armijo condition
       arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
       double suff_dec_ag;
@@ -411,7 +422,7 @@ arma::vec vecB_cg(arma::vec init,
         mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
           mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
 
-      int armijo_cond = (suff_dec_ag >= armijo_bound);
+      int armijo_cond = (suff_dec_ag >= armijo_bound_imp);
 
       int wolfe_cond=0;
       if (c_wolfe > 0) {
@@ -424,7 +435,7 @@ arma::vec vecB_cg(arma::vec init,
           p_now.t()*mn_score_made(c_search,x_datta,y_datta,
                   bw,ahat_list, Dhat_list,link,k,r_mat) );
 
-        wolfe_cond =+ (curv_wolfe <= wolfe_bound);
+        wolfe_cond =+ (curv_wolfe >= wolfe_bound);
       }
 
 
