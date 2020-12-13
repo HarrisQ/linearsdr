@@ -242,6 +242,10 @@ arma::vec aD_j_cg(arma::vec init,
     for (m_cg = 1; m_cg < max_iter_line; m_cg++ ) {
       
       // the Armijo rule
+      // the computational effort is not just dependent on the m_cg search
+      // it also depends on the step-size; large s_now means the m_cg will have
+      // to search farther.
+      // So we would like to have the smallest s_now to allow for fastest m_cg find. 
       double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
@@ -401,7 +405,11 @@ arma::vec vecB_cg(arma::vec init,
     int m_cg;
     for (m_cg = 1; m_cg < max_iter_line; m_cg++ ) {
 
-      // // the Armijo rule
+      // the Armijo rule
+      // the computational effort is not just dependent on the m_cg search
+      // it also depends on the step-size; large s_now means the m_cg will have
+      // to search farther.
+      // So we would like to have the smallest s_now to allow for fastest m_cg find. 
       // double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
       //                                 (p_now.t()*grad_now));
       
