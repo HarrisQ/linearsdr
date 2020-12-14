@@ -42,11 +42,12 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   wls_reg=if ( "wls_reg" %in% control_names ) control_args$wls_reg else 0;
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
+  max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 25 ; 
   init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter); 
-  beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
-  c_ag=if ( "c_ag" %in% control_names ) control_args$c_ag else 10e-4;
-  c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; 
-  max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100; 
+  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
+  c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 10e-4;
+  c_wolfe1=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe1 else 0; 
+  max_iter_line1=if ( "max_iter_line1" %in% control_names ) control_args$max_iter_line1 else 100; 
   l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
   
   
@@ -177,12 +178,12 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
         # Run Conjugate Gradients
         c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
                       control_list=list(tol_val=tol_val,
-                                        max_iter=max_iter, 
+                                        max_iter=max_iter1, 
                                         init_stepsize=init_stepsize1,
-                                        beta_bt=beta_bt,
-                                        c_ag=c_ag,
-                                        c_wolfe=c_wolfe,
-                                        max_iter_line=max_iter_line,
+                                        beta_bt=beta_bt1,
+                                        c_ag=c_ag1,
+                                        c_wolfe=c_wolfe1,
+                                        max_iter_line=max_iter_line1,
                                         l2_pen=l2_pen), 
                       test);
       } else if (method=="newton") {

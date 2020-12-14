@@ -470,15 +470,18 @@ arma::vec vecB_cg(arma::vec init,
           }
           
         }
-        Rcout << "m_cg_wolfe=" << m_cg_wolfe;
-        
+        if (test) { 
+          Rcout << "m_cg_wolfe=" << m_cg_wolfe;
+        } 
       } else if (((armijo_cond == 1) && (c_wolfe == 0) ) || ( m_cg == (max_iter_line - 1) ) ) { 
         // no wolfe conditon
         m_ag = m_cg;
         break;
       } 
     }
-    
+    if (test) { 
+      Rcout << "m_cg=" << m_cg; Rcout << "m_ag=" << m_ag; 
+    } 
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
     c_next = c_now - h_now*p_now;
 

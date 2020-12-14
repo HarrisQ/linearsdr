@@ -37,7 +37,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args); 
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
-  # max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ;  
+  max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ;
   max_B_iter=if ( "max_B_iter" %in% control_names ) {
     control_args$max_B_iter
   } else {
@@ -202,14 +202,14 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     
     # Control Parameter Defaults
     control_args=control_list; control_names=names(control_args); 
-    max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
+    max_iter2=if ( "max_iter2" %in% control_names ) control_args$max_iter2 else 25 ; 
     test=if ( "test" %in% control_names ) control_args$test else F ; 
-    init_stepsize2=if ( "init_stepsize2" %in% control_names ) control_args$init_stepsize2 else rep(n^2,max_iter); 
-    beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
-    c_ag=if ( "c_ag" %in% control_names ) control_args$c_ag else 10e-4;
-    c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; # 0.1 wiki-recom 
+    init_stepsize2=if ( "init_stepsize2" %in% control_names ) control_args$init_stepsize2 else rep(n^2,max_iter2); 
+    beta_bt2=if ( "beta_bt2" %in% control_names ) control_args$beta_bt2 else 0.5;
+    c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 10e-4;
+    c_wolfe2=if ( "c_wolfe2" %in% control_names ) control_args$c_wolfe2 else 0; # 0.1 wiki-recom 
     eps_wolfe=if ( "eps_wolfe" %in% control_names ) control_args$eps_wolfe else 0.01; # 0.1 wiki-recom 
-    max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100;
+    max_iter_line2=if ( "max_iter_line2" %in% control_names ) control_args$max_iter_line2 else 100;
     # psi=if ( "psi" %in% control_names ) control_args$psi else 5;
     # l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
     
@@ -220,13 +220,13 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                    bw, ahat_list, Dhat_list,
                    link=linktype, k=k_vec, r_mat,
                    control_list=list(tol_val=tol_val,
-                                     max_iter=max_iter, 
+                                     max_iter=max_iter2, 
                                      init_stepsize=init_stepsize2,
-                                     beta_bt=beta_bt,
-                                     c_ag=c_ag,
-                                     c_wolfe=c_wolfe,
+                                     beta_bt=beta_bt2,
+                                     c_ag=c_ag2,
+                                     c_wolfe=c_wolfe2,
                                      eps_wolfe=eps_wolfe,
-                                     max_iter_line=max_iter_line#,
+                                     max_iter_line=max_iter_line2#,
                                      # psi=psi,
                                      # eps1=.1,
                                      # eps2=.1
