@@ -6,7 +6,8 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
                         size=1, h_lim=NULL, v_lim=NULL, 
                         h_lab=NULL, v_lab=NULL, main_lab=NULL, 
                         show_legend=T, 
-                        y_colors=NULL, y_symbols=NULL 
+                        y_colors=NULL, y_symbols=NULL,
+                        ellipse=F
                         ) {
   
   # y_datta=Y_test; x_datta=t( B_hat_list[[type]] )%*%(X_test);
@@ -37,7 +38,14 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
     if(!y_on_axis) {
       p = p_base + 
         ggplot2::geom_point(aes(x=x1, y=x2, color = factor(y), shape=factor(y)),
-                            size=size, show.legend=show_legend ) 
+                            size=size, show.legend=show_legend );
+      
+      if(ellipse) {
+        p = p + 
+          ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
+                                type="norm", lwd=2, lty=2) #
+      }
+      
     } else {
       p = p_base + 
         ggplot2::geom_point(aes(x=x1, y=y, color = factor(y), shape=factor(y)),
@@ -51,11 +59,24 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
       p = p_base +
         ggplot2::geom_point(aes(x=x1, y=x2, color = y),
                             size=size, show.legend=show_legend  )
+      if(ellipse) {
+        p = p + 
+          ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
+                                type="norm")
+      }
     } else {
       p = p_base +
         ggplot2::geom_point(aes(x=x1, y=y, color = y),
                             size=size, show.legend=show_legend  )
+      if(ellipse) {
+        p = p + 
+          ggplot2::stat_ellipse(aes(x=x1, y=y, color = factor(y), group=factor(y)),
+                                type="norm")
+      }
     }
+    
+    
+    
   }
 
   
