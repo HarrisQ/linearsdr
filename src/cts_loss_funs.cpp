@@ -18,7 +18,7 @@ using namespace arma;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat nm_loss_j_made(arma::vec c, 
+arma::mat mgauss_loss_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
                          arma::vec wj, 
@@ -59,7 +59,7 @@ arma::mat nm_loss_j_made(arma::vec c,
 // A Loss function for whole MADE 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat nm_loss_made(arma::vec c, 
+arma::mat mgauss_loss_made(arma::vec c, 
                        arma::mat x_matrix, 
                        arma::mat y_matrix, 
                        double bw, 
@@ -83,7 +83,7 @@ arma::mat nm_loss_made(arma::vec c,
     
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
-    mean_nll += nm_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
+    mean_nll += mgauss_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
   }  
   
   return mean_nll;
@@ -95,7 +95,7 @@ arma::mat nm_loss_made(arma::vec c,
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat nm_score_j_made(arma::vec c, 
+arma::mat mgauss_score_j_made(arma::vec c, 
                           arma::mat xj, 
                           arma::mat y_matrix, 
                           arma::vec wj, 
@@ -132,7 +132,7 @@ arma::mat nm_score_j_made(arma::vec c,
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat nm_info_j_made(arma::vec c, 
+arma::mat mgauss_info_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
                          arma::vec wj, 

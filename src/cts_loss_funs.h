@@ -12,7 +12,7 @@ using namespace arma;
 // #                MADE for Continuous Response (i.e. MAVE)    
 // #######################################################################
  
-arma::mat nm_loss_made(arma::vec c, 
+arma::mat mgauss_loss_made(arma::vec c, 
                        arma::mat x_matrix, 
                        arma::mat y_matrix, 
                        double bw, 
@@ -20,21 +20,21 @@ arma::mat nm_loss_made(arma::vec c,
                        Rcpp::List Dhat_list,
                        arma::mat r_mat);  
   
-arma::mat nm_loss_j_made(arma::vec c, 
+arma::mat mgauss_loss_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
                          arma::vec wj, 
                          arma::vec ahat,
                          arma::mat Dhat);
 
-arma::mat nm_score_j_made(arma::vec c, 
+arma::mat mgauss_score_j_made(arma::vec c, 
                           arma::mat xj, 
                           arma::mat y_matrix, 
                           arma::vec wj, 
                           arma::vec ahat,
                           arma::mat Dhat);
 
-arma::mat nm_info_j_made(arma::vec c, 
+arma::mat mgauss_info_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
                          arma::vec wj, 

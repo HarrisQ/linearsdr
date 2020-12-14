@@ -253,6 +253,7 @@ arma::vec aD_j_cg(arma::vec init,
       
       // evaluation for armijo condition
       arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
+      
       double suff_dec_ag;
       suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
         mn_loss_j(c_search,vj,y_datta,wj,link,k) );
@@ -384,22 +385,36 @@ arma::vec vecB_cg(arma::vec init,
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   double eps_wolfe=control_list["eps_wolfe"]; // eps parameter in Dai-Kou improved line search
   int max_iter_line=control_list["max_iter_line"]; 
+  // double psi=control_list["psi"];
+  // double eps1=control_list["eps1"];
+  // double eps2=control_list["eps2"];
   
   // Step 0: Set the initial value, and compute the loss and score
   // Also set the initial p_0 to the gradient
   
-  arma::vec c_now = init; arma::uword n = x_datta.n_cols;    
+  arma::vec c_now = init; //arma::uword n = x_datta.n_cols;    
   
-  arma::mat nll_now(1,1);
+  arma::mat nll_now(1,1); 
+  // arma::mat nll_prev(1,1); nll_prev.zeros();
   arma::vec grad_now;
   nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
   grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
   arma::vec p_now = grad_now;
+  // double s_prev=1;
   
   arma::vec c_next;
   arma::uword iter;
-  for (iter = 0; iter < max_iter; iter++ ) { 
+  for (iter = 0; iter < max_iter; iter++ ) {
+    
+    double d_grad = as_scalar(p_now.t()*grad_now);
+      
+    // Need to pick initial stepsize for this iteration
     double s_now = s(iter);
+    // arma::vec s_now_dkvec(2); 
+    // s_now_dkvec(0)=psi*s_prev; s_now_dkvec(1)= as_scalar(2*abs(nll_now - nll_prev)/d_grad);     
+    // double s_now = max(s_now_dkvec);
+    
+    
     // Step 1: Line search
     int m_ag=0;
     int m_cg;
@@ -410,50 +425,60 @@ arma::vec vecB_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      // double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
-      //                                 (p_now.t()*grad_now));
+      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now)*d_grad;
       
       // for the improved Wolfe line search of Dai-Kou (2013)
       // But still uses the backtracking step-size selection.
-      double armijo_bound1 = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
-                                       (p_now.t()*grad_now)) + pow(iter+1,-2);
-      double armijo_bound2 = as_scalar(eps_wolfe*abs(p_now.t()*grad_now));
-      
-      arma::vec armijo_improved(2);  
-      armijo_improved(0)=armijo_bound1; armijo_improved(1)=armijo_bound2;
-      double armijo_bound_imp = min(armijo_improved);  
+      // double armijo_bound1 = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*d_grad
+      //                                    + pow(iter+1,-2) );
+      // double armijo_bound2 = as_scalar(eps_wolfe*abs( d_grad ));
+      // 
+      // arma::vec armijo_improved(2);  
+      // armijo_improved(0)=armijo_bound1; armijo_improved(1)=armijo_bound2;
+      // double armijo_bound = min(armijo_improved);  
         
       // evaluation for armijo condition
       arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
+      
       double suff_dec_ag;
       suff_dec_ag = as_scalar(
         mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
           mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
 
-      int armijo_cond = (suff_dec_ag >= armijo_bound_imp);
+      int armijo_cond = (suff_dec_ag >= armijo_bound); 
 
-      int wolfe_cond=0;
-      if (c_wolfe > 0) {
-        // the weak Wolfe condition
-        double wolfe_bound = as_scalar(c_wolfe*(p_now.t()*grad_now));
+      int wolfe_cond=0; int m_cg_wolfe; // if armijo and wolfe search
+      if ( (armijo_cond ==1) && (c_wolfe > 0) ) {
+        for (m_cg_wolfe = m_cg; m_cg_wolfe < max_iter_line; m_cg_wolfe++ ) {
+          // the weak Wolfe condition
+          double wolfe_bound = as_scalar(c_wolfe*d_grad);
 
-        // evaluation for curvature in weak wolfe
-        double curv_wolfe;
-        curv_wolfe = as_scalar(
-          p_now.t()*mn_score_made(c_search,x_datta,y_datta,
-                  bw,ahat_list, Dhat_list,link,k,r_mat) );
-
-        wolfe_cond =+ (curv_wolfe >= wolfe_bound);
-      }
-
-
-      if ( armijo_cond + wolfe_cond > 0) {
+          // evaluation for curvature in weak wolfe
+          arma::vec c_search_w; 
+          c_search_w = c_now - pow(beta_bt,m_cg_wolfe)*s_now*p_now;
+          
+          double curv_wolfe;
+          curv_wolfe = as_scalar(
+            p_now.t()*mn_score_made(c_search_w,x_datta,y_datta,
+                    bw,ahat_list, Dhat_list,link,k,r_mat) );
+  
+          wolfe_cond =+ (curv_wolfe >= wolfe_bound); 
+          
+          if (wolfe_cond == 1) {
+            m_ag = m_cg_wolfe;
+            break;
+          }
+          
+        }
+        Rcout << "m_cg_wolfe=" << m_cg_wolfe;
+        
+      } else if (((armijo_cond == 1) && (c_wolfe == 0) ) || ( m_cg == (max_iter_line - 1) ) ) { 
+        // no wolfe conditon
         m_ag = m_cg;
         break;
-      }
-
+      } 
     }
-
+    
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
     c_next = c_now - h_now*p_now;
 
@@ -467,6 +492,7 @@ arma::vec vecB_cg(arma::vec init,
     if (test) {
       // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ",
       //         iter, ll_dist, eu_dist);
+      Rcout << "m_cg=" << m_cg; Rcout << "m_ag=" << m_ag;
       Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\n";
     }
     if( nll_dist < tol) {
@@ -500,7 +526,9 @@ arma::vec vecB_cg(arma::vec init,
 
       // Update all inputs for next iteration
       c_now=c_next;
+      // nll_prev=nll_now;
       nll_now=nll_next;
+      // s_prev=s_now;
       grad_now=grad_next;
       p_now=p_next;
     }

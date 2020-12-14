@@ -451,7 +451,7 @@ arma::mat mn_loss_made(arma::vec c,
   } 
   
   
-  return mean_nll;
+  return mean_nll; //pow(n,2)*
   
 } ;
 
@@ -535,7 +535,7 @@ arma::mat mn_score_made(arma::vec c,
   } 
   
   
-  return mean_score;
+  return mean_score; //pow(n,2)*
   
 } ;
 

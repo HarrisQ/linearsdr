@@ -182,9 +182,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// nm_loss_j_made
-arma::mat nm_loss_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
-RcppExport SEXP _linearsdr_nm_loss_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
+// mgauss_loss_j_made
+arma::mat mgauss_loss_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
+RcppExport SEXP _linearsdr_mgauss_loss_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -194,13 +194,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type ahat(ahatSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Dhat(DhatSEXP);
-    rcpp_result_gen = Rcpp::wrap(nm_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat));
+    rcpp_result_gen = Rcpp::wrap(mgauss_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat));
     return rcpp_result_gen;
 END_RCPP
 }
-// nm_loss_made
-arma::mat nm_loss_made(arma::vec c, arma::mat x_matrix, arma::mat y_matrix, double bw, Rcpp::List ahat_list, Rcpp::List Dhat_list, arma::mat r_mat);
-RcppExport SEXP _linearsdr_nm_loss_made(SEXP cSEXP, SEXP x_matrixSEXP, SEXP y_matrixSEXP, SEXP bwSEXP, SEXP ahat_listSEXP, SEXP Dhat_listSEXP, SEXP r_matSEXP) {
+// mgauss_loss_made
+arma::mat mgauss_loss_made(arma::vec c, arma::mat x_matrix, arma::mat y_matrix, double bw, Rcpp::List ahat_list, Rcpp::List Dhat_list, arma::mat r_mat);
+RcppExport SEXP _linearsdr_mgauss_loss_made(SEXP cSEXP, SEXP x_matrixSEXP, SEXP y_matrixSEXP, SEXP bwSEXP, SEXP ahat_listSEXP, SEXP Dhat_listSEXP, SEXP r_matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -211,13 +211,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::List >::type ahat_list(ahat_listSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type Dhat_list(Dhat_listSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type r_mat(r_matSEXP);
-    rcpp_result_gen = Rcpp::wrap(nm_loss_made(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat));
+    rcpp_result_gen = Rcpp::wrap(mgauss_loss_made(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat));
     return rcpp_result_gen;
 END_RCPP
 }
-// nm_score_j_made
-arma::mat nm_score_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
-RcppExport SEXP _linearsdr_nm_score_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
+// mgauss_score_j_made
+arma::mat mgauss_score_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
+RcppExport SEXP _linearsdr_mgauss_score_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -227,13 +227,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type ahat(ahatSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Dhat(DhatSEXP);
-    rcpp_result_gen = Rcpp::wrap(nm_score_j_made(c, xj, y_matrix, wj, ahat, Dhat));
+    rcpp_result_gen = Rcpp::wrap(mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat));
     return rcpp_result_gen;
 END_RCPP
 }
-// nm_info_j_made
-arma::mat nm_info_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
-RcppExport SEXP _linearsdr_nm_info_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
+// mgauss_info_j_made
+arma::mat mgauss_info_j_made(arma::vec c, arma::mat xj, arma::mat y_matrix, arma::vec wj, arma::vec ahat, arma::mat Dhat);
+RcppExport SEXP _linearsdr_mgauss_info_j_made(SEXP cSEXP, SEXP xjSEXP, SEXP y_matrixSEXP, SEXP wjSEXP, SEXP ahatSEXP, SEXP DhatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -243,7 +243,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type ahat(ahatSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Dhat(DhatSEXP);
-    rcpp_result_gen = Rcpp::wrap(nm_info_j_made(c, xj, y_matrix, wj, ahat, Dhat));
+    rcpp_result_gen = Rcpp::wrap(mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -581,10 +581,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_linearsdr_solve_cpp", (DL_FUNC) &_linearsdr_solve_cpp, 2},
     {"_linearsdr_gauss_kern_cpp", (DL_FUNC) &_linearsdr_gauss_kern_cpp, 2},
     {"_linearsdr_wls_cpp", (DL_FUNC) &_linearsdr_wls_cpp, 4},
-    {"_linearsdr_nm_loss_j_made", (DL_FUNC) &_linearsdr_nm_loss_j_made, 6},
-    {"_linearsdr_nm_loss_made", (DL_FUNC) &_linearsdr_nm_loss_made, 7},
-    {"_linearsdr_nm_score_j_made", (DL_FUNC) &_linearsdr_nm_score_j_made, 6},
-    {"_linearsdr_nm_info_j_made", (DL_FUNC) &_linearsdr_nm_info_j_made, 6},
+    {"_linearsdr_mgauss_loss_j_made", (DL_FUNC) &_linearsdr_mgauss_loss_j_made, 6},
+    {"_linearsdr_mgauss_loss_made", (DL_FUNC) &_linearsdr_mgauss_loss_made, 7},
+    {"_linearsdr_mgauss_score_j_made", (DL_FUNC) &_linearsdr_mgauss_score_j_made, 6},
+    {"_linearsdr_mgauss_info_j_made", (DL_FUNC) &_linearsdr_mgauss_info_j_made, 6},
     {"_linearsdr_mnY_to_mvY", (DL_FUNC) &_linearsdr_mnY_to_mvY, 3},
     {"_linearsdr_emp_logit", (DL_FUNC) &_linearsdr_emp_logit, 3},
     {"_linearsdr_emp_culmit", (DL_FUNC) &_linearsdr_emp_culmit, 3},

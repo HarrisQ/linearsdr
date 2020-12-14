@@ -33,21 +33,23 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list(l2_pen=3)
   
+  # Parameters for the problem/model
+  p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
+  B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; d <- dim(B)[2];  
+  
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
   wls_reg=if ( "wls_reg" %in% control_names ) control_args$wls_reg else 0;
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
-  init_stepsize=if ( "init_stepsize" %in% control_names ) control_args$init_stepsize else rep(1,max_iter); 
+  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter); 
   beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
   c_ag=if ( "c_ag" %in% control_names ) control_args$c_ag else 10e-4;
   c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; 
   max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100; 
   l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
   
-  # Parameters for the problem/model
-  p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
-  B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; d <- dim(B)[2];  
+  
   
   # Setting up the response and gradient functions ----
   if (ytype=='continuous'){
@@ -176,7 +178,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
         c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter, 
-                                        init_stepsize=init_stepsize,
+                                        init_stepsize=init_stepsize1,
                                         beta_bt=beta_bt,
                                         c_ag=c_ag,
                                         c_wolfe=c_wolfe,

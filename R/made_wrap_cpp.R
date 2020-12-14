@@ -204,12 +204,13 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     control_args=control_list; control_names=names(control_args); 
     max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
     test=if ( "test" %in% control_names ) control_args$test else F ; 
-    init_stepsize=if ( "init_stepsize" %in% control_names ) control_args$init_stepsize else rep(1,max_iter); 
+    init_stepsize2=if ( "init_stepsize2" %in% control_names ) control_args$init_stepsize2 else rep(n^2,max_iter); 
     beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
     c_ag=if ( "c_ag" %in% control_names ) control_args$c_ag else 10e-4;
     c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; # 0.1 wiki-recom 
     eps_wolfe=if ( "eps_wolfe" %in% control_names ) control_args$eps_wolfe else 0.01; # 0.1 wiki-recom 
-    max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100; 
+    max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100;
+    # psi=if ( "psi" %in% control_names ) control_args$psi else 5;
     # l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
     
     # Initial c_param value
@@ -220,12 +221,16 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                    link=linktype, k=k_vec, r_mat,
                    control_list=list(tol_val=tol_val,
                                      max_iter=max_iter, 
-                                     init_stepsize=init_stepsize,
+                                     init_stepsize=init_stepsize2,
                                      beta_bt=beta_bt,
                                      c_ag=c_ag,
                                      c_wolfe=c_wolfe,
                                      eps_wolfe=eps_wolfe,
-                                     max_iter_line=max_iter_line),
+                                     max_iter_line=max_iter_line#,
+                                     # psi=psi,
+                                     # eps1=.1,
+                                     # eps2=.1
+                                     ),
                    test) 
   } # End of CG   
   return(c_0);
@@ -398,7 +403,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   }
 
   B_hat_made = t(matrix(c_1, nrow=d, ncol=p));
-  B_hat_made =  apply(B_hat_made, 2, normalize_cpp);
+  B_hat_made = apply(B_hat_made, 2, normalize_cpp);
   return(B_hat_made)
   # return(list( estimate=B_hat_made, loss=B_hat_made_loss))
 };

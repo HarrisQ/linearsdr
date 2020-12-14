@@ -61,20 +61,20 @@ wls_cpp <- function(x_matrix, y_matrix, weights, reg) {
     .Call(`_linearsdr_wls_cpp`, x_matrix, y_matrix, weights, reg)
 }
 
-nm_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_nm_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+mgauss_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
+    .Call(`_linearsdr_mgauss_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
 
-nm_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
-    .Call(`_linearsdr_nm_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
+mgauss_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
+    .Call(`_linearsdr_mgauss_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
 }
 
-nm_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_nm_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+mgauss_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
+    .Call(`_linearsdr_mgauss_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
 
-nm_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_nm_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+mgauss_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
+    .Call(`_linearsdr_mgauss_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
 
 mnY_to_mvY <- function(mn_y, m_classes, ytype) {
