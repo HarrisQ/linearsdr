@@ -207,11 +207,12 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     init_stepsize2=if ( "init_stepsize2" %in% control_names ) control_args$init_stepsize2 else rep(n^2,max_iter2); 
     beta_bt2=if ( "beta_bt2" %in% control_names ) control_args$beta_bt2 else 0.5;
     c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 10e-4;
-    c_wolfe2=if ( "c_wolfe2" %in% control_names ) control_args$c_wolfe2 else 0; # 0.1 wiki-recom 
+    c_wolfe2=if ( "c_wolfe2" %in% control_names ) control_args$c_wolfe2 else 0.1; # 0.1 wiki-recom 
     eps_wolfe=if ( "eps_wolfe" %in% control_names ) control_args$eps_wolfe else 0.01; # 0.1 wiki-recom 
     max_iter_line2=if ( "max_iter_line2" %in% control_names ) control_args$max_iter_line2 else 100;
     # psi=if ( "psi" %in% control_names ) control_args$psi else 5;
     # l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
+    delta_w=if ( "delta_w" %in% control_names ) control_args$delta_w else 0.1; # 0.1 wiki-recom 
     
     # Initial c_param value
     c_init = as.vector(t(B_mat));
@@ -226,7 +227,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                                      c_ag=c_ag2,
                                      c_wolfe=c_wolfe2,
                                      eps_wolfe=eps_wolfe,
-                                     max_iter_line=max_iter_line2#,
+                                     max_iter_line=max_iter_line2,
+                                     delta_w=delta_w
                                      # psi=psi,
                                      # eps1=.1,
                                      # eps2=.1

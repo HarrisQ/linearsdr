@@ -385,6 +385,7 @@ arma::vec vecB_cg(arma::vec init,
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   double eps_wolfe=control_list["eps_wolfe"]; // eps parameter in Dai-Kou improved line search
   int max_iter_line=control_list["max_iter_line"]; 
+  double delta_w=control_list["delta_w"];
   // double psi=control_list["psi"];
   // double eps1=control_list["eps1"];
   // double eps2=control_list["eps2"];
@@ -406,7 +407,7 @@ arma::vec vecB_cg(arma::vec init,
   arma::uword iter;
   for (iter = 0; iter < max_iter; iter++ ) {
     
-    double d_grad = as_scalar(p_now.t()*grad_now);
+    // double d_grad = as_scalar(p_now.t()*grad_now);
       
     // Need to pick initial stepsize for this iteration
     double s_now = s(iter);
@@ -425,7 +426,7 @@ arma::vec vecB_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now)*d_grad;
+      // double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now)*d_grad;
       
       // for the improved Wolfe line search of Dai-Kou (2013)
       // But still uses the backtracking step-size selection.
@@ -436,48 +437,81 @@ arma::vec vecB_cg(arma::vec init,
       // arma::vec armijo_improved(2);  
       // armijo_improved(0)=armijo_bound1; armijo_improved(1)=armijo_bound2;
       // double armijo_bound = min(armijo_improved);  
-        
-      // evaluation for armijo condition
+      
+      
+      // double suff_dec_ag;
+      // suff_dec_ag = as_scalar(
+      //   mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
+      //     mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+
+      // int armijo_cond = (suff_dec_ag >= armijo_bound); 
+
+      // int wolfe_cond=0; int m_cg_wolfe; // if armijo and wolfe search
+      // if ( (armijo_cond ==1) && (c_wolfe > 0) ) {
+      //   for (m_cg_wolfe = m_cg; m_cg_wolfe < max_iter_line; m_cg_wolfe++ ) {
+      //     // the weak Wolfe condition
+      //     double wolfe_bound = as_scalar(c_wolfe*d_grad);
+      // 
+      //     // evaluation for curvature in weak wolfe
+      //     arma::vec c_search_w; 
+      //     c_search_w = c_now - pow(beta_bt,m_cg_wolfe)*s_now*p_now;
+      //     
+      //     double curv_wolfe;
+      //     curv_wolfe = as_scalar(
+      //       p_now.t()*mn_score_made(c_search_w,x_datta,y_datta,
+      //               bw,ahat_list, Dhat_list,link,k,r_mat) );
+      // 
+      //     wolfe_cond =+ (curv_wolfe >= wolfe_bound); 
+      //     
+      //     if (wolfe_cond == 1) {
+      //       m_ag = m_cg_wolfe;
+      //       break;
+      //     }
+      //     
+      //   }
+      //   if (test) { 
+      //     Rcout << "m_cg_wolfe=" << m_cg_wolfe;
+      //   } 
+      // } else if (((armijo_cond == 1) && (c_wolfe == 0) ) || 
+      //   ( m_cg == (max_iter_line - 1) ) ) { 
+      //   // no wolfe conditon
+      //   m_ag = m_cg;
+      //   break;
+      // } 
+      
+      // for the Approximate Wolfe line search of Hager-Zhang (2005)
+      // But still uses the backtracking step-size selection.
+      
+      // line search
       arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
       
-      double suff_dec_ag;
-      suff_dec_ag = as_scalar(
-        mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
-          mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
-
-      int armijo_cond = (suff_dec_ag >= armijo_bound); 
-
-      int wolfe_cond=0; int m_cg_wolfe; // if armijo and wolfe search
-      if ( (armijo_cond ==1) && (c_wolfe > 0) ) {
-        for (m_cg_wolfe = m_cg; m_cg_wolfe < max_iter_line; m_cg_wolfe++ ) {
-          // the weak Wolfe condition
-          double wolfe_bound = as_scalar(c_wolfe*d_grad);
-
-          // evaluation for curvature in weak wolfe
-          arma::vec c_search_w; 
-          c_search_w = c_now - pow(beta_bt,m_cg_wolfe)*s_now*p_now;
-          
-          double curv_wolfe;
-          curv_wolfe = as_scalar(
-            p_now.t()*mn_score_made(c_search_w,x_datta,y_datta,
-                    bw,ahat_list, Dhat_list,link,k,r_mat) );
-  
-          wolfe_cond =+ (curv_wolfe >= wolfe_bound); 
-          
-          if (wolfe_cond == 1) {
-            m_ag = m_cg_wolfe;
-            break;
-          }
-          
-        }
-        if (test) { 
-          Rcout << "m_cg_wolfe=" << m_cg_wolfe;
-        } 
-      } else if (((armijo_cond == 1) && (c_wolfe == 0) ) || ( m_cg == (max_iter_line - 1) ) ) { 
-        // no wolfe conditon
+      int app_wolfe1 = 0; int app_wolfe2 = 0; //the two approx wolfe conditions
+      
+      double phi_dot0 = as_scalar(p_now.t()*grad_now);
+      double wolfe_bound1 = (2*delta_w - 1)*phi_dot0; 
+      double wolfe_bound2 = c_wolfe*phi_dot0;
+      
+      double curv_wolfe;
+      curv_wolfe = as_scalar(
+        p_now.t()*mn_score_made(c_search,x_datta,y_datta,
+                bw,ahat_list, Dhat_list,link,k,r_mat) );
+      
+      app_wolfe1 =+ ( wolfe_bound1 >= curv_wolfe); 
+      app_wolfe2 =+ ( curv_wolfe >= wolfe_bound2); 
+      
+      int error_cond=0;
+      double error_relax = 1e-5; // 10e-6 = 1e-5, Fixed error tolerance at minima
+      
+      double within_error = as_scalar(
+        mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
+          mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+      error_cond =+ ( within_error <= error_relax); 
+      
+      if (app_wolfe1+app_wolfe2+error_cond == 3) {
         m_ag = m_cg;
         break;
-      } 
+      }
+      
     }
     if (test) { 
       Rcout << "m_cg=" << m_cg; Rcout << "m_ag=" << m_ag; 
