@@ -347,12 +347,12 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 #' @export
 #' 
 opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
-                 method="newton", parallelize=F,
+                 method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
   cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 
-                   parallelize, r_mat = NULL, control_list)
+                   parallelize, r_mat , control_list)
   
   # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
   # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();

@@ -11,7 +11,9 @@ devtools::install_github("HarrisQ/linearsdr");
 # Test OPCG, RADE, MADE with plots and distance
 
 
+
 # Generate some continuous data
+
 
 
 # Test OPCG, RADE, MADE with plots and distance
