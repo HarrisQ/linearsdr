@@ -15,3 +15,8 @@ devtools::install_github("HarrisQ/linearsdr");
 
 
 # Test OPCG, RADE, MADE with plots and distance
+
+
+
+# End 
+remove.packages("linearsdr")
