@@ -29,9 +29,11 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # other: Custom Loss Functions - to be done at a later date
   
    
-  # x_matrix=X; y_matrix=Y; bw; ytype="multinomial";tol_val= 1e-07; max_iter=25;
+  # x_matrix=X; y_matrix=matrix(Y[2,],1,n)#Y;
+  # bw;  ytype=continuous;#"multinomial";
+  # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
-  # control_list = list(l2_pen=3)
+  # control_list = list()
   
   # Parameters for the problem/model
   p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
@@ -57,6 +59,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     # y.matrix should be m x n, m can be >= 1
     # This is just OPG, with the WLS as the exact solution per j
     
+    
     mv_Y=y_matrix
     m=dim(y_matrix)[1]
     
@@ -78,22 +81,24 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # Initial Value
       # WLS gives a (d+1)x(m-1) matrix; 
       # We want its transpose, a (m-1)x(d+1) matrix 
-      c_j_ls=wls_cpp(Vj,mv_Y,Wj, reg=wls_reg); 
+      c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,mv_Y,Wj, reg=wls_reg))); 
       
       # Don't need to return the wls starting values for this  
       ## for least squares, we undo the vec to get (m-1)x(d+1), which is t(Aj)
       tA_hatj_ls <- matrix(c_j_ls, nrow = m, ncol = d+1) 
       
       a_hatj_ls <- tA_hatj_ls[,1]  
-      D_hatj_ls <- t( tA_hatj_ls[,2:d] )  
+      D_hatj_ls <- t( tA_hatj_ls[,2:(d+1)] )  
       
       
       if (m > 1) {
-        return( list( ahat=a_hatj_ls,  
-                      Dhat=D_hatj_ls ) );
+        return( list( ahat=a_hatj_ls, Dhat=D_hatj_ls,
+                      Dhat_ls=D_hatj_ls, 
+                      weights=Wj) );
       } else {
-        return( list( ahat=a_hatj_ls,  
-                      Dhat=t(D_hatj_ls) ) );
+        return( list( ahat=a_hatj_ls, Dhat=t(D_hatj_ls),
+                      Dhat_ls=t(D_hatj_ls), 
+                      weights=Wj) ) ;
       }
       
        
@@ -251,6 +256,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 
 # opcg_made(x_matrix, y_matrix, h, B_mat=NULL, ytype="multinomial", 
 #           method="newton", parallelize, r_mat, control_list)
+
+# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="continuous",
+#           method="newton", parallelize, r_mat, control_list)$Dhat
 
 ############### OPCG Candidate Matrix #########################
 #' This is an internal function called by opcg 

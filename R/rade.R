@@ -54,7 +54,8 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
                method="newton", parallelize=F, 
                l2_pen=0, l1_pen=0, control_list=list() ){
   
-  # x_matrix=X; y_matrix=Y; d; bw; ytype="multinomial";tol_val= 1e-07; max_iter=25;
+  # x_matrix=X; y_matrix=Y; d; bw; ytype="continuous"; #"multinomial";
+  # tol_val= 1e-07; max_iter=25; 
   # B_mat = NULL;  method="cg"; parallelize=T; r_mat=NULL;
   # control_list=list(); l2_pen=0; l1_pen=0;
   # ytype="ordinal"
@@ -72,7 +73,7 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   # l2_pen=1; l1_pen=0;
   # l2_pen=0; l1_pen=1;
   
-  opcg_obj=opcg(x_matrix, y_matrix, d, bw, ytype, method, parallelize, control_list)
+  opcg_obj=opcg(x_matrix, y_matrix, d, bw, ytype, method, parallelize, r_mat, control_list)
   b_hat_opcg=opcg_obj$opcg;
   opcg_grad=opcg_obj$gradients;
   

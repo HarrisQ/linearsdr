@@ -10,11 +10,12 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
                         ellipse=F
                         ) {
   
-  # y_datta=Y_test; x_datta=t( B_hat_list[[type]] )%*%(X_test);
-  # y_on_axis=F; ytype="multinomial";
+  # y_datta=Y; x_datta=t( Beta )%*%(X);
+  # y_on_axis=F; ytype="continuous";#"multinomial";
   # size=1; h_lab=NULL; v_lab=NULL; main_lab=NULL;
   # show_legend=T;
   # y_colors=NULL; y_symbols=NULL
+  
   datta_frame0 <- data.frame( t( rbind(y_datta, x_datta) ));
   colnames(datta_frame0) <- c('y', 
                               sapply(1:(dim(datta_frame0)[2]-1), 
@@ -26,50 +27,69 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
   if(!is.null(h_lim) ) p_base = p_base + xlim(h_lim[1], h_lim[2]); 
   if(!is.null(v_lim) ) p_base = p_base + ylim(v_lim[1], v_lim[2]);  
   
-  if(!is.null(y_colors)) {
-    p_base = p_base + ggplot2::scale_colour_manual(values = y_colors)
-  }
-
-  if(!is.null(y_symbols)) {
-    p_base = p_base + ggplot2::scale_shape_manual(values = y_symbols)
-  }
-  
   if( ytype=="multinomial" ) {
-    if(!y_on_axis) {
-      p = p_base + 
+    # Colours for discrete Y
+    if(!is.null(y_colors)) {
+      p_base = p_base + ggplot2::scale_colour_manual(values = y_colors)
+    }
+    # Shapes for Discrete Y
+    if(!is.null(y_symbols)) {
+      p_base = p_base + ggplot2::scale_shape_manual(values = y_symbols)
+    }
+    
+    # Add points
+    if(!y_on_axis) { # Don't plot Y
+      pplot = p_base + 
         ggplot2::geom_point(aes(x=x1, y=x2, color = factor(y), shape=factor(y)),
                             size=size, show.legend=show_legend );
       
+      # Draw Ellipse
       if(ellipse) {
-        p = p + 
+        pplot = pplot + 
           ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
                                 type="norm", lwd=2, lty=2) #
       }
       
     } else {
-      p = p_base + 
+      # Plot Y
+      pplot = p_base + 
         ggplot2::geom_point(aes(x=x1, y=y, color = factor(y), shape=factor(y)),
                             size=size, show.legend=show_legend  )
     }
     
     
     
-  } else {
-    if(!y_on_axis) {
-      p = p_base +
+  } else if (ytype=="continuous") {
+    
+    # Colours for continuous Y
+    if(!is.null(y_colors)) {
+      p_base = p_base + ggplot2::scale_colour_manual(values = y_colors)
+    }
+    # Shapes for continuous Y
+    if(!is.null(y_symbols)) {
+      p_base = p_base + ggplot2::scale_shape_manual(values = y_symbols)
+    }
+    
+    
+    
+    # Add points
+    if(!y_on_axis) { # Don't plot Y
+      pplot = p_base +
         ggplot2::geom_point(aes(x=x1, y=x2, color = y),
                             size=size, show.legend=show_legend  )
+      # Draw Ellipse
       if(ellipse) {
-        p = p + 
+        pplot = pplot + 
           ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
                                 type="norm")
       }
-    } else {
-      p = p_base +
+    } else { # Plot Y
+      pplot = p_base +
         ggplot2::geom_point(aes(x=x1, y=y, color = y),
                             size=size, show.legend=show_legend  )
+      # Draw Ellipse
       if(ellipse) {
-        p = p + 
+        pplot = pplot + 
           ggplot2::stat_ellipse(aes(x=x1, y=y, color = factor(y), group=factor(y)),
                                 type="norm")
       }
@@ -80,7 +100,7 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
   }
 
   
-  p + ggplot2::labs(title = main_lab, x = h_lab, y = v_lab ) +
+  pplot + ggplot2::labs(title = main_lab, x = h_lab, y = v_lab ) +
     ggplot2::theme(legend.position="none",
                    panel.grid.major = element_blank(), 
                    panel.grid.minor = element_blank(),
