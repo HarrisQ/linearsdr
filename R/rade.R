@@ -171,7 +171,7 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
     }
     Gamma_hat = matrix(Gamma_hat_l1, p, d);
     
-  } else if (l2_pen >= 0 & l1_pen==0) { # Just L2 penalty, if even
+  } else if (l1_pen==0 & l2_pen >= 0) { # Just L2 penalty, if even
     vvt0=list_sum(made_grad,made_grad) + l2_pen*eye_d;
     Gamma_hat=t(solve_cpp(vvt0, list_sum(made_grad, opcg_grad) ) )
   }
