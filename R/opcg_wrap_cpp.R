@@ -377,3 +377,39 @@ opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
                 )  ) 
 }
 
+# A wrapper for Refined OPCG
+
+ropcg=function(x_matrix, y_matrix, d, bw, ytype='continuous',
+               method="newton", parallelize=F, r_mat = NULL,
+               control_list=list()) {
+  
+  est0=opcg(x_matrix, y_matrix, d, bw, ytype,
+           method, parallelize, r_mat,
+           control_list=list())$opcg 
+  
+  refined_est0 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
+                     method, parallelize, r_mat = est0,
+                     control_list=list())$opcg 
+  
+  for(iter in 1:25) {
+    refined_est1 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
+                        method, parallelize, r_mat = refined_est0,
+                        control_list=list())$opcg 
+    
+    dist = mat_dist(refined_est1, refined_est0);
+    
+    print(c("rOPCG: dist dist is", dist, iter));
+    if( dist < 1e-7 ) {
+      refined_est0=refined_est1;
+      break();
+    } else{
+      # The new B_0 for next iteration
+      # B_0 = B_1;
+      refined_est0=refined_est1;
+    }  
+    if(iter==25) print("0 - non-convergence");
+ 
+  } # end of iterations
+  
+  return(refined_est0)
+}

@@ -51,7 +51,7 @@
 #' @examples
 #' 
 rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='continuous', 
-               method="newton", parallelize=F, 
+               method="newton", parallelize=F, r_mat=NULL,
                l2_pen=0, l1_pen=0, control_list=list() ){
   
   # x_matrix=X; y_matrix=Y; d; bw; ytype="continuous"; #"multinomial";
@@ -180,3 +180,43 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   Gamma_hat = apply(Gamma_hat, 2, normalize_cpp) 
   return(Gamma_hat)
 } 
+
+
+# A wrapper for rRADE
+
+rrade=function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='continuous', 
+               method="newton", parallelize=F, 
+               l2_pen=0, l1_pen=0, control_list=list() ){
+  
+  est0=rade(x_matrix, y_matrix, d, bw, bw2, init_mat, ytype, 
+            method, parallelize, r_mat = NULL,
+            l2_pen, l1_pen, control_list=list() )
+  
+  refined_est0 = rade(x_matrix, y_matrix, d, bw2, bw2, init_mat, ytype, 
+                  method, parallelize, r_mat=est0,
+                  l2_pen, l1_pen, control_list=list() )
+  
+  for(iter in 1:25) {
+    refined_est1 = rade(x_matrix, y_matrix, d, bw2, bw2, init_mat, ytype, 
+                        method, parallelize, r_mat=refined_est0,
+                        l2_pen, l1_pen, control_list=list() )
+    
+    dist = mat_dist(refined_est1, refined_est0);
+    
+    print(c("rOPCG: dist dist is", dist, iter));
+    if( dist < 1e-7 ) {
+      refined_est0=refined_est1;
+      break();
+    } else{
+      # The new B_0 for next iteration
+      # B_0 = B_1;
+      refined_est0=refined_est1;
+    }  
+    if(iter==25) print("0 - non-convergence");
+    
+  } # end of iterations
+  
+  return(refined_est0)
+  
+}
+
