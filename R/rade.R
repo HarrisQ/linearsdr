@@ -54,9 +54,9 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
                method="newton", parallelize=F, r_mat=NULL,
                l2_pen=0, l1_pen=0, control_list=list() ){
   
-  # x_matrix=X; y_matrix=Y; d; bw; ytype="continuous"; #"multinomial";
-  # tol_val= 1e-07; max_iter=25; 
-  # B_mat = NULL;  method="cg"; parallelize=T; r_mat=NULL;
+  # x_matrix=X; y_matrix=Y; d; bw; bw2=bw; ytype="continuous"; #"multinomial";
+  # tol_val= 1e-07; max_iter=25;
+  # init_mat = NULL;  method="cg"; parallelize=T; r_mat=NULL;
   # control_list=list(); l2_pen=0; l1_pen=0;
   # ytype="ordinal"
   
@@ -190,16 +190,16 @@ rrade=function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   
   est0=rade(x_matrix, y_matrix, d, bw, bw2, init_mat, ytype, 
             method, parallelize, r_mat = NULL,
-            l2_pen, l1_pen, control_list=list() )
+            l2_pen, l1_pen, control_list )
   
   refined_est0 = rade(x_matrix, y_matrix, d, bw2, bw2, init_mat, ytype, 
                   method, parallelize, r_mat=est0,
-                  l2_pen, l1_pen, control_list=list() )
+                  l2_pen, l1_pen, control_list )
   
-  for(iter in 1:25) {
+  for(iter in 1:5) {
     refined_est1 = rade(x_matrix, y_matrix, d, bw2, bw2, init_mat, ytype, 
                         method, parallelize, r_mat=refined_est0,
-                        l2_pen, l1_pen, control_list=list() )
+                        l2_pen, l1_pen, control_list )
     
     dist = mat_dist(refined_est1, refined_est0);
     

@@ -33,11 +33,14 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # bw;  ytype=continuous;#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
+  # B_mat=init_mat;
   # control_list = list()
+  
   
   # Parameters for the problem/model
   p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
-  B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; d <- dim(B)[2];  
+  B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; 
+  d <- dim(as.matrix(B))[2];  
   
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
@@ -92,10 +95,14 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       
       if (m > 1) {
+        
         return( list( ahat=a_hatj_ls, Dhat=D_hatj_ls,
                       Dhat_ls=D_hatj_ls, 
                       weights=Wj) );
-      } else {
+      } else { # i.e. m==1; 
+        
+        
+        
         return( list( ahat=a_hatj_ls, Dhat=t(D_hatj_ls),
                       Dhat_ls=t(D_hatj_ls), 
                       weights=Wj) ) ;
@@ -385,16 +392,16 @@ ropcg=function(x_matrix, y_matrix, d, bw, ytype='continuous',
   
   est0=opcg(x_matrix, y_matrix, d, bw, ytype,
            method, parallelize, r_mat,
-           control_list=list())$opcg 
+           control_list)$opcg 
   
   refined_est0 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
                      method, parallelize, r_mat = est0,
-                     control_list=list())$opcg 
+                     control_list)$opcg 
   
   for(iter in 1:25) {
     refined_est1 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
                         method, parallelize, r_mat = refined_est0,
-                        control_list=list())$opcg 
+                        control_list)$opcg 
     
     dist = mat_dist(refined_est1, refined_est0);
     
