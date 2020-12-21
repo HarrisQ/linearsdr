@@ -52,7 +52,7 @@
 #' 
 rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='continuous', 
                method="newton", parallelize=F, r_mat=NULL,
-               l2_pen=0, l1_pen=0, control_list=list() ){
+               l2_pen=0, l1_pen=0, print_opcg=F, control_list=list() ){
   
   # x_matrix=X; y_matrix=Y; d; bw; bw2=bw; ytype="continuous"; #"multinomial";
   # tol_val= 1e-07; max_iter=25;
@@ -178,7 +178,12 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   
   
   Gamma_hat = apply(Gamma_hat, 2, normalize_cpp) 
-  return(Gamma_hat)
+  if (print_opcg) {
+    return(list(opcg=b_hat_opcg, rade=Gamma_hat) );
+  } else if (!print_opcg) {
+    return(Gamma_hat);
+  }
+  
 } 
 
 
