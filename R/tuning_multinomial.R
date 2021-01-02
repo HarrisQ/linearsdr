@@ -241,7 +241,7 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
     for (iter in 1:n_hlist) {
       edr_iter=opcg(x_matrix=X_train, y_matrix=Y_train, d=d, bw=h_list[iter],
                     ytype=ytype, method=method, parallelize=parallelize,
-                    control_list=control_list)$opcg
+                    control_list=control_list)
       edr_list[[iter]]=edr_iter;
     }
 
