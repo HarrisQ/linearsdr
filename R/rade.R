@@ -73,7 +73,10 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   # l2_pen=1; l1_pen=0;
   # l2_pen=0; l1_pen=1;
   
-  opcg_obj=opcg_wrap(x_matrix, y_matrix, d, bw, ytype, method, parallelize, r_mat, control_list)
+  opcg_obj=opcg_wrap(x_matrix, y_matrix, d, bw, ytype,
+                     method, parallelize, r_mat,
+                     control_list)
+  
   b_hat_opcg=opcg_obj$opcg;
   opcg_grad=opcg_obj$gradients;
   
