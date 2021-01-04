@@ -54,7 +54,7 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
                method="newton", parallelize=F, r_mat=NULL,
                l2_pen=0, l1_pen=0, print_opcg=F, control_list=list() ){
   
-  # x_matrix=X; y_matrix=Y; d; bw; bw2=bw; ytype="continuous"; #"multinomial";
+  # x_matrix=X; y_matrix=Y; d; bw; bw2=bw; ytype="multinomial";#"continuous";
   # tol_val= 1e-07; max_iter=25;
   # init_mat = NULL;  method="cg"; parallelize=T; r_mat=NULL;
   # control_list=list(); l2_pen=0; l1_pen=0;
@@ -80,15 +80,33 @@ rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='contin
   b_hat_opcg=opcg_obj$opcg;
   opcg_grad=opcg_obj$gradients;
   
-  if (is.null(init_mat) ) init_mat=b_hat_opcg;
+  if (is.null(init_mat) ) init_mat=b_hat_opcg; # Not needed
   
   if (is.null(bw2)) { #diag(1, p, d)
-    made_grad=opcg_made(x_matrix, y_matrix, bw, B_mat=init_mat, ytype, method, 
+    Bx_matrix0=t(b_hat_opcg)%*%x_matrix;
+    Bx_matrix=matpower_cpp(cov(t(Bx_matrix0)), -1/2)%*%
+      t(sapply(1:d, FUN= function(j) center_cpp(Bx_matrix0[j,], NULL) ) );
+    
+    made_grad=opcg_made(Bx_matrix, y_matrix, bw, B_mat=NULL, ytype, method, 
                         parallelize, r_mat=NULL, control_list)$Dhat;
   } else {
-    made_grad=opcg_made(x_matrix, y_matrix, bw2, B_mat=init_mat, ytype, method, 
-                        parallelize, r_mat=b_hat_opcg, control_list)$Dhat;
+    Bx_matrix0=t(b_hat_opcg)%*%x_matrix;
+    Bx_matrix=matpower_cpp(cov(t(Bx_matrix0)), -1/2)%*%
+      t(sapply(1:d, FUN= function(j) center_cpp(Bx_matrix0[j,], NULL) ) );
+    
+    made_grad=opcg_made(Bx_matrix, y_matrix, bw2, B_mat=NULL, ytype, method, 
+                        parallelize, r_mat=NULL, control_list)$Dhat;
   }
+  
+  # if (is.null(init_mat) ) init_mat=b_hat_opcg;
+  # 
+  # if (is.null(bw2)) { #diag(1, p, d)
+  #   made_grad=opcg_made(x_matrix, y_matrix, bw, B_mat=init_mat, ytype, method, 
+  #                       parallelize, r_mat=NULL, control_list)$Dhat;
+  # } else {
+  #   made_grad=opcg_made(x_matrix, y_matrix, bw2, B_mat=init_mat, ytype, method, 
+  #                       parallelize, r_mat=b_hat_opcg, control_list)$Dhat;
+  # }
   
   
   # made_grad_kp = lapply(1:n, function(j) kronecker( t(made_grad[[j]]), diag(1,p,p) ));
