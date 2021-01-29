@@ -78,9 +78,9 @@ tuning_skm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
     # class_bss3= sum(diag(var( Reduce('rbind', class_grand_means) )))*(n_classes-1);
     
     if ( sum(n_cpc_vec)>n_classes) {
-      return( class_wss/max(class_bss1, class_bss2) ) #class_bss1 )
+      return( class_wss/ #max(class_bss1, class_bss2) ) #
     } else if(sum(n_cpc_vec)==n_classes) {
-      return( class_wss/max(class_bss1, class_bss2) )#class_bss2 )
+      return( class_wss/class_bss2 )#max(class_bss1, class_bss2) )#
     }
     
     
