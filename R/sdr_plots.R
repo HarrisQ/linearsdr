@@ -196,7 +196,7 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
               nudge_x = -.25, nudge_y = 1 )  +
     ggplot2::geom_text(aes(x = x[5], y = y[5], label = paste(sdr_method,'3') ), size=label_size,
               # data=surface.2d.labels, 
-              nudge_x = -.5, nudge_y = .25 )  +
+              nudge_x = +.15, nudge_y = .25 )  +
     ggplot2::geom_text(aes(x = x[6], y = y[6], label = paste(sdr_method,'1') ), size=label_size,
               # data=surface.2d.labels, 
               nudge_x = -1, nudge_y = -.1 )  +
@@ -215,7 +215,7 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
     ggplot2::geom_point(aes(y = y,x = x, 
                             color = factor(label), shape=factor(label)),
                         data = data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
-                                                          function(vec) (vec-mean(vec))/(.85*max(abs(vec))) ), 
+                                                          function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
                                                    label=y_datta),
                         size=size, show.legend=show.legend) +
     ggplot2::scale_colour_manual(values = y_color)+
