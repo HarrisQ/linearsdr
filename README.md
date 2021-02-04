@@ -10,3 +10,24 @@ The 'NAMESPACE - no oxy' is the original NAMESPACE file prior to when I started 
 The 'NAMESPACE - oxy' is NAMESPACE file generated from rOxygen.
 
 The 'Experimental Code' folder is where I have stored code for aspects of Linear SDR that I have been working on sparingly and is not quite ready for use. 
+
+Things that work:
+---
+* OPG/OPCG, MAVE/MADE
+* SIR, DR, SAVE
+
+Minor Things to do:
+---
+* Clean up OPP/OPCG and MAVE/MADE code
+* Limit function exports to just the ones peopel will use
+
+Major Things to do:
+---
+* Build Test Script
+* Finish/Clean Code for OPCG and Multivariate Continuous Response
+* Finish/Clean Regularization Code
+* Write more Documentation
+
+
+
+
