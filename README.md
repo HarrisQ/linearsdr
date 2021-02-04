@@ -19,7 +19,7 @@ Things that work:
 
 Minor Things to do:
 ---
-* Clean up OPP/OPCG and MAVE/MADE code  
+* Clean up OPG/OPCG and MAVE/MADE code  
 * Limit function exports to just the ones peopel will use  
 * Clean Regularized OPG/OPCG (RADE) Code  
 
