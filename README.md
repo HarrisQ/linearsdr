@@ -25,7 +25,7 @@ Major Things to do:
 ---
 * Build Test Script
 * Finish/Clean Code for OPCG and Multivariate Continuous Response
-* Finish/Clean Regularization Code
+* Finish/Clean Regularization (RADE) Code
 * Write more Documentation
 
 
