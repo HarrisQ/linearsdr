@@ -21,12 +21,12 @@ Minor Things to do:
 ---
 * Clean up OPP/OPCG and MAVE/MADE code  
 * Limit function exports to just the ones peopel will use  
+* Clean Regularized OPG/OPCG (RADE) Code  
 
 Major Things to do:
 ---
 * Build Test Script  
 * Finish/Clean Code for OPCG and Multivariate Continuous Response  
-* Finish/Clean Regularization (RADE) Code  
 * Write more Documentation  
 
 
