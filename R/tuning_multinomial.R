@@ -112,7 +112,7 @@ tuning_skmkm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
   #Unsupervised Tuning
   # number of centers for unsupervised is n_classes*n_cpc if n_cpc is a
   # number, i.e. each class has same number, otherwise, it should be sum(n_cpc)
-  n_centers = n_classes #if (length(n_cpc)==1) n_classes*n_cpc else sum(n_cpc);
+  n_centers = if (length(n_cpc)==1) n_classes*n_cpc else sum(n_cpc); #n_classes #
   
   km_tune=tuning_km(x, n_hlist, edr_list,
                centers=n_centers, iter.max=iter.max, nstart = nstart)
