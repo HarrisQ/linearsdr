@@ -48,9 +48,10 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
       arma::vec Y_i ; Y_i.zeros(m);
       arma::uvec ids = find(m_classes<=mn_y(i)); 
       Y_i.elem(ids).fill(1);
-      arma::vec cum_Y_i = cumsum(Y_i);
+      //arma::vec cum_Y_i = cumsum(Y_i); // This is for summing over T
       
-      mv_Y.col(i) = cum_Y_i/max(cum_Y_i);
+      //mv_Y.col(i) = cum_Y_i/max(cum_Y_i); // This is for normalizing to get empirical CDF
+      mv_Y.col(i) = Y_i;
     }
   }
   return mv_Y;
@@ -126,8 +127,9 @@ arma::mat emp_culmit(arma::mat y_matrix,
   
   
   // create matrices with ones; they are difference matrices;
-  arma::mat C(m,m - 1); C.eye(); C.diag(1).fill(-1);
-  arma::mat D(m,m - 1); D.eye(); D.diag().fill(-1); D.diag(-1).fill(1); 
+  // transposing them give the correct differences;
+  arma::mat C(m,m - 1); C.eye(); C.diag(-1).fill(-1); // one above diag, fill with -1
+  arma::mat D(m,m - 1); D.eye(); D.diag().fill(-1); D.diag(1).fill(1); //one below diag fill with 1
   
   // applying difference matrices to Y and tuning;
   arma::mat C_Y = C.t()*tildeY0; arma::mat D_Y = D.t()*tildeY0;
@@ -186,13 +188,21 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     
     // creating upper/lower triangular matrices;
     arma::mat A; A.ones(m,m);
-    arma::mat U=trimatu(A); arma::mat L=trimatl(A);
+    //arma::mat U=trimatu(A); 
+    arma::mat L=trimatl(A);
     
-    arma::vec tau_i = L*exp( U*lin_can_par/k_i );
-    //cpp index starts at 0, so m-1 is the mth entry
-    double dem; dem = 1 + tau_i(m-1); 
+    // creating Permutation and Differencing Matrices, P, Q
+    arma::mat I(m,m); I.eye();
+    arma::mat P(m,m); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+    arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); Q(0,0)=2; 
     
-    dot_b = tau_i/dem;
+    arma::vec phi_i = L*exp( L*lin_can_par/k_i ); //don't need U for Ad-Cat 
+    //cpp index starts at 0, so m-1 is the mth or last entry
+    double dem; dem = 1 + phi_i(m-1); //don't need to apply the P mat, just say directly
+    
+    arma::vec num = Q*P*phi_i;
+      
+    dot_b = num/dem;
   }
   return dot_b;
 };
@@ -207,7 +217,7 @@ double b_expit(arma::vec lin_can_par, int k_i) {
 double b_culmit(arma::vec lin_can_par, int k_i) {
   arma::uword m=lin_can_par.n_rows;
   arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit"); 
-  return -k_i*log(  (1 - mu_i(m-1))  ) ;
+  return -k_i*log(  (1 - mu_i(0))  ) ;
 };  
 
 // #######################################################################
@@ -255,7 +265,7 @@ arma::mat mn_loss_j(arma::vec c,
       arma::mat tVij_I=kron( (vj.col(i)).t(),I);
       arma::vec lcp=tVij_I*c;
       
-      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_expit(lcp, k(i) ) )/n;
+      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
     } 
   }
   
