@@ -29,8 +29,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # other: Custom Loss Functions - to be done at a later date
   
    
-  # x_matrix=X; y_matrix=matrix(Y[2,],1,n)#Y;
-  # bw;  ytype=continuous;#"multinomial";
+  x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
+  bw;  ytype="ordinal"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # B_mat=init_mat;
@@ -130,9 +130,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     } else if (ytype=="ordinal" ) {
       linktype="culmit";
       
-      k_vec = as.vector(y_matrix);
-      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
-      
+      k_vec = rep(1, n) #as.vector(y_matrix);
+      mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
+      # mv_Y[1,]
       # Empirical Culmit Transform of the reponse
       link_mv_y=linearsdr:::emp_culmit( mv_Y, k_vec, tune=0.05 );
       

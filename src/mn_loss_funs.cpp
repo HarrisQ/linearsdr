@@ -120,8 +120,8 @@ arma::mat emp_culmit(arma::mat y_matrix,
   arma::vec k = k_vec;
   
   
-  // re-fill matrix with last row
-  arma::mat tildeY0 ; tildeY0 = join_cols(y_matrix,ones_vec);
+  // re-fill matrix with first (not last) row
+  arma::mat tildeY0 ; tildeY0 = join_cols(ones_vec,y_matrix);
   arma::uword m = tildeY0.n_rows;
   arma::mat I; I.eye(m, m);
   
