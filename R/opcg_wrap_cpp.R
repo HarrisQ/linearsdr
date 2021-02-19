@@ -29,8 +29,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # other: Custom Loss Functions - to be done at a later date
   
    
-  x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  bw;  ytype="ordinal"; #"continuous";#"multinomial";
+  # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
+  # bw;  ytype="ordinal"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # B_mat=init_mat;
@@ -132,12 +132,61 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       k_vec = rep(1, n) #as.vector(y_matrix);
       mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
-      # mv_Y[1,]
+      # mv_Y[1,] # mv_Y[,1:20]
       # Empirical Culmit Transform of the reponse
       link_mv_y=linearsdr:::emp_culmit( mv_Y, k_vec, tune=0.05 );
-      
+      # linearsdr:::emp_culmit( mv_Y[,1:20], k_vec, tune=0.05 );
     }
     
+  #   sourceCpp(code='
+  #   // [[Rcpp::depends(RcppArmadillo)]]
+  #   #include <RcppArmadillo.h>
+  #   using namespace Rcpp;
+  #   
+  #   // [[Rcpp::export(name = "emp_culmit")]]
+  #   arma::mat emp_culmit(arma::mat y_matrix,
+  #                    arma::vec k_vec,
+  #                    double tune) {
+  # 
+  #   /***
+  #    * y_matrix is m x n
+  #    */
+  #   
+  #   arma::uword n = y_matrix.n_cols;
+  #   arma::rowvec ones_vec; ones_vec.ones(n);
+  #   arma::vec k = k_vec;
+  #   
+  #   
+  #   // re-fill matrix with first (not last) row
+  #   arma::mat tildeY0 ; tildeY0 = join_cols(ones_vec,y_matrix);
+  #   arma::uword m = tildeY0.n_rows;
+  #   arma::mat I; I.eye(m, m);
+  #   
+  #   
+  #   // create matrices with ones; they are difference matrices;
+  #   // transposing them give the correct differences;
+  #   arma::mat C(m,m - 1); C.eye(); C.diag(-1).fill(-1); // one above diag, fill with -1
+  #   arma::mat D(m,m - 1); D.eye(); D.diag().fill(-1); D.diag(1).fill(1); //one below diag fill with 1
+  #   
+  #   // applying difference matrices to Y and tuning;
+  #   arma::mat C_Y = C.t()*tildeY0; arma::mat D_Y = D.t()*tildeY0;
+  #   C_Y.elem( find(C_Y == 0) ).fill(tune); 
+  #   D_Y.elem( find(D_Y == 0) ).fill(tune);
+  #   
+  #   // # So that the numerator in log(p/(1-p)) is not zero
+  #   arma::mat emp_culmit(m-1,n);  
+  #   
+  #   // Writing the For loop instead of sapply.
+  #   arma::uword i;
+  #   for (i = 0; i < n; i++ ) {
+  #     emp_culmit.col(i) = k(i)*log( abs( diagmat(1/D_Y.col(i))*C_Y.col(i) ) );
+  #     
+  #   }
+  #   
+  #   return emp_culmit;   
+  #   
+  #   
+  # };')
     
     # emp.logit( mv.Y, k.vec, 0.05 )
     # emp.culmit( mv_Y,k_vec);

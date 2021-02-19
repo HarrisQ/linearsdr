@@ -142,7 +142,7 @@ arma::mat emp_culmit(arma::mat y_matrix,
   // Writing the For loop instead of sapply.
   arma::uword i;
   for (i = 0; i < n; i++ ) {
-    emp_culmit.col(i) = k(i)*log( diagmat(1/D_Y.col(i))*C_Y.col(i) );
+    emp_culmit.col(i) = k(i)*log( abs(diagmat(1/D_Y.col(i))*C_Y.col(i) ) );
     
   }
   
