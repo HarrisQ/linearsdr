@@ -125,25 +125,25 @@ arma::mat emp_culmit(arma::mat y_matrix,
   arma::uword m = tildeY0.n_rows;
   arma::mat I; I.eye(m, m);
   
-  // // Use the 1 - empirical CDF as an estimate for the mean tau;
-  // arma::mat tau0(m,n); tau0.zeros();
-  // arma::uword i;
-  // for (i = 0; i < n; i++ ) {   
-  //   arma::vec cum_Z_i ; cum_Z_i = cumsum(tildeY0.col(i)); // This is for summing over T 
-  //   arma::vec Z_i; Z_i = cum_Z_i/max(cum_Z_i); // This is for normalizing to get empirical CDF 
-  //   tau0.col(i) =1 - Z_i; // Z_i; //
-  // }
-  // tau0 = tau0.rows(0,m-2); 
-  // tau0 = join_cols(ones_vec,tau0);
-  // tau0.elem( find(tau0 == 0) ).fill(tune); 
-  
+  // Use the 1 - empirical CDF as an estimate for the mean tau;
+  arma::mat tau0(m,n); tau0.zeros();
+  arma::uword i;
+  for (i = 0; i < n; i++ ) {
+    arma::vec cum_Z_i ; cum_Z_i = cumsum(tildeY0.col(i)); // This is for summing over T
+    arma::vec Z_i; Z_i = cum_Z_i/max(cum_Z_i); // This is for normalizing to get empirical CDF
+    tau0.col(i) =1 - Z_i; // Z_i; //
+  }
+  tau0 = tau0.rows(0,m-2);
+  tau0 = join_cols(ones_vec,tau0);
+  tau0.elem( find(tau0 == 0) ).fill(tune);
+
   // create matrices with ones; they are difference matrices;
   // transposing them give the correct differences;
   arma::mat C(m,m - 1); C.eye(); C.diag(-1).fill(-1); // one above diag, fill with -1
   arma::mat D(m,m - 1); D.eye(); D.diag().fill(-1); D.diag(1).fill(1); //one below diag fill with 1
   
   // applying difference matrices to tau0 and tuning;
-  arma::mat C_Y = C.t()*tildeY0; arma::mat D_Y = D.t()*tildeY0;
+  arma::mat C_Y = C.t()*tau0; arma::mat D_Y = D.t()*tau0;
   C_Y.elem( find(C_Y == 0) ).fill(tune); 
   D_Y.elem( find(D_Y == 0) ).fill(tune);
   
