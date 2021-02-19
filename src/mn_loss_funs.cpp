@@ -171,7 +171,7 @@ arma::mat emp_culmit(arma::mat y_matrix,
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
+arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
   
   arma::uword m=lin_can_par.n_rows;
   arma::vec dot_b;

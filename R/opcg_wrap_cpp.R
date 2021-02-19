@@ -231,7 +231,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       #   using namespace Rcpp;
       #   
       #   // [[Rcpp::export(name = "dot_b_multinom")]]
-      #   arma::mat dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
+      #   arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
       #     
       #     arma::uword m=lin_can_par.n_rows;
       #     arma::vec dot_b;
