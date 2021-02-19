@@ -131,7 +131,7 @@ arma::mat emp_culmit(arma::mat y_matrix,
   for (i = 0; i < n; i++ ) {
     arma::vec cum_Z_i ; cum_Z_i = cumsum(tildeY0.col(i)); // This is for summing over T
     arma::vec Z_i; Z_i = cum_Z_i/max(cum_Z_i); // This is for normalizing to get empirical CDF
-    tau0.col(i) =1 - Z_i; // Z_i; //
+    tau0.col(i) = 1 - Z_i; // Z_i; //
   }
   tau0 = tau0.rows(0,m-2);
   tau0 = join_cols(ones_vec,tau0);
@@ -270,11 +270,11 @@ arma::mat mn_loss_j(arma::vec c,
     for (i = 0; i < n; i++ ) {
       
       // Without constant gradient per class
-      // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
       
       // Imposing constant gradient per class
       // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-      arma::mat tVij_I=reshape(vj.col(i),m,pm );
+      // arma::mat tVij_I=reshape(vj.col(i),m,pm );
       
       // Creating lin_can_parameter
       arma::vec lcp=tVij_I*c;

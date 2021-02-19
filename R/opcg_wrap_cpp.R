@@ -47,7 +47,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
   max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 25 ; 
-  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter); 
+  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter1); 
   beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
   c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 10e-4;
   c_wolfe1=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe1 else 0; 
@@ -205,30 +205,65 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # centering data at obs j 
       Xj = linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL); #(x_matrix - x_matrix[,j])
       B_Xj=t(B)%*%Xj;
-      # Vj=rbind(rep(1,n), B_Xj); 
-      Vj=sapply(1:n, function(j) {
-        c(t(rbind(diag(1,m-1,m-1) , B_Xj[,1]%*%t(rep(1,m-1)))));
-        } );
       
-      
-      # Kernel Weights at j
-      if (is.null(r_mat)) {
-        # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
-        # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
-        # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
-        Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
-      } else { 
-        rXj = t(r_mat)%*%Xj; 
-        Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
+      if (linktype=="culmit") {
+        
+        Vj=rbind(rep(1,n), B_Xj);
+        # Vj=sapply(1:n, function(j) {
+        #   c(t(rbind(diag(1,m-1,m-1) , B_Xj[,1]%*%t(rep(1,m-1)))));
+        # } );
+        
+        
+        # Kernel Weights at j
+        if (is.null(r_mat)) {
+          # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
+          # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
+          # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
+          Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
+        } else { 
+          rXj = t(r_mat)%*%Xj; 
+          Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
+        }
+        
+        # Initial Value
+        # WLS gives a (d+1)x(m-1) matrix; 
+        # We want its transpose, a (m-1)x(d+1) matrix wls_reg
+        
+        # c_j_ls=matrix( t( link_mv_y%*%t(Vj)%*%MASS::ginv(Vj%*%t(Vj)) )%*%rep(1,m-1),
+        #                nrow = m-1, ncol = p+m-1 )[1,]
+        # c_j_ls=matrix( (t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg))),
+        #                nrow = m-1, ncol = p+m-1 )[1,]
+        
+        c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
+      } else {
+        
+        Vj=rbind(rep(1,n), B_Xj); 
+        # Vj=sapply(1:n, function(j) {
+        #   c(t(rbind(diag(1,m-1,m-1) , B_Xj[,1]%*%t(rep(1,m-1)))));
+        # } );
+        
+        # Kernel Weights at j
+        if (is.null(r_mat)) {
+          # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
+          # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
+          # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
+          Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
+        } else { 
+          rXj = t(r_mat)%*%Xj; 
+          Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
+        }
+        
+        # Initial Value
+        # WLS gives a (d+1)x(m-1) matrix; 
+        # We want its transpose, a (m-1)x(d+1) matrix wls_reg
+        
+        c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
+        
       }
       
-      # Initial Value
-      # WLS gives a (d+1)x(m-1) matrix; 
-      # We want its transpose, a (m-1)x(d+1) matrix wls_reg
-      # c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
 
-      c_j_ls=matrix( t( link_mv_y%*%t(Vj)%*%ginv(Vj%*%t(Vj)) )%*%rep(1,m-1), 
-                     nrow = m-1, ncol = p+m-1 )[1,]
+      
+      
       
       # sourceCpp(code='
       #   // [[Rcpp::depends(RcppArmadillo)]]
@@ -301,6 +336,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                                         max_iter_line=max_iter_line1,
                                         l2_pen=l2_pen), 
                       test);
+        # beta_bt1=.25
         # t(c_j_ls)%*%t(matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) )%*%mv_Y[,1]
         
         # sourceCpp(code='
@@ -470,9 +506,22 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       # Don't need to return the wls starting values for this  
       ## for least squares, we undo the vec to get (m-1)x(p+1), which is t(Aj)
-      tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
-      a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
-      D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
+      
+      if (linktype=="culmit") {
+        ### Same Gradients
+        # tA_hatj=matrix(c_j_1, nrow = p+m-1, ncol = 1);
+        # a_hatj=tA_hatj[1:(m-1),]; D_hatj= matrix(tA_hatj[m:(p+m-1),],p,1)  ;
+        # D_hatj_ls= matrix(c_j_ls[m:(p+m-1)], nrow = p, ncol = 1);
+        tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
+        a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
+        D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
+        
+      } else {
+        ### Different Gradients
+        tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
+        a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
+        D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
+      }
       
       if (m > 2) {
         return( list( ahat=a_hatj, Dhat=D_hatj,
@@ -524,8 +573,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
 } 
 
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="ordinal",
-#           method="cg", parallelize, r_mat, control_list)
+# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
+#           method="cg", parallelize, r_mat, control_list)$Dhat
 
 # opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="continuous",
 #           method="newton", parallelize, r_mat, control_list)$Dhat
