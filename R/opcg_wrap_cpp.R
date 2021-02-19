@@ -197,22 +197,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     #   
     #   
     # };')
-    
-    # emp.logit( mv.Y, k.vec, 0.05 )
-    # emp_culmit( mv_Y,k_vec, 0.05);
-    
-    # Rcpp::compileAttributes("../forwardsdr");
-    # devtools::install("../forwardsdr");
-    # library("forwardsdr");
-    
-    # dot_b_multinom(matrix(1:5,1,5),k_i=1,link = "culmit");
-    # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, "culmit", k_vec) ;
-    # mn_score_j(c_j_ls, Vj, mv_Y, Wj, "culmit", k_vec) ;
-    # mn_info_j(c_j_ls, Vj, mv_Y, Wj, "culmit", k_vec) ;
-    
-    
+ 
     # loss_fns = list(mn_loss_j, mn_score_j, mn_info_j);
-    # j=150; test=T
+    # j=2; test=T
     aD_j = function(j, test=F) {
       
       # centering data at obs j 
@@ -238,7 +225,67 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 
       # c_j_0=as.vector(t(wls_cpp(Vj,logit_Y,Wj)));
       
-      # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, "expit", k_vec);
+      # sourceCpp(code='
+      #   // [[Rcpp::depends(RcppArmadillo)]]
+      #   #include <RcppArmadillo.h> 
+      #   using namespace Rcpp;
+      #   
+      #   // [[Rcpp::export(name = "dot_b_multinom")]]
+      #   arma::mat dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
+      #     
+      #     arma::uword m=lin_can_par.n_rows;
+      #     arma::vec dot_b;
+      #     
+      #     if ( link == "expit") {
+      #       
+      #       arma::vec e_lcp=exp(lin_can_par);
+      #       // arma::vec ones_vec(m); ones_vec.ones();
+      #       double dem; dem = 1 + sum(e_lcp) ;
+      #       
+      #       arma::vec pi_i=e_lcp/dem;
+      #       arma::uvec ids = find(pi_i < 0);  
+      #       pi_i.elem(ids).fill(0);    
+      #       
+      #       dot_b = k_i*pi_i;
+      #       
+      #       return dot_b;
+      #       
+      #     } else if (link == "culmit") {
+      #       
+      #       // creating upper/lower triangular matrices;
+      #       arma::mat A; A.ones(m,m);
+      #       //arma::mat U=trimatu(A); 
+      #       arma::mat L=trimatl(A);
+      #       
+      #       // creating Permutation and Differencing Matrices, P, Q
+      #       arma::mat I(m,m); I.eye();
+      #       arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+      #       arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); 
+      #       
+      #       arma::vec phi_i = L*exp( L*lin_can_par  );  
+      #       double dem; dem = 1 + phi_i(m-1);  
+      #       arma::vec num = Q*P*phi_i;
+      #         
+      #       dot_b = num/dem;
+      #       
+      #       return dot_b;
+      #     }
+      #     
+      #   };
+      # 
+      #   // [[Rcpp::export(name = "b_culmit")]]
+      #   double b_culmit(arma::vec lin_can_par, int k_i) {
+      #   arma::uword m=lin_can_par.n_rows;
+      #   arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit"); 
+      #   return -k_i*log(  (1 - mu_i(0))  ) ;
+      # };')
+      
+      #b_culmit(c_j_ls, k_vec[1])
+      #dot_b_multinom( c_j_ls, k_vec[1], "culmit")
+      
+      
+      
+      # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec);
       # mn_score_j(c_j_ls, Vj, mv_Y, Wj, "expit", k_vec);
       # mn_info_j(c_j_ls, Vj, mv_Y, Wj, "expit", k_vec);  
       # mn_info_j(c_j_ls, Vj, mv_Y, Wj, "expit", k_vec)[1:9,1:9];  
@@ -280,10 +327,10 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                       weights=Wj) );
       }
       
-    } # aD_j(150,T)
+    } # hi=aD_j(150,T)
     
   }
-  # aD_j(257, test=T)
+  # hi=aD_j(2, test=T)
   
   # Computing the candidate matrix ----
   # Use version with no parallel

@@ -171,14 +171,7 @@ arma::mat emp_culmit(arma::mat y_matrix,
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
-  
-  /***
-   *  Matrix return with columns as the b_i for observation/individual i;
-   *  \th_i is the canonical parameter for obs i;
-   *  \th_i is p dimensional
-   *  th.i = as.vector(tZij.I%*%c.now)
-   */ 
+arma::mat dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
   
   arma::uword m=lin_can_par.n_rows;
   arma::vec dot_b;
@@ -190,10 +183,12 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     double dem; dem = 1 + sum(e_lcp) ;
     
     arma::vec pi_i=e_lcp/dem;
-    arma::uvec ids = find(pi_i < 0); // Find indices
-    pi_i.elem(ids).fill(0);   // Assign value '0' to ids identified by condition
+    arma::uvec ids = find(pi_i < 0);  
+    pi_i.elem(ids).fill(0);    
     
     dot_b = k_i*pi_i;
+    
+    return dot_b;
     
   } else if (link == "culmit") {
     
@@ -204,18 +199,18 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     
     // creating Permutation and Differencing Matrices, P, Q
     arma::mat I(m,m); I.eye();
-    arma::mat P(m,m); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
-    arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); Q(0,0)=2; 
+    arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+    arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); 
     
-    arma::vec phi_i = L*exp( L*lin_can_par/k_i ); //don't need U for Ad-Cat 
-    //cpp index starts at 0, so m-1 is the mth or last entry
-    double dem; dem = 1 + phi_i(m-1); //don't need to apply the P mat, just say directly
-    
+    arma::vec phi_i = L*exp( L*lin_can_par  );  
+    double dem; dem = 1 + phi_i(m-1);  
     arma::vec num = Q*P*phi_i;
-      
+    
     dot_b = num/dem;
+    
+    return dot_b;
   }
-  return dot_b;
+  
 };
 
 // These need to come after dot_b because they use it.  
