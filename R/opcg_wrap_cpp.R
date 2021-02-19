@@ -303,163 +303,163 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                       test);
         # t(c_j_ls)%*%t(matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) )%*%mv_Y[,1]
         
-        sourceCpp(code='
-          // [[Rcpp::depends(RcppArmadillo)]]
-          #include <RcppArmadillo.h>
-          using namespace Rcpp;
-
-          // [[Rcpp::export(name = "dot_b_multinom")]]
-          arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
-
-            arma::uword m=lin_can_par.n_rows;
-            arma::vec dot_b;
-
-            if ( link == "expit") {
-
-              arma::vec e_lcp=exp(lin_can_par);
-              // arma::vec ones_vec(m); ones_vec.ones();
-              double dem; dem = 1 + sum(e_lcp) ;
-
-              arma::vec pi_i=e_lcp/dem;
-              arma::uvec ids = find(pi_i < 0);
-              pi_i.elem(ids).fill(0);
-
-              dot_b = k_i*pi_i;
-
-              return dot_b;
-
-            } else if (link == "culmit") {
-
-              // creating upper/lower triangular matrices;
-              arma::mat A; A.ones(m,m);
-              //arma::mat U=trimatu(A);
-              arma::mat L=trimatl(A);
-
-              // creating Permutation and Differencing Matrices, P, Q
-              arma::mat I(m,m); I.eye();
-              arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
-              arma::mat Q(m,m); Q = -I; Q.col(0).fill(1);
-
-              arma::vec phi_i = L*exp( L*lin_can_par  );
-              double dem; dem = 1 + phi_i(m-1);
-              arma::vec num = Q*P*phi_i;
-
-              dot_b = num/dem;
-
-              return dot_b;
-            }
-
-          };
-
-          // [[Rcpp::export(name = "b_culmit")]]
-          double b_culmit(arma::vec lin_can_par, int k_i) {
-            arma::uword m=lin_can_par.n_rows;
-            arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit");
-            return -k_i*log(  (1 - mu_i(0))  ) ;
-          };
-          
-          // [[Rcpp::export(name = "mn_loss_j")]]
-          arma::mat mn_loss_j(arma::vec c, 
-                      arma::mat vj, 
-                      arma::mat y_datta, 
-                      arma::vec wj, 
-                      Rcpp::String link, 
-                      arma::vec k) {
-          
-            arma::uword pm=c.n_elem;
-            arma::uword n=y_datta.n_cols;
-            arma::uword m=y_datta.n_rows;
-            arma::mat I(m,m); I.eye();
-            
-            arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
-            // arma::mat test;
-            
-            if (link=="culmit") {
-              
-              // Writing the For loop instead of sapply.
-              arma::uword i;
-              for (i = 0; i < n; i++ ) {
-                
-                // Without constant gradient per class
-                // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-                
-                // Imposing constant gradient per class
-                // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-                arma::mat tVij_I=reshape(vj.col(i),m,pm );
-                
-                // Creating lin_can_parameter
-                arma::vec lcp=tVij_I*c;
-                
-                mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
-              } 
-            }
-            
-            return mean_nll_j;
-                
-          };
-          
-          //[[Rcpp::export(name = "mn_score_j")]]
-          arma::mat mn_score_j(arma::vec c,
-                               arma::mat vj,
-                               arma::mat y_datta,
-                               arma::vec wj,
-                               Rcpp::String link,
-                               arma::vec k) { 
-            arma::uword n=y_datta.n_cols;
-            arma::uword m=y_datta.n_rows;
-            arma::uword pm=c.n_elem;
-            arma::mat I(m,m); I.eye();
-            
-            arma::mat mean_score_j(pm,1); mean_score_j.zeros();
-            // arma::mat test;
-            
-            // Link only matters for the mean, the form of the score is
-            // always the same;
-            // Writing the For loop instead of sapply.
-            
-            
-            if (link=="culmit"){
-              
-              arma::uword i;
-              for (i = 0; i < n; i++ ) {
-                
-                // Without constant gradient per class
-                // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-                
-                // Imposing constant gradient per class
-                // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-                arma::mat tVij_I=reshape(vj.col(i),m,pm );
-                
-                // Creating lin_can_parameter
-                arma::vec lcp=tVij_I*c;
-                
-                arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-                
-                mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-              }
-              
-            } else {
-              
-              arma::uword i;
-              for (i = 0; i < n; i++ ) {
-                
-                arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-                arma::vec lcp=tVij_I*c;
-                arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-                
-                mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-              }
-              
-              
-            }
-            
-            return mean_score_j;
-            
-          };')
+        # sourceCpp(code='
+        #   // [[Rcpp::depends(RcppArmadillo)]]
+        #   #include <RcppArmadillo.h>
+        #   using namespace Rcpp;
+        # 
+        #   // [[Rcpp::export(name = "dot_b_multinom")]]
+        #   arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
+        # 
+        #     arma::uword m=lin_can_par.n_rows;
+        #     arma::vec dot_b;
+        # 
+        #     if ( link == "expit") {
+        # 
+        #       arma::vec e_lcp=exp(lin_can_par);
+        #       // arma::vec ones_vec(m); ones_vec.ones();
+        #       double dem; dem = 1 + sum(e_lcp) ;
+        # 
+        #       arma::vec pi_i=e_lcp/dem;
+        #       arma::uvec ids = find(pi_i < 0);
+        #       pi_i.elem(ids).fill(0);
+        # 
+        #       dot_b = k_i*pi_i;
+        # 
+        #       return dot_b;
+        # 
+        #     } else if (link == "culmit") {
+        # 
+        #       // creating upper/lower triangular matrices;
+        #       arma::mat A; A.ones(m,m);
+        #       //arma::mat U=trimatu(A);
+        #       arma::mat L=trimatl(A);
+        # 
+        #       // creating Permutation and Differencing Matrices, P, Q
+        #       arma::mat I(m,m); I.eye();
+        #       arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+        #       arma::mat Q(m,m); Q = -I; Q.col(0).fill(1);
+        # 
+        #       arma::vec phi_i = L*exp( L*lin_can_par  );
+        #       double dem; dem = 1 + phi_i(m-1);
+        #       arma::vec num = Q*P*phi_i;
+        # 
+        #       dot_b = num/dem;
+        # 
+        #       return dot_b;
+        #     }
+        # 
+        #   };
+        # 
+        #   // [[Rcpp::export(name = "b_culmit")]]
+        #   double b_culmit(arma::vec lin_can_par, int k_i) {
+        #     arma::uword m=lin_can_par.n_rows;
+        #     arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit");
+        #     return -k_i*log(  (1 - mu_i(0))  ) ;
+        #   };
+        #   
+        #   // [[Rcpp::export(name = "mn_loss_j")]]
+        #   arma::mat mn_loss_j(arma::vec c, 
+        #               arma::mat vj, 
+        #               arma::mat y_datta, 
+        #               arma::vec wj, 
+        #               Rcpp::String link, 
+        #               arma::vec k) {
+        #   
+        #     arma::uword pm=c.n_elem;
+        #     arma::uword n=y_datta.n_cols;
+        #     arma::uword m=y_datta.n_rows;
+        #     arma::mat I(m,m); I.eye();
+        #     
+        #     arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
+        #     // arma::mat test;
+        #     
+        #     if (link=="culmit") {
+        #       
+        #       // Writing the For loop instead of sapply.
+        #       arma::uword i;
+        #       for (i = 0; i < n; i++ ) {
+        #         
+        #         // Without constant gradient per class
+        #         // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+        #         
+        #         // Imposing constant gradient per class
+        #         // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
+        #         arma::mat tVij_I=reshape(vj.col(i),m,pm );
+        #         
+        #         // Creating lin_can_parameter
+        #         arma::vec lcp=tVij_I*c;
+        #         
+        #         mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
+        #       } 
+        #     }
+        #     
+        #     return mean_nll_j;
+        #         
+        #   };
+        #   
+        #   //[[Rcpp::export(name = "mn_score_j")]]
+        #   arma::mat mn_score_j(arma::vec c,
+        #                        arma::mat vj,
+        #                        arma::mat y_datta,
+        #                        arma::vec wj,
+        #                        Rcpp::String link,
+        #                        arma::vec k) { 
+        #     arma::uword n=y_datta.n_cols;
+        #     arma::uword m=y_datta.n_rows;
+        #     arma::uword pm=c.n_elem;
+        #     arma::mat I(m,m); I.eye();
+        #     
+        #     arma::mat mean_score_j(pm,1); mean_score_j.zeros();
+        #     // arma::mat test;
+        #     
+        #     // Link only matters for the mean, the form of the score is
+        #     // always the same;
+        #     // Writing the For loop instead of sapply.
+        #     
+        #     
+        #     if (link=="culmit"){
+        #       
+        #       arma::uword i;
+        #       for (i = 0; i < n; i++ ) {
+        #         
+        #         // Without constant gradient per class
+        #         // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+        #         
+        #         // Imposing constant gradient per class
+        #         // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
+        #         arma::mat tVij_I=reshape(vj.col(i),m,pm );
+        #         
+        #         // Creating lin_can_parameter
+        #         arma::vec lcp=tVij_I*c;
+        #         
+        #         arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+        #         
+        #         mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+        #       }
+        #       
+        #     } else {
+        #       
+        #       arma::uword i;
+        #       for (i = 0; i < n; i++ ) {
+        #         
+        #         arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+        #         arma::vec lcp=tVij_I*c;
+        #         arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+        #         
+        #         mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+        #       }
+        #       
+        #       
+        #     }
+        #     
+        #     return mean_score_j;
+        #     
+        #   };')
         
         
-        mn_loss_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
-        mn_score_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
+        # mn_loss_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
+        # mn_score_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
         
       } else if (method=="newton") {
         # Run Newton-Raphson
