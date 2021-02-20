@@ -591,14 +591,19 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
                     method="newton", parallelize=F, r_mat=NULL, 
                     control_list=list()) {
   
-  # x_matrix=X; y_matrix=Y; h=1.19; ytype="multinomial";tol_val= 1e-07; max_iter=25;
-  # B_mat = NULL; # will generate the identity matrix, which is appropriate for OPG
+  
+  # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
+  # bw;  ytype="ordinal"; #"continuous";#"multinomial";
+  # tol_val= 1e-07; max_iter=25;
+  # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
+  # control_list = list(); # B_mat=init_mat;
   
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
   
   DD_list=opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype, 
                     method, parallelize, r_mat, control_list); 
   # DD_mean=list_mean(list(matrix(0,3,2), matrix(1,3,2), matrix(2,3,2)))
+  # DD_mean=list_mean(lapply(1:n, function(j) matrix(rowMeans(DD_list$Dhat[[j]]),ncol=1) ))
   
   DD_mean=list_mean(DD_list$Dhat);
   DD_mean_ls=list_mean(DD_list$Dhat_ls);
