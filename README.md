@@ -13,7 +13,7 @@ The 'Experimental Code' folder is where I have stored code for aspects of Linear
 
 Things that work:
 ---
-* OPG/OPCG, MAVE/MADE  
+* OPG/OPCG, MAVE/MADE (Newton_Raphson)  
 * SIR, DR, SAVE  
 * OPCG Tuning 
 
@@ -27,6 +27,7 @@ Major Things to do:
 ---
 * Build Test Script  
 * Finish/Clean Code for OPCG and Multivariate Continuous Response  
+* Check/Tune CG for MADE (Currently runs slower than Newton and crashes) 
 * Write more Documentation  
 
 
