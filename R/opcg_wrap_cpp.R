@@ -203,7 +203,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     aD_j = function(j, test=F) {
       
       # centering data at obs j 
-      Xj = linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL); #(x_matrix - x_matrix[,j])
+      Xj = linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL); 
       B_Xj=t(B)%*%Xj;
       
       if (linktype=="culmit") {

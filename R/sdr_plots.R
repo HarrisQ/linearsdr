@@ -212,11 +212,10 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
   # 
   
   p_blank + 
-    ggplot2::geom_point(aes(y = y,x = x, 
-                            color = factor(label), shape=factor(label)),
-                        data = data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+    ggplot2::geom_point(data = data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
                                                           function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
-                                                   label=y_datta),
+                                                   label=t(y_datta) ), aes(y = y,x = x, 
+                            color = factor(label), shape=factor(label)), 
                         size=size, show.legend=show.legend) +
     ggplot2::scale_colour_manual(values = y_color)+
     ggplot2::scale_shape_manual(values = y_symbol)+
@@ -260,17 +259,18 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
 ### Plotly Function ====
 plotly_plot <- function(x_datta,y_datta,edr_est,
                         clas_col=NULL, clas_symb=NULL, symb_size=2,
-                        method=NULL) {
+                        method=NULL, legend=T) {
   
   dattaframe = data.frame(t(rbind(t(edr_est)%*%x_datta,y_datta)));
   colnames(dattaframe) = c('x','y','z','resp');
   
   plot_ly(dattaframe, x=dattaframe$x, y=dattaframe$y , z=dattaframe$z,
           color = as.factor(dattaframe$resp), colors = clas_col,
-          # symbol = dattaframe$resp, symbols = clas_symb,
+          symbol = as.factor(dattaframe$resp), symbols = clas_symb,
           marker=list(size=symb_size, sizemode="diameter")
   ) %>%
-    add_markers(   ) 
+    add_markers(    ) %>% layout(showlegend = legend)
+  
   # %>%
   #   layout(scene = list(xaxis = c(title=paste0(axis_labels_method, as.character(1))),
   #                       yaxis = c(title=paste0(axis_labels_method, as.character(2))),
