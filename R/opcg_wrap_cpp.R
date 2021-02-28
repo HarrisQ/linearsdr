@@ -359,12 +359,12 @@ opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
   # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
   # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();
   
-<<<<<<< HEAD
+# <<<<<<< HEAD
  
-=======
+# =======
   opcg_sdr=eigen_cpp(cand_mat$opcg_mat)$vec[,1:d]
   wls_sdr=eigen_cpp(cand_mat$wls_mat)$vec[,1:d]
->>>>>>> parent of 2c17fd2 (Update opcg_wrap_cpp.R)
+# >>>>>>> parent of 2c17fd2 (Update opcg_wrap_cpp.R)
   
   return( list( opcg=opcg_sdr,  
                 # opcg_wls=wls_sdr,
