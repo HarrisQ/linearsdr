@@ -137,68 +137,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # emp_culmit( mv_Y[,980:1000], k_vec, tune=0.05 );
     }
     
-    # sourceCpp(code='
-    #   // [[Rcpp::depends(RcppArmadillo)]]
-    #   #include <RcppArmadillo.h>
-    #   using namespace Rcpp;
-    # 
-    #   // [[Rcpp::export(name = "emp_culmit")]]
-    #   arma::mat emp_culmit(arma::mat y_matrix,
-    #                    arma::vec k_vec,
-    #                    double tune) {
-    # 
-    #   /***
-    #    * y_matrix is m x n
-    #    */
-    # 
-    #   arma::uword n = y_matrix.n_cols;
-    #   arma::rowvec ones_vec; ones_vec.ones(n);
-    #   arma::vec k = k_vec;
-    # 
-    # 
-    #   // re-fill matrix with first (not last) row
-    #   arma::mat tildeY0 ; tildeY0 = join_cols(ones_vec,y_matrix);
-    #   arma::uword m = tildeY0.n_rows;
-    #   arma::mat I; I.eye(m, m);
-    # 
-    #   // Use the 1 - empirical CDF as an estimate for the mean tau;
-    #   arma::mat tau0(m,n); tau0.zeros();
-    #   arma::uword i;
-    #   for (i = 0; i < n; i++ ) {
-    #     arma::vec cum_Z_i ; cum_Z_i = cumsum(tildeY0.col(i)); // This is for summing over T
-    #     arma::vec Z_i; Z_i = cum_Z_i/max(cum_Z_i); // This is for normalizing to get empirical CDF
-    #     tau0.col(i) =1 - Z_i; // Z_i; //
-    #   }
-    #   tau0 = tau0.rows(0,m-2);
-    #   tau0 = join_cols(ones_vec,tau0);
-    #   tau0.elem( find(tau0 == 0) ).fill(tune);
-    # 
-    #   // create matrices with ones; they are difference matrices;
-    #   // transposing them give the correct differences;
-    #   arma::mat C(m,m - 1); C.eye(); C.diag(-1).fill(-1); // one above diag, fill with -1
-    #   arma::mat D(m,m - 1); D.eye(); D.diag().fill(-1); D.diag(1).fill(1); //one below diag fill with 1
-    # 
-    #   // applying difference matrices to tau0 and tuning;
-    #   arma::mat C_Y = C.t()*tildeY0; arma::mat D_Y = D.t()*tildeY0;
-    #   C_Y.elem( find(C_Y == 0) ).fill(tune);
-    #   D_Y.elem( find(D_Y == 0) ).fill(tune);
-    # 
-    #   // # So that the numerator in log(p/(1-p)) is not zero
-    #   arma::mat emp_culmit(m-1,n);
-    # 
-    #   // Writing the For loop instead of sapply.
-    #   arma::uword j;
-    #   for (j = 0; j < n; j++ ) {
-    #     emp_culmit.col(j) = k(j)*log( abs(diagmat(1/D_Y.col(j))*C_Y.col(j) ) );
-    # 
-    #   }
-    # 
-    #   return emp_culmit;  // tau0; //
-    # 
-    # 
-    # };')
- 
-    # loss_fns = list(mn_loss_j, mn_score_j, mn_info_j);
+    
     # j=2; test=T
     aD_j = function(j, test=F) {
       
