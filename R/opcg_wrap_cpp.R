@@ -291,44 +291,6 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 
 ############### OPCG wrapper #########################
 
-opcg_wrap <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
-                 method="newton", parallelize=F, r_mat = NULL,
-                 control_list=list()) {
-  
-  # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
-  cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 
-                   parallelize, r_mat , control_list)
-  
-  # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
-  # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();
-  
-  opcg_sdr=eigen_cpp(cand_mat$opcg_mat)$vec[,1:d]
-  wls_sdr=eigen_cpp(cand_mat$wls_mat)$vec[,1:d]
-  
-  #' @return A list containing both the estimate and candidate matrix.
-  #' \itemize{
-  #'   \item opcg - 
-  #'   \item opcg_wls - A 'pxd' matrix that estimates a basis for the central subspace based 
-  #'   on the initial value of the optimization problem; useful for examining bad starting 
-  #'   values.
-  #'   \item cand_mat - A list that contains both the candidate matrix for OPCG and for
-  #'   the initial value; this is used in other functions for order determination
-  #'   \item gradients - The estimated local gradients; used in regularization of OPCG
-  #'   \item weights - The kernel weights in the local-linear GLM. 
-  #' }
-  
-  
-  return( list( opcg=opcg_sdr,  
-                # opcg_wls=wls_sdr,
-                cand_mat=cand_mat,
-                # ,
-                gradients=cand_mat$gradients#,
-                # weights=cand_mat$weights
-  )  )
-  
-}
-
-
 #' Outer Product of Canonical Gradients
 #'
 #' This implements the Outer Product of Canonical Gradients (OPCG) in a forth coming
@@ -372,27 +334,46 @@ opcg_wrap <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
 #' }
 #' @param ytype specify the response as 'continuous', 'multinomial', or 'ordinal' 
 #'
-#' @return A 'pxd' matrix that estimates a basis for the central subspace based on 
-#' the estimated local gradients
+#' @return A list containing both the estimate and candidate matrix.
+#' \itemize{
+#'   \item opcg - A 'pxd' matrix that estimates a basis for the central subspace.
+#'   \item opcg_wls - A 'pxd' matrix that estimates a basis for the central subspace based 
+#'   on the initial value of the optimization problem; useful for examining bad starting 
+#'   values.
+#'   \item cand_mat - A list that contains both the candidate matrix for OPCG and for
+#'   the initial value; this is used in other functions for order determination
+#'   \item gradients - The estimated local gradients; used in regularization of OPCG
+#'   \item weights - The kernel weights in the local-linear GLM. 
+#' }
 #'  
 #' @export
-#' 
 #' 
 opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
-  beta=opcg_wrap(x_matrix, y_matrix, d, bw, ytype,
-                     method, parallelize, r_mat,
-                     control_list)$opcg 
+  # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
+  cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 
+                   parallelize, r_mat , control_list)
   
-  return(beta)
+  # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
+  # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();
   
+<<<<<<< HEAD
  
+=======
+  opcg_sdr=eigen_cpp(cand_mat$opcg_mat)$vec[,1:d]
+  wls_sdr=eigen_cpp(cand_mat$wls_mat)$vec[,1:d]
+>>>>>>> parent of 2c17fd2 (Update opcg_wrap_cpp.R)
   
+  return( list( opcg=opcg_sdr,  
+                # opcg_wls=wls_sdr,
+                cand_mat=cand_mat,
+                # ,
+                gradients=cand_mat$gradients#,
+                # weights=cand_mat$weights
+                )  ) 
 }
-
-
 
 # A wrapper for Refined OPCG
 
