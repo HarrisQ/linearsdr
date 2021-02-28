@@ -309,41 +309,50 @@ arma::mat mn_score_j(arma::vec c,
   // always the same;
   // Writing the For loop instead of sapply.
   
-  
-  if (link=="culmit"){
+  arma::uword i;
+  for (i = 0; i < n; i++ ) {
     
-    arma::uword i;
-    for (i = 0; i < n; i++ ) {
-      
-      // Without constant gradient per class
-      // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-      
-      // Imposing constant gradient per class
-      // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-      arma::mat tVij_I=reshape(vj.col(i),m,pm );
-      
-      // Creating lin_can_parameter
-      arma::vec lcp=tVij_I*c;
-      
-      arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-      
-      mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-    }
+    arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+    arma::vec lcp=tVij_I*c;
+    arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
     
-  } else {
-    
-    arma::uword i;
-    for (i = 0; i < n; i++ ) {
-      
-      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-      arma::vec lcp=tVij_I*c;
-      arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-      
-      mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-    }
-    
-    
+    mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
   }
+  
+  // if (link=="culmit"){
+  //   
+  //   arma::uword i;
+  //   for (i = 0; i < n; i++ ) {
+  //     
+  //     // Without constant gradient per class
+  //     // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+  //     
+  //     // Imposing constant gradient per class
+  //     // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
+  //     arma::mat tVij_I=reshape(vj.col(i),m,pm );
+  //     
+  //     // Creating lin_can_parameter
+  //     arma::vec lcp=tVij_I*c;
+  //     
+  //     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+  //     
+  //     mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+  //   }
+  //   
+  // } else {
+  //   
+  //   arma::uword i;
+  //   for (i = 0; i < n; i++ ) {
+  //     
+  //     arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+  //     arma::vec lcp=tVij_I*c;
+  //     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+  //     
+  //     mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+  //   }
+  //   
+  //   
+  // }
   
   return mean_score_j;
   

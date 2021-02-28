@@ -206,122 +206,24 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       Xj = linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL); 
       B_Xj=t(B)%*%Xj;
       
-      if (linktype=="culmit") {
-        
-        Vj=rbind(rep(1,n), B_Xj);
-        # Vj=sapply(1:n, function(j) {
-        #   c(t(rbind(diag(1,m-1,m-1) , B_Xj[,1]%*%t(rep(1,m-1)))));
-        # } );
-        
-        
-        # Kernel Weights at j
-        if (is.null(r_mat)) {
-          # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
-          # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
-          # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
-          Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
-        } else { 
-          rXj = t(r_mat)%*%Xj; 
-          Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
-        }
-        
-        # Initial Value
-        # WLS gives a (d+1)x(m-1) matrix; 
-        # We want its transpose, a (m-1)x(d+1) matrix wls_reg
-        
-        # c_j_ls=matrix( t( link_mv_y%*%t(Vj)%*%MASS::ginv(Vj%*%t(Vj)) )%*%rep(1,m-1),
-        #                nrow = m-1, ncol = p+m-1 )[1,]
-        # c_j_ls=matrix( (t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg))),
-        #                nrow = m-1, ncol = p+m-1 )[1,]
-        
-        c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
-      } else {
-        
-        Vj=rbind(rep(1,n), B_Xj); 
-        # Vj=sapply(1:n, function(j) {
-        #   c(t(rbind(diag(1,m-1,m-1) , B_Xj[,1]%*%t(rep(1,m-1)))));
-        # } );
-        
-        # Kernel Weights at j
-        if (is.null(r_mat)) {
-          # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
-          # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
-          # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
-          Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
-        } else { 
-          rXj = t(r_mat)%*%Xj; 
-          Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
-        }
-        
-        # Initial Value
-        # WLS gives a (d+1)x(m-1) matrix; 
-        # We want its transpose, a (m-1)x(d+1) matrix wls_reg
-        
-        c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
-        
+      Vj=rbind(rep(1,n), B_Xj);  
+      
+      # Kernel Weights at j
+      if (is.null(r_mat)) {
+        # Wj=  exp(colSums(dnorm(Xj,0, sd=bw, log = T))) 
+        # normalize_cpp( exp(colSums(dnorm( rbind(c(1,2), c(1,2),c(1,2) ) , 0, sd=bw, log = T))))
+        # gauss_kern_cpp( rbind(c(1,2), c(1,2), c(1,2) ) ,bw)
+        Wj=linearsdr:::gauss_kern_cpp(Xj,bw)
+      } else { 
+        rXj = t(r_mat)%*%Xj; 
+        Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
       }
       
-
+      # Initial Value
+      # WLS gives a (d+1)x(m-1) matrix; 
+      # We want its transpose, a (m-1)x(d+1) matrix wls_reg
       
-      
-      
-      # sourceCpp(code='
-      #   // [[Rcpp::depends(RcppArmadillo)]]
-      #   #include <RcppArmadillo.h> 
-      #   using namespace Rcpp;
-      #   
-      #   // [[Rcpp::export(name = "dot_b_multinom")]]
-      #   arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
-      #     
-      #     arma::uword m=lin_can_par.n_rows;
-      #     arma::vec dot_b;
-      #     
-      #     if ( link == "expit") {
-      #       
-      #       arma::vec e_lcp=exp(lin_can_par);
-      #       // arma::vec ones_vec(m); ones_vec.ones();
-      #       double dem; dem = 1 + sum(e_lcp) ;
-      #       
-      #       arma::vec pi_i=e_lcp/dem;
-      #       arma::uvec ids = find(pi_i < 0);  
-      #       pi_i.elem(ids).fill(0);    
-      #       
-      #       dot_b = k_i*pi_i;
-      #       
-      #       return dot_b;
-      #       
-      #     } else if (link == "culmit") {
-      #       
-      #       // creating upper/lower triangular matrices;
-      #       arma::mat A; A.ones(m,m);
-      #       //arma::mat U=trimatu(A); 
-      #       arma::mat L=trimatl(A);
-      #       
-      #       // creating Permutation and Differencing Matrices, P, Q
-      #       arma::mat I(m,m); I.eye();
-      #       arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
-      #       arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); 
-      #       
-      #       arma::vec phi_i = L*exp( L*lin_can_par  );  
-      #       double dem; dem = 1 + phi_i(m-1);  
-      #       arma::vec num = Q*P*phi_i;
-      #         
-      #       dot_b = num/dem;
-      #       
-      #       return dot_b;
-      #     }
-      #     
-      #   };
-      # 
-      #   // [[Rcpp::export(name = "b_culmit")]]
-      #   double b_culmit(arma::vec lin_can_par, int k_i) {
-      #   arma::uword m=lin_can_par.n_rows;
-      #   arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit"); 
-      #   return -k_i*log(  (1 - mu_i(0))  ) ;
-      # };')
-      
-      #b_culmit(c_j_ls, k_vec[1])
-      #dot_b_multinom( c_j_ls, k_vec[1], "culmit")
+      c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
       
       
       if (method=="cg") { 
@@ -336,166 +238,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                                         max_iter_line=max_iter_line1,
                                         l2_pen=l2_pen), 
                       test);
-        # beta_bt1=.25
-        # t(c_j_ls)%*%t(matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) )%*%mv_Y[,1]
-        
-        # sourceCpp(code='
-        #   // [[Rcpp::depends(RcppArmadillo)]]
-        #   #include <RcppArmadillo.h>
-        #   using namespace Rcpp;
-        # 
-        #   // [[Rcpp::export(name = "dot_b_multinom")]]
-        #   arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
-        # 
-        #     arma::uword m=lin_can_par.n_rows;
-        #     arma::vec dot_b;
-        # 
-        #     if ( link == "expit") {
-        # 
-        #       arma::vec e_lcp=exp(lin_can_par);
-        #       // arma::vec ones_vec(m); ones_vec.ones();
-        #       double dem; dem = 1 + sum(e_lcp) ;
-        # 
-        #       arma::vec pi_i=e_lcp/dem;
-        #       arma::uvec ids = find(pi_i < 0);
-        #       pi_i.elem(ids).fill(0);
-        # 
-        #       dot_b = k_i*pi_i;
-        # 
-        #       return dot_b;
-        # 
-        #     } else if (link == "culmit") {
-        # 
-        #       // creating upper/lower triangular matrices;
-        #       arma::mat A; A.ones(m,m);
-        #       //arma::mat U=trimatu(A);
-        #       arma::mat L=trimatl(A);
-        # 
-        #       // creating Permutation and Differencing Matrices, P, Q
-        #       arma::mat I(m,m); I.eye();
-        #       arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
-        #       arma::mat Q(m,m); Q = -I; Q.col(0).fill(1);
-        # 
-        #       arma::vec phi_i = L*exp( L*lin_can_par  );
-        #       double dem; dem = 1 + phi_i(m-1);
-        #       arma::vec num = Q*P*phi_i;
-        # 
-        #       dot_b = num/dem;
-        # 
-        #       return dot_b;
-        #     }
-        # 
-        #   };
-        # 
-        #   // [[Rcpp::export(name = "b_culmit")]]
-        #   double b_culmit(arma::vec lin_can_par, int k_i) {
-        #     arma::uword m=lin_can_par.n_rows;
-        #     arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit");
-        #     return -k_i*log(  (1 - mu_i(0))  ) ;
-        #   };
-        #   
-        #   // [[Rcpp::export(name = "mn_loss_j")]]
-        #   arma::mat mn_loss_j(arma::vec c, 
-        #               arma::mat vj, 
-        #               arma::mat y_datta, 
-        #               arma::vec wj, 
-        #               Rcpp::String link, 
-        #               arma::vec k) {
-        #   
-        #     arma::uword pm=c.n_elem;
-        #     arma::uword n=y_datta.n_cols;
-        #     arma::uword m=y_datta.n_rows;
-        #     arma::mat I(m,m); I.eye();
-        #     
-        #     arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
-        #     // arma::mat test;
-        #     
-        #     if (link=="culmit") {
-        #       
-        #       // Writing the For loop instead of sapply.
-        #       arma::uword i;
-        #       for (i = 0; i < n; i++ ) {
-        #         
-        #         // Without constant gradient per class
-        #         // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-        #         
-        #         // Imposing constant gradient per class
-        #         // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-        #         arma::mat tVij_I=reshape(vj.col(i),m,pm );
-        #         
-        #         // Creating lin_can_parameter
-        #         arma::vec lcp=tVij_I*c;
-        #         
-        #         mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
-        #       } 
-        #     }
-        #     
-        #     return mean_nll_j;
-        #         
-        #   };
-        #   
-        #   //[[Rcpp::export(name = "mn_score_j")]]
-        #   arma::mat mn_score_j(arma::vec c,
-        #                        arma::mat vj,
-        #                        arma::mat y_datta,
-        #                        arma::vec wj,
-        #                        Rcpp::String link,
-        #                        arma::vec k) { 
-        #     arma::uword n=y_datta.n_cols;
-        #     arma::uword m=y_datta.n_rows;
-        #     arma::uword pm=c.n_elem;
-        #     arma::mat I(m,m); I.eye();
-        #     
-        #     arma::mat mean_score_j(pm,1); mean_score_j.zeros();
-        #     // arma::mat test;
-        #     
-        #     // Link only matters for the mean, the form of the score is
-        #     // always the same;
-        #     // Writing the For loop instead of sapply.
-        #     
-        #     
-        #     if (link=="culmit"){
-        #       
-        #       arma::uword i;
-        #       for (i = 0; i < n; i++ ) {
-        #         
-        #         // Without constant gradient per class
-        #         // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-        #         
-        #         // Imposing constant gradient per class
-        #         // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-        #         arma::mat tVij_I=reshape(vj.col(i),m,pm );
-        #         
-        #         // Creating lin_can_parameter
-        #         arma::vec lcp=tVij_I*c;
-        #         
-        #         arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-        #         
-        #         mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-        #       }
-        #       
-        #     } else {
-        #       
-        #       arma::uword i;
-        #       for (i = 0; i < n; i++ ) {
-        #         
-        #         arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-        #         arma::vec lcp=tVij_I*c;
-        #         arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-        #         
-        #         mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-        #       }
-        #       
-        #       
-        #     }
-        #     
-        #     return mean_score_j;
-        #     
-        #   };')
-        
-        
-        # mn_loss_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
-        # mn_score_j(c_j_ls, Vj, mv_Y, Wj,linktype, k_vec) 
+
         
       } else if (method=="newton") {
         # Run Newton-Raphson
@@ -507,21 +250,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # Don't need to return the wls starting values for this  
       ## for least squares, we undo the vec to get (m-1)x(p+1), which is t(Aj)
       
-      if (linktype=="culmit") {
-        ### Same Gradients
-        # tA_hatj=matrix(c_j_1, nrow = p+m-1, ncol = 1);
-        # a_hatj=tA_hatj[1:(m-1),]; D_hatj= matrix(tA_hatj[m:(p+m-1),],p,1)  ;
-        # D_hatj_ls= matrix(c_j_ls[m:(p+m-1)], nrow = p, ncol = 1);
-        tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
-        a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
-        D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
-        
-      } else {
-        ### Different Gradients
-        tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
-        a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
-        D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
-      }
+      tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
+      a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
+      D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
       
       if (m > 2) {
         return( list( ahat=a_hatj, Dhat=D_hatj,
@@ -718,49 +449,7 @@ opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
   
   return(beta)
   
-  # if (ytype!='continuous') {
-  #   cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 
-  #                    parallelize, r_mat , control_list)
-  #   
-  #   # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
-  #   # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();
-  #   
-  #   opcg_sdr=eigen_cpp(cand_mat$opcg_mat)$vec[,1:d]
-  #   wls_sdr=eigen_cpp(cand_mat$wls_mat)$vec[,1:d]
-  #   
-  #   return( list( opcg=opcg_sdr,  
-  #                 # opcg_wls=wls_sdr,
-  #                 cand_mat=cand_mat,
-  #                 # ,
-  #                 gradients=cand_mat$gradients#,
-  #                 # weights=cand_mat$weights
-  #   )  )
-  # } else if (ytype=='continuous') {
-  #   m = min(dim(y_matrix)); n = max(dim(y_matrix));
-  #   opcg_obj=lapply(1:m, function(r) { 
-  #     cand_mat=opcg_DD(x_matrix, matrix(y_matrix[r,],1,n), bw, ytype, method, 
-  #                      parallelize, r_mat , control_list)
-  #     return(list(opcg=eigen_cpp(cand_mat$opcg_mat)$vec[,1],
-  #                 wls=eigen_cpp(cand_mat$wls_mat)$vec[,1],
-  #                 gradients=) )
-  #   } )
-  #   
-  #   
-  #   # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
-  #   # method="cg"; lambda2a=1;lambda2b=5; parallelize=T; control_list=list();
-  #   
-  #   opcg_sdr= sapply(1:m, function(r) opcg_obj[[r]]$opcg )
-  #   wls_sdr= sapply(1:m, function(r) opcg_obj[[r]]$wls )
-  #   
-  #   return( list( opcg=opcg_sdr,  
-  #                 # opcg_wls=wls_sdr,
-  #                 cand_mat=cand_mat,
-  #                 # ,
-  #                 gradients=cand_mat$gradients#,
-  #                 # weights=cand_mat$weights
-  #   )  )
-  #   
-  # }
+ 
   
 }
 
