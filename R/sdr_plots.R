@@ -10,11 +10,12 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
                         ellipse=F
                         ) {
   
-  # y_datta=Y; x_datta=t( Beta )%*%(X);
+  # y_datta=Y; x_datta=t( B_hat_opcg )%*%(X);
   # y_on_axis=F; ytype="continuous";#"multinomial";
   # size=1; h_lab=NULL; v_lab=NULL; main_lab=NULL;
-  # show_legend=T;
+  # show_legend=T; h_lim=NULL; v_lin=NULL;
   # y_colors=NULL; y_symbols=NULL
+  # ellipse=T;
   
   datta_frame0 <- data.frame( t( rbind(y_datta, x_datta) ));
   colnames(datta_frame0) <- c('y', 
@@ -39,15 +40,16 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
     
     # Add points
     if(!y_on_axis) { # Don't plot Y
-      pplot = p_base + 
-        ggplot2::geom_point(aes(x=x1, y=x2, color = factor(y), shape=factor(y)),
-                            size=size, show.legend=show_legend );
       
       # Draw Ellipse
       if(ellipse) {
-        pplot = pplot + 
+        pplot = p_base + 
           ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
                                 type="norm", lwd=2, lty=2) #
+      } else {
+        pplot = p_base + 
+          ggplot2::geom_point(aes(x=x1, y=x2, color = factor(y), shape=factor(y)),
+                              size=size, show.legend=show_legend );
       }
       
     } else {
@@ -74,24 +76,28 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
     
     # Add points
     if(!y_on_axis) { # Don't plot Y
-      pplot = p_base +
-        ggplot2::geom_point(aes(x=x1, y=x2, color = y),
-                            size=size, show.legend=show_legend  )
+      
       # Draw Ellipse
       if(ellipse) {
-        pplot = pplot + 
+        pplot = p_base + 
           ggplot2::stat_ellipse(aes(x=x1, y=x2, color = factor(y), group=factor(y)),
                                 type="norm")
+      } else {
+        pplot = p_base +
+          ggplot2::geom_point(aes(x=x1, y=x2, color = y),
+                              size=size, show.legend=show_legend  )
       }
     } else { # Plot Y
-      pplot = p_base +
-        ggplot2::geom_point(aes(x=x1, y=y, color = y),
-                            size=size, show.legend=show_legend  )
+      
       # Draw Ellipse
       if(ellipse) {
-        pplot = pplot + 
+        pplot = p_base + 
           ggplot2::stat_ellipse(aes(x=x1, y=y, color = factor(y), group=factor(y)),
                                 type="norm")
+      } else {
+        pplot = p_base +
+          ggplot2::geom_point(aes(x=x1, y=y, color = y),
+                              size=size, show.legend=show_legend  )
       }
     }
     

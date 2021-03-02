@@ -46,9 +46,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   wls_reg=if ( "wls_reg" %in% control_names ) control_args$wls_reg else 0;
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
-  max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 25 ; 
-  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter); 
-  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.75;
+  max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 50 ; 
+  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter1); 
+  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
   c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 10e-4;
   c_wolfe1=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe1 else 0; 
   max_iter_line1=if ( "max_iter_line1" %in% control_names ) control_args$max_iter_line1 else 100; 
@@ -138,7 +138,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     }
     
     
-    # j=2; test=T
+    # j=14; test=T
     aD_j = function(j, test=F) {
       
       # centering data at obs j 
@@ -206,7 +206,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     } # hi=aD_j(150,T)
     
   }
-  # hi=aD_j(2, test=T)
+  # hi=aD_j(14, test=T)
   
   # Computing the candidate matrix ----
   # Use version with no parallel
@@ -246,7 +246,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 # opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
 #           method="cg", parallelize, r_mat, control_list)$Dhat
 
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="continuous",
+# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="ordinal",
 #           method="newton", parallelize, r_mat, control_list)$Dhat
 
 ############### OPCG Candidate Matrix #########################
