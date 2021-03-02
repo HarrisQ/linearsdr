@@ -401,7 +401,7 @@ arma::mat mn_info_j(arma::vec c,
       
       arma::vec v_m(m); v_m.ones(); //vec of ones
       arma::mat E; E = v_m*mu_ij.t();
-      arma::mat E_syml = symmatl(E);
+      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       mean_info_j += wj(i)*tVij_I.t()*(E_syml - mu_ij*mu_ij.t())*tVij_I/(k(i)*n);
       

@@ -33,7 +33,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   # bw;  ytype="ordinal"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
-  # control_list = list(); # B_mat=init_mat;
+  # control_list = list() #control_list = list(); # B_mat=init_mat;
   
   
   # Parameters for the problem/model
@@ -48,7 +48,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
   max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 25 ; 
   init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter); 
-  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
+  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.75;
   c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 10e-4;
   c_wolfe1=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe1 else 0; 
   max_iter_line1=if ( "max_iter_line1" %in% control_names ) control_args$max_iter_line1 else 100; 
@@ -109,7 +109,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
        
     }
-    # aD_j(1,T)  
+    # hi=aD_j(1,T)  
   } else if (ytype %in% c("multinomial", "ordinal") ) {
     # y.matrix should be 1 x n 
     
