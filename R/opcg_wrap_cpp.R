@@ -247,8 +247,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
 } 
 
-opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
-          method="cg", parallelize, r_mat, control_list)$Dhat
+# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
+#           method="cg", parallelize, r_mat, control_list)$Dhat
 
 # opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="ordinal",
 #           method="newton", parallelize, r_mat, control_list)$Dhat
