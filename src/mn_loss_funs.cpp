@@ -279,7 +279,7 @@ arma::mat mn_loss_j(arma::vec c,
       // Creating lin_can_parameter
       arma::vec lcp=tVij_I*c;
       
-      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )\1;
+      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/1;
     } 
     
   }
