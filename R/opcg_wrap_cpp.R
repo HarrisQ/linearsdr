@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="ordinal"; #"continuous";#"multinomial";
+  # bw=4.8;  ytype="multinomial"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -198,8 +198,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (m > 2) {
         return( list( ahat=a_hatj, Dhat=D_hatj,
-                      Dhat_ls=D_hatj_ls, 
+                      Dhat_ls=D_hatj_ls,
                       weights=Wj) );
+        # return( list( ahat=a_hatj ) );
       } else {
         return( list( ahat=a_hatj, Dhat=t(D_hatj),
                       Dhat_ls=t(D_hatj_ls),
@@ -246,8 +247,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
 } 
 
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
-#           method="cg", parallelize, r_mat, control_list)$Dhat
+opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
+          method="cg", parallelize, r_mat, control_list)$Dhat
 
 # opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="ordinal",
 #           method="newton", parallelize, r_mat, control_list)$Dhat
