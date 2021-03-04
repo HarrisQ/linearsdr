@@ -279,7 +279,7 @@ arma::mat mn_loss_j(arma::vec c,
       // Creating lin_can_parameter
       arma::vec lcp=tVij_I*c;
       
-      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
+      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) );
     } 
     
   }
@@ -316,7 +316,7 @@ arma::mat mn_score_j(arma::vec c,
     arma::vec lcp=tVij_I*c;
     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
     
-    mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+    mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij); 
   }
   
   // if (link=="culmit"){
