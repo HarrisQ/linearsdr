@@ -214,6 +214,7 @@ arma::vec aD_j_cg(arma::vec init,
   arma::vec s=control_list["init_stepsize"]; 
   double beta_bt=control_list["beta_bt"]; //backtracking beta
   double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_ag2=control_list["c_ag2"]; //parameter for second Armijo bound in nesterov 
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   int max_iter_line=control_list["max_iter_line"];
   //int l2_pen=control_list["l2_pen"]; //penalty parameter for ridge regression
@@ -257,8 +258,17 @@ arma::vec aD_j_cg(arma::vec init,
       double suff_dec_ag;
       suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
         mn_loss_j(c_search,vj,y_datta,wj,link,k) );
-      
       int armijo_cond = (suff_dec_ag >= armijo_bound);
+      
+      
+      int armijo_cond2=0;
+      if (c_ag2 > 0) {
+        // the second bound in armijo-goldstein in nesterovs intro to conv opt text
+        double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
+                                          (p_now.t()*grad_now));
+        // second sufficient descent bound uses the same suff_dec_ag   
+        armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
+      }  
       
       int wolfe_cond=0;
       if (c_wolfe > 0) {
@@ -273,7 +283,7 @@ arma::vec aD_j_cg(arma::vec init,
       }  
       
       
-      if ( armijo_cond + wolfe_cond > 0) {
+      if ( armijo_cond + armijo_cond2 == 2 ) { //+ wolfe_cond
         m_ag = m_cg;
         break;
         }
