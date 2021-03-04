@@ -279,7 +279,7 @@ arma::mat mn_loss_j(arma::vec c,
       // Creating lin_can_parameter
       arma::vec lcp=tVij_I*c;
       
-      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
+      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) );
     } 
     
   }
@@ -316,7 +316,7 @@ arma::mat mn_score_j(arma::vec c,
     arma::vec lcp=tVij_I*c;
     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
     
-    mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+    mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij); 
   }
   
   // if (link=="culmit"){
@@ -463,7 +463,7 @@ arma::mat mn_loss_j_made(arma::vec c,
       arma::vec lcp=tXij_tD*c;
       
       mean_nll_j += -wj(i)*( (ahat + lcp).t()* y_matrix.col(i) - 
-        b_culmit((ahat + lcp), k(i) ) )/n;
+        b_culmit((ahat + lcp), k(i) ) );
       
     } 
   }
@@ -505,7 +505,7 @@ arma::mat mn_loss_made(arma::vec c,
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
     // not really a mean
-    mean_nll += mn_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat, link, k)/n;
+    mean_nll += mn_loss_j_made(c, xj, y_matrix, wj, ahat, Dhat, link, k);
     // test = -wj(i)*( lcp.t()*( y_datta.col(i)) - b_expit(lcp, k(i) ) );
   } 
   
@@ -545,7 +545,7 @@ arma::mat mn_score_j_made(arma::vec c,
     arma::vec mu_ij = dot_b_multinom( ( ahat + lcp), k(i), link);
     
    
-    mean_score_j += -wj(i)*tXij_tD.t()*( y_matrix.col(i) - mu_ij)/n;
+    mean_score_j += -wj(i)*tXij_tD.t()*( y_matrix.col(i) - mu_ij);
     
     // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
   }
@@ -588,7 +588,7 @@ arma::mat mn_score_made(arma::vec c,
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
     // not really a mean, just a sum
-    mean_score += mn_score_j_made(c, xj, y_matrix, wj, ahat, Dhat, link, k)/n;
+    mean_score += mn_score_j_made(c, xj, y_matrix, wj, ahat, Dhat, link, k);
     // test = -wj(i)*( lcp.t()*( y_datta.col(i)) - b_expit(lcp, k(i) ) );
     
   } 
@@ -627,7 +627,7 @@ arma::mat mn_info_j_made(arma::vec c,
       arma::vec lcp=tXij_tD*c;
       arma::vec mu_ij = dot_b_multinom( ( ahat + lcp), k(i), link);
       
-      mean_info_j += wj(i)*k(i)*tXij_tD.t()*( diagmat(mu_ij) - mu_ij*mu_ij.t())*tXij_tD/n;
+      mean_info_j += wj(i)*k(i)*tXij_tD.t()*( diagmat(mu_ij) - mu_ij*mu_ij.t())*tXij_tD;
       
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
     }
@@ -645,7 +645,7 @@ arma::mat mn_info_j_made(arma::vec c,
       arma::mat E; E = v_m*mu_ij.t();
       arma::mat E_syml = symmatl(E);
       
-      mean_info_j += wj(i)*tXij_tD.t()*(E_syml - mu_ij*mu_ij.t())*tXij_tD/(k(i)*n);
+      mean_info_j += wj(i)*tXij_tD.t()*(E_syml - mu_ij*mu_ij.t())*tXij_tD/(k(i));
       
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;  
     }
