@@ -48,7 +48,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ; 
   max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 50 ; 
   #no more n needed
-  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(1,max_iter1); 
+  init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter1); 
   beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
   c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 10e-4;
   c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 0.9;
