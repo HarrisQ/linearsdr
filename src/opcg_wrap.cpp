@@ -174,8 +174,8 @@ arma::mat vecB_hat(arma::vec c0,
 //////////////////////////////////////////////////////////////////////////
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::export(name = "aD_j_cg_test")]]
-arma::vec aD_j_cg_test(arma::vec init,
+// [[Rcpp::export]]
+arma::vec aD_j_cg(arma::vec init,
                        arma::mat vj,
                        arma::mat y_datta,
                        arma::vec wj,
