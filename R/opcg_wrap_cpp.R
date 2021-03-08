@@ -169,7 +169,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (method=="cg") { 
         # Run Conjugate Gradients
-        c_j_1=aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
+        c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter1, 
                                         init_stepsize=init_stepsize1,
@@ -219,10 +219,14 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   if (parallelize) {
     
     # Compute estimates
-    aD_list = foreach::foreach(j = iterators::icount(n), 
-                               .packages = "linearsdr" ) %dopar%{ 
-                               # Release results
-                               return(aD_j(j));
+    # aD_list = foreach::foreach(j = iterators::icount(n), 
+    #                            .packages = "linearsdr" ) %dopar%{ 
+    #                            # Release results
+    #                            return(aD_j(j));
+    #                            }
+    aD_list = foreach::foreach(j = iterators::icount(n) ) %dopar%{ 
+                                 # Release results
+                                 return(aD_j(j));
                                }
   } else {
     aD_list = list();

@@ -100,14 +100,15 @@ aD_j_cg_test2 =function(init,
       armijo_cond = as.numeric(suff_dec_ag >= armijo_bound);
       
       
-      # int armijo_cond2=0;
-      # if (c_ag2 > 0) {
-      #   // the second bound in armijo-goldstein in nesterovs intro to conv opt text
-      #   double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
-      #                                      (p_now.t()*grad_now));
-      #   // second sufficient descent bound uses the same suff_dec_ag   
-      #   armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
-      # }  
+      #int 
+      armijo_cond2=0;
+      if (c_ag2 > 0) {
+        #// the second bound in armijo-goldstein in nesterovs intro to conv opt text
+        armijo_bound2 = (c_ag2*(beta_bt^m_cg)*s_now*
+                                           ( t(p_now)%*%grad_now));
+        #// second sufficient descent bound uses the same suff_dec_ag
+        armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
+      }
       
       wolfe_cond=0;
       if (c_wolfe > 0) {
@@ -123,7 +124,7 @@ aD_j_cg_test2 =function(init,
       }  
       
       
-      if ( armijo_cond + wolfe_cond == 2 ) {# //+ armijo_cond2
+      if ( armijo_cond + armijo_cond2== 2 ) {# //+ wolfe_cond 
         m_ag = m_cg;
         break;
       }

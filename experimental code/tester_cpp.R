@@ -275,7 +275,7 @@ arma::vec aD_j_cg_test(arma::vec init,
        things(1)=as_scalar(m_cg);
       
       
-      if ( armijo_cond + wolfe_cond == 2 ) { //== 2+ armijo_cond2 
+      if ( armijo_cond + armijo_cond2== 2 ) { //== 2 + wolfe_cond 
         m_ag = m_cg;
         break;
       }
@@ -507,7 +507,7 @@ arma::vec aD_j_cg_test(arma::vec init,
        things(1)=as_scalar(m_cg);
       
       
-      if ( armijo_cond + wolfe_cond == 2 ) { //== 2+ armijo_cond2 
+      if ( armijo_cond + armijo_cond2 == 2 ) { //== 2 + wolfe_cond 
         m_ag = m_cg;
         break;
       }
@@ -570,18 +570,6 @@ arma::vec aD_j_cg_test(arma::vec init,
 }')
 
 
-
-
-    
-      
-            
-    
-
-#          ')
-# sourceCpp(code = '
-# #include <RcppArmadillo.h>
-# using namespace Rcpp;
-# using namespace arma;
 
 #### dot_b ----
 sourceCpp(code='// [[Rcpp::depends(RcppArmadillo)]]
