@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw=4.8;  ytype="multinomial"; #"continuous";#"multinomial";
+  # bw;  ytype="multinomial"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -49,8 +49,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 50 ; 
   #no more n needed
   init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(1,max_iter1); 
-  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.25;
-  c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 1e-4; #1e-3 too small?
+  beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
+  c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 1e-3; #1e-3 too small?
   c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 0.9;
   c_wolfe1=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe1 else 0.9; 
   max_iter_line1=if ( "max_iter_line1" %in% control_names ) control_args$max_iter_line1 else 100; 
@@ -169,7 +169,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (method=="cg") { 
         # Run Conjugate Gradients
-        c_j_1=aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
+        c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,  
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter1, 
                                         init_stepsize=init_stepsize1,
