@@ -227,8 +227,8 @@ arma::vec aD_j_cg(arma::vec init,
   arma::mat nll_now(1,1);  
   arma::vec grad_now; 
   nll_now = mn_loss_j(c_now,vj,y_datta,wj,link,k);
-  grad_now = -mn_score_j(c_now,vj,y_datta,wj,link,k);
-  arma::vec p_now = -grad_now; 
+  grad_now = mn_score_j(c_now,vj,y_datta,wj,link,k);
+  arma::vec p_now = grad_now; 
   
   // //   grad_now=score_fn(c_now);
   // //   p_now = grad_now; 
@@ -247,13 +247,13 @@ arma::vec aD_j_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      double armijo_bound = -as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
       
       
       // evaluation for armijo condition
-      arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
+      arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
       
       double suff_dec_ag;
       suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
@@ -291,7 +291,7 @@ arma::vec aD_j_cg(arma::vec init,
       }
     
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
-    c_next = c_now + h_now*p_now;
+    c_next = c_now - h_now*p_now;
     
     
     // #Step 2a: Compute Loss;
@@ -311,7 +311,7 @@ arma::vec aD_j_cg(arma::vec init,
       } else {
       
       // #Step 2b: Compute gradient;
-      arma::vec grad_next = -mn_score_j(c_next,vj,y_datta,wj,link,k);
+      arma::vec grad_next = mn_score_j(c_next,vj,y_datta,wj,link,k);
       
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
@@ -319,11 +319,11 @@ arma::vec aD_j_cg(arma::vec init,
       //                                ( grad_now.t()*grad_now ) );
       
       // Dai-Yuan
-      double beta_cg_dy = as_scalar( ( grad_next.t()*grad_next )/
+      double beta_cg_dy = -as_scalar( ( grad_next.t()*grad_next )/
                                      ( p_now.t()*(grad_next-grad_now) ) );
       
       // Hestenes-Stiefel
-      double beta_cg_hs= as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
+      double beta_cg_hs= -as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
                                     ( p_now.t()*(grad_next-grad_now) ) );
       
       // Hybird
@@ -332,7 +332,7 @@ arma::vec aD_j_cg(arma::vec init,
       double beta_cg_hybrid=max(beta3);
       
       // Step 4: Update p
-      arma::vec p_next = -grad_next + beta_cg_hybrid*p_now;
+      arma::vec p_next = grad_next - beta_cg_hybrid*p_now;
       
       // Update all inputs for next iteration
       c_now=c_next;

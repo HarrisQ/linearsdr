@@ -6,22 +6,32 @@ library('RcppArmadillo')
 library('inline')
 
 p=10; n=1000
-beta=1:10
-c_init = c(1,0,0,0,0,0,0,0,0,0)
+beta=matrix(1:30, 10, 3)
+c_init = c(matrix(rep(1,30), 10,3))
 
 
 X = matrix(rnorm(n*p), nrow=p, ncol=n)
-Y = t(beta)%*%X + rnorm(n)
+Y = t(beta)%*%(X)# + rnorm(n)
+
+sq_loss(c_init, X, Y)
+sq_grad(c_init, X, Y)
 
 control_list1=list(tol_val=1e-7, max_iter=50, 
-                   init_stepsize=rep(1,50), beta_bt=.05,
-                   c_ag=1e-3, c_ag2=9e-1, c_wolfe=.1,
+                   init_stepsize=rep(1,50), beta_bt=.5,
+                   c_ag=1e-3, c_ag2=9e-1, c_wolfe=9e-1,
                    max_iter_line=100)
 test=T
 
-c_star=aD_j_cg(c_init, X, Y, control_list1, test)
+# c_star=
+aD_j_cg_test(c_init, X, Y, wj = 1, link='hi', k=1,  control_list1, test)
 
-aD_j_cg =function(init,
+t(matrix(aD_j_cg_test(c_init, X, Y, wj = 1, link='hi', k=1,  control_list1, test), 3,10))
+
+# This works 
+c_star=aD_j_cg_test2(c_init, X, Y, control_list1, test)
+t(matrix(c_star, 3,10))
+
+aD_j_cg_test2 =function(init,
                   vj,
                   y_datta,
                   control_list,
@@ -45,14 +55,19 @@ aD_j_cg =function(init,
   #// Step 0: Set the initial value, and compute the loss and score
   #// Also set the initial p_0 to the gradient
   
-  c_now = init; 
-  nll_now = (y_datta-t(init)%*%vj)%*%t(y_datta-t(init)%*%vj); #mn_loss_j(c_now,vj,y_datta,wj,link,k);
-  grad_now = -0.5*vj%*%t(y_datta-t(init)%*%vj);
-  p_now = -grad_now; 
+  p= dim(vj)[1]; m=dim(y_datta)[1];n=dim(y_datta)[2];
+  c_mat = matrix(init, p, m); 
+  c_now = init;
+  y_vec = c(y_datta);
+  y_vec
   
-  #// //   grad_now=score_fn(c_now);
-  #// //   p_now = grad_now; 
   
+  nll_now = t(y_vec - kronecker(t(vj), diag(1,m,m))%*%c_now )%*%
+    (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_now )/n; #mn_loss_j(c_now,vj,y_datta,wj,link,k);
+  grad_now = -2*t(kronecker(t(vj),diag(1, m,m), FUN="*"))%*%
+              (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_now)/n;
+  p_now = grad_now; 
+
   #arma::vec c_next;
   #arma::uword iter;
   for (iter in 1:max_iter) { 
@@ -68,18 +83,20 @@ aD_j_cg =function(init,
       # // it also depends on the step-size; large s_now means the m_cg will have
       # // to search farther.
       # // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      armijo_bound = -(c_ag*(beta_bt^m_cg)*s_now*
+      armijo_bound = (c_ag*(beta_bt^m_cg)*s_now*
                                          ( t(p_now)%*%grad_now));
       
       
       
       # // evaluation for armijo condition
       # arma::vec c_search; 
-      c_search = c(c_now + (beta_bt^m_cg)*s_now*p_now);
+      c_search = c_now - (beta_bt^m_cg)*s_now*p_now ;
       
       # double suff_dec_ag;
-      suff_dec_ag = ( (y_datta-t(c_now)%*%vj)%*%t(y_datta-t(c_now)%*%vj) -
-                        (y_datta-t(c_search)%*%vj)%*%t(y_datta-t(c_search)%*%vj) );
+      suff_dec_ag = t(y_vec - kronecker(t(vj), diag(1,m,m))%*%c_now )%*%
+        (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_now )/n - 
+        t(y_vec - kronecker(t(vj), diag(1,m,m))%*%c_search )%*%
+        (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_search )/n;
       armijo_cond = as.numeric(suff_dec_ag >= armijo_bound);
       
       
@@ -95,13 +112,14 @@ aD_j_cg =function(init,
       wolfe_cond=0;
       if (c_wolfe > 0) {
         # // the weak Wolfe condition
-        wolfe_bound = (c_wolfe*( t(p_now)%*%grad_now));
+        wolfe_bound = c_wolfe*( t(p_now)%*%grad_now);
         
         # // evaluation for curvature in weak wolfe
         # double curv_wolfe;
-        curv_wolfe = ( t(p_now)%*%(-0.5*vj%*%t(y_datta-t(c_search)%*%vj) ) );
+        curv_wolfe = t(p_now)%*%(-2*t(kronecker(t(vj),diag(1, m,m), FUN="*"))%*%
+                                   (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_search)/n) ;
         
-        wolfe_cond = as.numeric(curv_wolfe >= wolfe_bound);
+        wolfe_cond = as.numeric(curv_wolfe <= wolfe_bound);
       }  
       
       
@@ -112,14 +130,14 @@ aD_j_cg =function(init,
       
     }
     
-    h_now = ( (beta_bt^m_ag)*s_now );
-    c_next = c_now + h_now*p_now;
+    h_now =  (beta_bt^m_ag)*s_now ;
+    c_next = c_now - h_now*p_now;
     
     
     #// #Step 2a: Compute Loss;
     # arma::mat nll_next(1,1); 
-    nll_next=(y_datta-t(c_next)%*%vj)%*%t(y_datta-t(c_next)%*%vj); #mn_loss_j(c_next,vj,y_datta,wj,link,k); 
-    
+    nll_next=t(y_vec - kronecker(t(vj), diag(1,m,m))%*%c_next )%*%
+      (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_next )/n;    
     
     # double nll_dist; 
     nll_dist = ( nll_now - nll_next);
@@ -136,30 +154,31 @@ aD_j_cg =function(init,
     } else {
       
       # // #Step 2b: Compute gradient;
-      # arma::vec 
-      grad_next = -0.5*vj%*%t(y_datta-t(c_next)%*%vj);
-        
+      # arma::vec
+      grad_next = (-2*t(kronecker(t(vj),diag(1, m,m), FUN="*"))%*%
+                     (y_vec - kronecker(t(vj), diag(1,m,m))%*%c_next)/n)
+
       # // Step 3: Compute the coeffiecient
       # // Fletcher-Reeves
       # // double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
       # //                                ( grad_now.t()*grad_now ) );
-        
+
       # // Dai-Yuan
-      beta_cg_dy = ( ( t(grad_next)%*%grad_next )/
+      beta_cg_dy = -( ( t(grad_next)%*%grad_next )/
                                          ( t(p_now)%*%(grad_next-grad_now) ) );
-        
+
       # // Hestenes-Stiefel
-      beta_cg_hs = ( ( t(grad_next)%*%(grad_next-grad_now) )/
+      beta_cg_hs = -( ( t(grad_next)%*%(grad_next-grad_now) )/
                                         ( t(p_now)%*%(grad_next-grad_now) ) );
-        
+
       # // Hybird
         # arma::vec beta2(2); beta2(0) = beta_cg_dy; beta2(1)=beta_cg_hs;
         # arma::vec beta3(2); beta3(0) = 0; beta3(1)=min(beta2);
       beta_cg_hybrid=max(0, min(beta_cg_dy, beta_cg_hs));
-        
+
       # // Step 4: Update p
-      p_next = -grad_next + beta_cg_hybrid*p_now;
-        
+      p_next = grad_next - beta_cg_hybrid*p_now;
+
       #  // Update all inputs for next iteration
       c_now=c_next;
       nll_now=nll_next;

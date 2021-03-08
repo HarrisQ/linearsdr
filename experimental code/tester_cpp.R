@@ -1,15 +1,81 @@
-sourceCpp(code = '// [[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h>
-using namespace Rcpp;
-using namespace arma;
 
+#### cg ----
+sourceCpp(code='
+  #include <RcppArmadillo.h>
+  using namespace Rcpp;
+  using namespace arma;
+  
+  // [[Rcpp::depends(RcppArmadillo)]]
+  // [[Rcpp::export(name="sq_loss")]]
+  arma::vec sq_loss(arma::vec init,
+                  arma::mat vj,
+                  arma::mat y_datta
+  ) {
+
+    arma::uword m; m= y_datta.n_rows;
+    arma::uword n; n= y_datta.n_cols;
+    arma::uword p; p= vj.n_rows;
+    arma::mat I(m,m); I.eye(); 
+    
+    arma::vec c_now = init;
+    arma::vec y_vec = reshape(y_datta, n*m,1); 
+    
+    arma::mat nll_now(1,1);  
+    nll_now = (y_vec-kron(vj.t(),I)*c_now).t()*(y_vec-kron(vj.t(),I)*c_now)/n;
+    return nll_now;
+  };
+  
+  // [[Rcpp::depends(RcppArmadillo)]]
+  // [[Rcpp::export(name = "sq_grad")]]
+  arma::mat sq_grad(arma::vec init,
+                  arma::mat vj,
+                  arma::mat y_datta
+  ) {
+  
+    arma::uword m; m= y_datta.n_rows;
+    arma::uword n; n= y_datta.n_cols;
+    arma::uword p; p=vj.n_rows;
+    arma::mat I(m,m); I.eye(); 
+    
+    // arma::mat c_mat; c_mat=reshape(init, p, m); 
+    arma::vec c_now = init;
+    arma::vec y_vec = reshape(y_datta, n*m,1); 
+    
+    arma::vec grad;
+    grad = -2*kron( vj.t(),I).t()*(y_vec-kron( vj.t(),I)*c_now )/n;//
+    return grad;//c_vec;//c_now; 
+  };
+
+// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export(name = "aD_j_cg_test")]]
-arma::vec aD_j_cg(arma::vec init,
+arma::vec aD_j_cg_test(arma::vec init,
                   arma::mat vj,
                   arma::mat y_datta,
+                  arma::vec wj,
+                  Rcpp::String link,
+                  arma::vec k, 
                   Rcpp::List control_list,
                   bool test
 ) {
+  
+  /***
+   * A Conjugate Gradient Algorithm for OPCG and MADE
+   * 
+   * Can either call the loss, score and info functions from
+   * R for each iteration (calling from R is costly computation)
+   * or load the arguments into the function and call within cpp, 
+   * but this leads to messier code
+   * 
+   * arma::vec c, 
+   arma::mat vj, 
+   arma::mat y_datta, 
+   arma::vec wj, 
+   Rcpp::String link, 
+   arma::vec k
+   * 
+   * 
+   * 
+   */
   
   // Set out controls for the algorithm
   
@@ -29,19 +95,21 @@ arma::vec aD_j_cg(arma::vec init,
   // Step 0: Set the initial value, and compute the loss and score
   // Also set the initial p_0 to the gradient
   
+  arma::uword m; m= y_datta.n_rows;
+  arma::uword n; n= y_datta.n_cols;
+  arma::uword p; p= vj.n_rows;
   arma::vec c_now = init; 
   
   arma::mat nll_now(1,1);  
   arma::vec grad_now; 
-  nll_now = mn_loss_j(c_now,vj,y_datta,wj,link,k);
-  grad_now = -mn_score_j(c_now,vj,y_datta,wj,link,k);
-  arma::vec p_now = -grad_now; 
-  
-  // //   grad_now=score_fn(c_now);
-  // //   p_now = grad_now; 
+  nll_now = sq_loss(c_now, vj, y_datta); 
+  grad_now = sq_grad(c_now,vj,y_datta);
+  arma::vec p_now = grad_now; 
   
   arma::vec c_next;
   arma::uword iter;
+  arma::vec things(7);
+
   for (iter = 0; iter < max_iter; iter++ ) { 
     double s_now = s(iter); 
     // Step 1: Line search 
@@ -54,19 +122,20 @@ arma::vec aD_j_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      double armijo_bound = -as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
-      
+      things(2)=armijo_bound; 
       
       // evaluation for armijo condition
-      arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
+      arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
       
       double suff_dec_ag;
-      suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
-        mn_loss_j(c_search,vj,y_datta,wj,link,k) );
+      suff_dec_ag = as_scalar( sq_loss(c_now,vj,y_datta) - 
+        sq_loss(c_search,vj,y_datta) );
       int armijo_cond = (suff_dec_ag >= armijo_bound);
       
+      things(3)=suff_dec_ag;
       
       int armijo_cond2=0;
       if (c_ag2 > 0) {
@@ -75,6 +144,8 @@ arma::vec aD_j_cg(arma::vec init,
                                           (p_now.t()*grad_now));
         // second sufficient descent bound uses the same suff_dec_ag   
         armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
+        
+        things(4)=armijo_bound2;
       }  
       
       int wolfe_cond=0;
@@ -84,75 +155,93 @@ arma::vec aD_j_cg(arma::vec init,
         
         // evaluation for curvature in weak wolfe
         double curv_wolfe;
-        curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,link,k) );
+        curv_wolfe = as_scalar( p_now.t()*sq_grad(c_search,vj,y_datta) );
         
         wolfe_cond =+ (curv_wolfe >= wolfe_bound);
+        
+        things(5)=wolfe_bound;things(6)= curv_wolfe;
       }  
       
+       things(1)=as_scalar(m_cg);
       
-      if ( armijo_cond + wolfe_cond == 2 ) { //+ armijo_cond2
+      
+      if ( armijo_cond + wolfe_cond == 2 ) { //== 2+ armijo_cond2 
         m_ag = m_cg;
         break;
-        }
-      
       }
+    }  
+    things(0)=as_scalar(m_ag);
     
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
-    c_next = c_now + h_now*p_now;
-    
+    c_next = c_now - h_now*p_now;
     
     // #Step 2a: Compute Loss;
     arma::mat nll_next(1,1); 
-    nll_next=mn_loss_j(c_next,vj,y_datta,wj,link,k); 
-    
-    
+    nll_next=sq_loss(c_next,vj,y_datta); 
     double nll_dist; nll_dist = as_scalar( nll_now - nll_next);
     
     if (test) {
-      // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ", 
-      //         iter, ll_dist, eu_dist);
-      Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\n";
+        // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ", 
+        //         iter, ll_dist, eu_dist);
+        Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\";
     }
+    
     if( nll_dist < tol) {
       break;
-      } else {
+    } else {
       
       // #Step 2b: Compute gradient;
-      arma::vec grad_next = -mn_score_j(c_next,vj,y_datta,wj,link,k);
+      arma::vec grad_next = sq_grad(c_next,vj,y_datta);
       
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
-      // double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
-      //                                ( grad_now.t()*grad_now ) );
+      double beta_cg_fr = -as_scalar( ( grad_next.t()*grad_next )/
+                                      ( grad_now.t()*grad_now ) );  
       
       // Dai-Yuan
-      double beta_cg_dy = as_scalar( ( grad_next.t()*grad_next )/
+      double beta_cg_dy = -as_scalar( ( grad_next.t()*grad_next )/
                                      ( p_now.t()*(grad_next-grad_now) ) );
       
       // Hestenes-Stiefel
-      double beta_cg_hs= as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
+      double beta_cg_hs= -as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
                                     ( p_now.t()*(grad_next-grad_now) ) );
-      
+
       // Hybird
       arma::vec beta2(2); beta2(0) = beta_cg_dy; beta2(1)=beta_cg_hs;
       arma::vec beta3(2); beta3(0) = 0; beta3(1)=min(beta2);
       double beta_cg_hybrid=max(beta3);
       
       // Step 4: Update p
-      arma::vec p_next = -grad_next + beta_cg_hybrid*p_now;
+      arma::vec p_next = grad_next - beta_cg_fr*p_now;
       
       // Update all inputs for next iteration
       c_now=c_next;
       nll_now=nll_next;
       grad_now=grad_next;
       p_now=p_next;
-      }
     }
   
-  return c_next;
+  } // end of cg iter  
+ 
+  return c_now;
   
 }')
 
+
+
+
+    
+      
+            
+    
+
+#          ')
+# sourceCpp(code = '
+# #include <RcppArmadillo.h>
+# using namespace Rcpp;
+# using namespace arma;
+
+#### dot_b ----
 sourceCpp(code='// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 using namespace Rcpp;
