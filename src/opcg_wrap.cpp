@@ -312,7 +312,7 @@ arma::vec aD_j_cg(arma::vec init,
     if (test) {
       // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ", 
       //         iter, ll_dist, eu_dist);
-      Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\n ";
+      Rcout << "Printing nll_dist: " << nll_dist<< ", m_ag:"  << m_ag << ", iter:"  << iter << "\n ";
     }
     
     if( nll_dist < tol) {
