@@ -235,7 +235,7 @@ arma::vec aD_j_cg(arma::vec init,
   
   arma::vec c_next;
   arma::uword iter;
-  arma::vec things(7);
+  // arma::vec things(7);
   
   for (iter = 0; iter < max_iter; iter++ ) { 
     double s_now = s(iter); 
@@ -252,7 +252,7 @@ arma::vec aD_j_cg(arma::vec init,
       double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
-      things(2)=armijo_bound; 
+      // things(2)=armijo_bound; 
       
       // evaluation for armijo condition
       arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
@@ -262,18 +262,18 @@ arma::vec aD_j_cg(arma::vec init,
         mn_loss_j(c_now,vj,y_datta,wj,link,k) );
       int armijo_cond = (suff_dec_ag <= armijo_bound);
       
-      things(3)=suff_dec_ag;
+      // things(3)=suff_dec_ag;
       
-      int armijo_cond2=0;
-      if (c_ag2 > 0) {
-        // the second bound in armijo-goldstein in nesterovs intro to conv opt text
-        double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
-                                         (p_now.t()*grad_now));
-        // second sufficient descent bound uses the same suff_dec_ag   
-        armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
-        
-        things(4)=armijo_bound2;
-      }  
+      // int armijo_cond2=0;
+      // if (c_ag2 > 0) {
+      //   // the second bound in armijo-goldstein in nesterovs intro to conv opt text
+      //   double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
+      //                                    (p_now.t()*grad_now));
+      //   // second sufficient descent bound uses the same suff_dec_ag   
+      //   armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
+      //   
+      //   things(4)=armijo_bound2;
+      // }  
       
       int wolfe_cond=0;
       if (c_wolfe > 0) {
@@ -286,10 +286,12 @@ arma::vec aD_j_cg(arma::vec init,
         
         wolfe_cond =+ (curv_wolfe >= wolfe_bound);
         
-        things(5)=wolfe_bound;things(6)= curv_wolfe;
-      }  
+        // things(5)=wolfe_bound;things(6)= curv_wolfe;
+      } else if (c_wolfe==0) {
+        wolfe_cond=1;
+      } 
       
-      things(1)=as_scalar(m_cg);
+      // things(1)=as_scalar(m_cg);
       
       
       if ( armijo_cond + wolfe_cond ==2 ) { //  + armijo_cond2== 2
@@ -297,7 +299,7 @@ arma::vec aD_j_cg(arma::vec init,
         break;
       }
     }  
-    things(0)=as_scalar(m_ag);
+    // things(0)=as_scalar(m_ag);
     
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
     c_next = c_now + h_now*p_now;
