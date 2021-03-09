@@ -46,7 +46,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   wls_reg=if ( "wls_reg" %in% control_names ) control_args$wls_reg else 0;
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25; 
-  max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 25; 
+  max_iter1=if ( "max_iter1" %in% control_names ) control_args$max_iter1 else 50; 
   #no more n needed
   init_stepsize1=if ( "init_stepsize1" %in% control_names ) control_args$init_stepsize1 else rep(n,max_iter1); 
   beta_bt1=if ( "beta_bt1" %in% control_names ) control_args$beta_bt1 else 0.5;
