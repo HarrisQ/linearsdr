@@ -292,7 +292,7 @@ arma::vec aD_j_cg(arma::vec init,
       things(1)=as_scalar(m_cg);
       
       
-      if ( armijo_cond + armijo_cond2== 2 ) { //== 2 + wolfe_cond 
+      if ( armijo_cond ==1 ) { //== 2 + wolfe_cond + armijo_cond2== 2
         m_ag = m_cg;
         break;
       }
