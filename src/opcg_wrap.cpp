@@ -214,7 +214,6 @@ arma::vec aD_j_cg(arma::vec init,
   arma::vec s=control_list["init_stepsize"]; 
   double beta_bt=control_list["beta_bt"]; //backtracking beta
   double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
-  double c_ag2=control_list["c_ag2"]; //parameter for second Armijo bound in nesterov 
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   int max_iter_line=control_list["max_iter_line"];
   //int l2_pen=control_list["l2_pen"]; //penalty parameter for ridge regression
@@ -260,6 +259,7 @@ arma::vec aD_j_cg(arma::vec init,
       double suff_dec_ag;
       suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
         mn_loss_j(c_search,vj,y_datta,wj,link,k) );
+<<<<<<< HEAD
       int armijo_cond = (suff_dec_ag >= armijo_bound);
       
       things(3)=suff_dec_ag;
@@ -274,6 +274,10 @@ arma::vec aD_j_cg(arma::vec init,
         
         things(4)=armijo_bound2;
       }  
+=======
+      
+      int armijo_cond = (suff_dec_ag >= armijo_bound);
+>>>>>>> parent of 89abdab (updating armijo bounds)
       
       int wolfe_cond=0;
       if (c_wolfe > 0) {
@@ -291,8 +295,12 @@ arma::vec aD_j_cg(arma::vec init,
       
       things(1)=as_scalar(m_cg);
       
+<<<<<<< HEAD
       
       if ( armijo_cond + armijo_cond2== 2 ) { //== 2 + wolfe_cond 
+=======
+      if ( armijo_cond + wolfe_cond > 0) {
+>>>>>>> parent of 89abdab (updating armijo bounds)
         m_ag = m_cg;
         break;
       }
