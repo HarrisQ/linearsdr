@@ -181,17 +181,17 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                                         l2_pen=l2_pen), 
                       test);
 
-        c_j_2=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
-                           control_list=list(tol_val=tol_val,
-                                  max_iter=max_iter1,
-                                  init_stepsize=init_stepsize1,
-                                  beta_bt=beta_bt1,
-                                  c_ag=c_ag1,
-                                  c_ag2=c_ag2,
-                                  c_wolfe=c_wolfe1,
-                                  max_iter_line=max_iter_line1,
-                                  l2_pen=l2_pen),
-                           test)
+        # c_j_2=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
+        #                    control_list=list(tol_val=tol_val,
+        #                           max_iter=max_iter1,
+        #                           init_stepsize=init_stepsize1,
+        #                           beta_bt=beta_bt1,
+        #                           c_ag=c_ag1,
+        #                           c_ag2=c_ag2,
+        #                           c_wolfe=c_wolfe1,
+        #                           max_iter_line=max_iter_line1,
+        #                           l2_pen=l2_pen),
+        #                    test)
         
       } else if (method=="newton") {
         # Run Newton-Raphson
