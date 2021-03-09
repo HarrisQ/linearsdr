@@ -269,7 +269,7 @@ arma::vec aD_j_cg_test(arma::vec init,
         double curv_wolfe;
         curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,link,k) );
         
-        wolfe_cond =+ (curv_wolfe >= wolfe_bound);
+        wolfe_cond =+ (curv_wolfe <= wolfe_bound);
         
         // things(5)=wolfe_bound;things(6)= curv_wolfe;
       } else if (c_wolfe==0) {
