@@ -354,7 +354,7 @@ arma::vec aD_j_cg(arma::vec init,
     
   } // end of cg iter  
   
-  return c_now;//things;
+  return c_next;//c_now;//things;
   
 }
 
