@@ -249,7 +249,7 @@ arma::vec aD_j_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+      double armijo_bound = as_scalar(c_ag1*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
       // things(2)=armijo_bound; 
@@ -402,7 +402,8 @@ arma::vec vecB_cg(arma::vec init,
   // inital step size s_k that will be adjusted by backtracking
   arma::vec s=control_list["init_stepsize"];
   double beta_bt=control_list["beta_bt"]; //backtracking beta
-  double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_ag1=control_list["c_ag1"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_ag2=control_list["c_ag2"]; //parameter for Armijo condition, delta in Hybrid-DY
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   int max_iter_line=control_list["max_iter_line"];  
   
@@ -437,7 +438,7 @@ arma::vec vecB_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+      double armijo_bound = as_scalar(c_ag1*pow(beta_bt,m_cg)*s_now*
                                       (p_now.t()*grad_now));
       
       // evaluation for armijo condition
