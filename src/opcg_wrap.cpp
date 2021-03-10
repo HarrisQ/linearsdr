@@ -411,7 +411,7 @@ arma::vec vecB_cg(arma::vec init,
   
   arma::uword m; m= y_datta.n_rows;
   arma::uword n; n= y_datta.n_cols;
-  arma::uword p; p= vj.n_rows;
+  arma::uword p; p= x_datta.n_rows;
   arma::vec c_now = init; 
   
   arma::mat nll_now(1,1);  
