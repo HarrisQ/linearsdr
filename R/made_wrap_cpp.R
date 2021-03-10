@@ -102,7 +102,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
   
   # Running Optimization algorithm
   
-  if (method$made=="newton") {
+  if (method=="newton") {
     # Estimation using Newton-Raphson
     
     # This function returns the next newton iterate, i.e. one Newton Step
@@ -198,7 +198,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     }
     
   # End of Newton Algorithm  
-  } else if (method$made=="cg") { 
+  } else if (method=="cg") { 
     # Estimation using Conjugate Gradients
     
     # Control Parameter Defaults
@@ -208,7 +208,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     init_stepsize_made=if ( "init_stepsize_made" %in% control_names ) control_args$init_stepsize_made else rep(n,max_iter_made); 
     beta_bt_made=if ( "beta_bt_made" %in% control_names ) control_args$beta_bt_made else 0.5;
     c_ag1_made=if ( "c_ag1_made" %in% control_names ) control_args$c_ag1_made else 10e-3;
-    c_ag2_made=if ( "c_ag2_made" %in% control_names ) control_args$c_ag2_made else 0;
+    c_ag2_made=if ( "c_ag2_made" %in% control_names ) control_args$c_ag2_made else 0.9;
     c_wolfe_made=if ( "c_wolfe_made" %in% control_names ) control_args$c_wolfe_made else 0; # 0.1 wiki-recom 
     max_iter_line_made=if ( "max_iter_line_made" %in% control_names ) control_args$max_iter_line_made else 100;
     
@@ -231,24 +231,10 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
   return(c_0);
 
 } # End of made update
-  
-# B_hat_made = t(matrix(c_0, nrow=d, ncol=p));
-# B_hat_made =  apply(B_hat_made, 2, normalize_cpp);
+
 # made_update(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="multinomial",
-#             method="cg", parallelize=T, r_mat=NULL,
-#             control_list=list(beta_bt=.99, c_ag=.000001, c_wolfe=.001,
-#                               init_stepsize=rep(1000,25)))
-# c_0=vecB_cg(c_init, x_matrix, mv_Y, 
-#             bw, ahat_list, Dhat_list,
-#             link=linktype, k=k_vec, r_mat,
-#             control_list=list(tol_val=tol_val,
-#                               max_iter=max_iter, 
-#                               init_stepsize=init_stepsize,
-#                               beta_bt=beta_bt,
-#                               c_ag=c_ag,
-#                               c_wolfe=c_wolfe,
-#                               max_iter_line=max_iter_line),
-#             test=T) 
+#             method= method$made, parallelize=T, r_mat=NULL,
+#             control_list=list( ))
 
 #### MADE; An alternating Block Co-ordinate Descent Approach ----
 # 

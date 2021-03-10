@@ -51,7 +51,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   init_stepsize_cg=if ( "init_stepsize_cg" %in% control_names ) control_args$init_stepsize_cg else rep(n,max_iter_cg); 
   beta_bt=if ( "beta_bt" %in% control_names ) control_args$beta_bt else 0.5;
   c_ag1=if ( "c_ag1" %in% control_names ) control_args$c_ag1 else 1e-3; #1e-3 too small?
-  c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 0;
+  c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 0.9;
   c_wolfe=if ( "c_wolfe" %in% control_names ) control_args$c_wolfe else 0; 
   max_iter_line=if ( "max_iter_line" %in% control_names ) control_args$max_iter_line else 100; 
 
