@@ -213,7 +213,7 @@ arma::vec aD_j_cg(arma::vec init,
   // inital step size s_k that will be adjusted by backtracking 
   arma::vec s=control_list["init_stepsize"]; 
   double beta_bt=control_list["beta_bt"]; //backtracking beta
-  double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
+  double c_ag1=control_list["c_ag1"]; //parameter for Armijo condition, delta in Hybrid-DY
   double c_ag2=control_list["c_ag2"]; //parameter for second Armijo bound in nesterov 
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
   int max_iter_line=control_list["max_iter_line"];
@@ -337,7 +337,7 @@ arma::vec aD_j_cg(arma::vec init,
       double beta_cg_hs= as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
                                      ( p_now.t()*(grad_next-grad_now) ) );
       
-      // Hybird
+      // Hybrid
       arma::vec beta2(2); beta2(0) = beta_cg_dy; beta2(1)=beta_cg_hs;
       arma::vec beta3(2); beta3(0) = 0; beta3(1)=min(beta2);
       double beta_cg_hybrid=max(beta3);
@@ -357,177 +357,6 @@ arma::vec aD_j_cg(arma::vec init,
   return c_next;//c_now;//things;
   
 }
-
-// // [[Rcpp::depends(RcppArmadillo)]]
-// // [[Rcpp::export]]
-// arma::vec aD_j_cg(arma::vec init,
-//                   arma::mat vj,
-//                   arma::mat y_datta,
-//                   arma::vec wj,
-//                   Rcpp::String link,
-//                   arma::vec k, 
-//                   Rcpp::List control_list,
-//                   bool test
-// ) {
-//   
-//   /***
-//    * A Conjugate Gradient Algorithm for OPCG and MADE
-//    * 
-//    * Can either call the loss, score and info functions from
-//    * R for each iteration (calling from R is costly computation)
-//    * or load the arguments into the function and call within cpp, 
-//    * but this leads to messier code
-//    * 
-//    * arma::vec c, 
-//    arma::mat vj, 
-//    arma::mat y_datta, 
-//    arma::vec wj, 
-//    Rcpp::String link, 
-//    arma::vec k
-//    * 
-//    * 
-//    * 
-//    */
-//   
-//   // Set out controls for the algorithm
-//   
-//   double tol = control_list["tol_val"];
-//   arma::uword max_iter = control_list["max_iter"];
-//   
-//   // beta and sigma in backtracking rule (Bertsekas)
-//   // inital step size s_k that will be adjusted by backtracking 
-//   arma::vec s=control_list["init_stepsize"]; 
-//   double beta_bt=control_list["beta_bt"]; //backtracking beta
-//   double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
-//   double c_ag2=control_list["c_ag2"]; //parameter for second Armijo bound in nesterov 
-//   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
-//   int max_iter_line=control_list["max_iter_line"];
-//   //int l2_pen=control_list["l2_pen"]; //penalty parameter for ridge regression
-//   
-//   // Step 0: Set the initial value, and compute the loss and score
-//   // Also set the initial p_0 to the gradient
-//   
-//   arma::vec c_now = init; 
-//   
-//   arma::mat nll_now(1,1);  
-//   arma::vec grad_now; 
-//   nll_now = mn_loss_j(c_now,vj,y_datta,wj,link,k);
-//   grad_now = mn_score_j(c_now,vj,y_datta,wj,link,k);
-//   arma::vec p_now = grad_now;  
-//   
-//   arma::vec c_next;
-//   arma::uword iter;
-//   for (iter = 0; iter < max_iter; iter++ ) { 
-//     double s_now = s(iter); 
-//     // Step 1: Line search 
-//     int m_ag=0;
-//     int m_cg;
-//     for (m_cg = 1; m_cg < max_iter_line; m_cg++ ) {
-//       
-//       // the Armijo rule
-//       // the computational effort is not just dependent on the m_cg search
-//       // it also depends on the step-size; large s_now means the m_cg will have
-//       // to search farther.
-//       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-//       double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
-//                                       (p_now.t()*grad_now));
-//       
-//       
-//       
-//       // evaluation for armijo condition
-//       arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
-//       
-//       double suff_dec_ag;
-//       suff_dec_ag = as_scalar( mn_loss_j(c_now,vj,y_datta,wj,link,k) - 
-//         mn_loss_j(c_search,vj,y_datta,wj,link,k) );
-//       int armijo_cond = (suff_dec_ag >= armijo_bound);
-//       
-//       
-//       int armijo_cond2=0;
-//       if (c_ag2 > 0) {
-//         // the second bound in armijo-goldstein in nesterovs intro to conv opt text
-//         double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
-//                                           (p_now.t()*grad_now));
-//         // second sufficient descent bound uses the same suff_dec_ag   
-//         armijo_cond2 =+ (suff_dec_ag <= armijo_bound2);
-//       }  
-//       
-//       int wolfe_cond=0;
-//       if (c_wolfe > 0) {
-//         // the weak Wolfe condition
-//         double wolfe_bound = as_scalar(c_wolfe*(p_now.t()*grad_now));
-//         
-//         // evaluation for curvature in weak wolfe
-//         double curv_wolfe;
-//         curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,link,k) );
-//         
-//         wolfe_cond =+ (curv_wolfe <= wolfe_bound);
-//       }  
-//       
-//       
-//       if ( armijo_cond + wolfe_cond == 2 ) { //+ armijo_cond2
-//         m_ag = m_cg;
-//         break;
-//         }
-//       
-//       }
-//     
-//     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
-//     c_next = c_now - h_now*p_now;
-//     
-//     
-//     // #Step 2a: Compute Loss;
-//     arma::mat nll_next(1,1); 
-//     nll_next=mn_loss_j(c_next,vj,y_datta,wj,link,k); 
-//     
-//     
-//     double nll_dist; nll_dist = as_scalar( nll_now - nll_next);
-//     
-//     if (test) {
-//       // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ", 
-//       //         iter, ll_dist, eu_dist);
-//       Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\n";
-//     }
-//     if( nll_dist < tol) {
-//       break;
-//       } else {
-//       
-//       // #Step 2b: Compute gradient;
-//       arma::vec grad_next = mn_score_j(c_next,vj,y_datta,wj,link,k);
-//       
-//       // Step 3: Compute the coeffiecient
-//       // Fletcher-Reeves
-//       // double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
-//       //                                ( grad_now.t()*grad_now ) );
-//       
-//       // Dai-Yuan
-//       double beta_cg_dy = -as_scalar( ( grad_next.t()*grad_next )/
-//                                      ( p_now.t()*(grad_next-grad_now) ) );
-//       
-//       // Hestenes-Stiefel
-//       double beta_cg_hs= -as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
-//                                     ( p_now.t()*(grad_next-grad_now) ) );
-//       
-//       // Hybird
-//       arma::vec beta2(2); beta2(0) = beta_cg_dy; beta2(1)=beta_cg_hs;
-//       arma::vec beta3(2); beta3(0) = 0; beta3(1)=min(beta2);
-//       double beta_cg_hybrid=max(beta3);
-//       
-//       // Step 4: Update p
-//       arma::vec p_next = grad_next - beta_cg_hybrid*p_now;
-//       
-//       // Update all inputs for next iteration
-//       c_now=c_next;
-//       nll_now=nll_next;
-//       grad_now=grad_next;
-//       p_now=p_next;
-//       }
-//     }
-//   
-//   return c_next;
-//   
-// }
-
 
 // A CG for MADE step
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -575,38 +404,28 @@ arma::vec vecB_cg(arma::vec init,
   double beta_bt=control_list["beta_bt"]; //backtracking beta
   double c_ag=control_list["c_ag"]; //parameter for Armijo condition, delta in Hybrid-DY
   double c_wolfe=control_list["c_wolfe"]; //parameter for curvature condition, sigma in H-DY
-  double eps_wolfe=control_list["eps_wolfe"]; // eps parameter in Dai-Kou improved line search
-  int max_iter_line=control_list["max_iter_line"]; 
-  double delta_w=control_list["delta_w"];
-  // double psi=control_list["psi"];
-  // double eps1=control_list["eps1"];
-  // double eps2=control_list["eps2"];
+  int max_iter_line=control_list["max_iter_line"];  
   
   // Step 0: Set the initial value, and compute the loss and score
   // Also set the initial p_0 to the gradient
   
-  arma::vec c_now = init; //arma::uword n = x_datta.n_cols;    
+  arma::uword m; m= y_datta.n_rows;
+  arma::uword n; n= y_datta.n_cols;
+  arma::uword p; p= vj.n_rows;
+  arma::vec c_now = init; 
   
-  arma::mat nll_now(1,1); 
-  // arma::mat nll_prev(1,1); nll_prev.zeros();
+  arma::mat nll_now(1,1);  
   arma::vec grad_now;
   nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
   grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
-  arma::vec p_now = grad_now;
-  // double s_prev=1;
+  arma::vec p_now = -grad_now; 
   
   arma::vec c_next;
   arma::uword iter;
-  for (iter = 0; iter < max_iter; iter++ ) {
-    
-    // double d_grad = as_scalar(p_now.t()*grad_now);
+  for (iter = 0; iter < max_iter; iter++ ) { 
       
     // Need to pick initial stepsize for this iteration
     double s_now = s(iter);
-    // arma::vec s_now_dkvec(2); 
-    // s_now_dkvec(0)=psi*s_prev; s_now_dkvec(1)= as_scalar(2*abs(nll_now - nll_prev)/d_grad);     
-    // double s_now = max(s_now_dkvec);
-    
     
     // Step 1: Line search
     int m_ag=0;
@@ -618,112 +437,74 @@ arma::vec vecB_cg(arma::vec init,
       // it also depends on the step-size; large s_now means the m_cg will have
       // to search farther.
       // So we would like to have the smallest s_now to allow for fastest m_cg find. 
-      // double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now)*d_grad;
+      double armijo_bound = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*
+                                      (p_now.t()*grad_now));
       
-      // for the improved Wolfe line search of Dai-Kou (2013)
-      // But still uses the backtracking step-size selection.
-      // double armijo_bound1 = as_scalar(c_ag*pow(beta_bt,m_cg)*s_now*d_grad
-      //                                    + pow(iter+1,-2) );
-      // double armijo_bound2 = as_scalar(eps_wolfe*abs( d_grad ));
-      // 
-      // arma::vec armijo_improved(2);  
-      // armijo_improved(0)=armijo_bound1; armijo_improved(1)=armijo_bound2;
-      // double armijo_bound = min(armijo_improved);  
+      // evaluation for armijo condition
+      arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
+      
+      double suff_dec_ag;
+      suff_dec_ag = as_scalar( mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) 
+                                 - mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+      int armijo_cond = (suff_dec_ag <= armijo_bound);
+      
+      // things(3)=suff_dec_ag;
+      
+      int armijo_cond2=0;
+      if (c_ag2 > 0) {
+        // the second bound in armijo-goldstein in nesterovs intro to conv opt text
+        double armijo_bound2 = as_scalar(c_ag2*pow(beta_bt,m_cg)*s_now*
+                                         (p_now.t()*grad_now));
+        // second sufficient descent bound uses the same suff_dec_ag
+        armijo_cond2 =+ (suff_dec_ag >= armijo_bound2);
+        
+        // things(4)=armijo_bound2;
+      } else if (c_ag2==0) {
+        armijo_cond2=1;
+      } 
+      
+      int wolfe_cond=0;
+      if (c_wolfe > 0) {
+        // the weak Wolfe condition
+        double wolfe_bound = as_scalar(c_wolfe*(p_now.t()*grad_now));
+        
+        // evaluation for curvature in weak wolfe
+        double curv_wolfe;
+        curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+        
+        wolfe_cond =+ (curv_wolfe <= wolfe_bound);
+        
+        // things(5)=wolfe_bound;things(6)= curv_wolfe;
+      } else if (c_wolfe==0) {
+        wolfe_cond=1;
+      } 
+      
+      // things(1)=as_scalar(m_cg);
       
       
-      // double suff_dec_ag;
-      // suff_dec_ag = as_scalar(
-      //   mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
-      //     mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
-
-      // int armijo_cond = (suff_dec_ag >= armijo_bound); 
-
-      // int wolfe_cond=0; int m_cg_wolfe; // if armijo and wolfe search
-      // if ( (armijo_cond ==1) && (c_wolfe > 0) ) {
-      //   for (m_cg_wolfe = m_cg; m_cg_wolfe < max_iter_line; m_cg_wolfe++ ) {
-      //     // the weak Wolfe condition
-      //     double wolfe_bound = as_scalar(c_wolfe*d_grad);
-      // 
-      //     // evaluation for curvature in weak wolfe
-      //     arma::vec c_search_w; 
-      //     c_search_w = c_now - pow(beta_bt,m_cg_wolfe)*s_now*p_now;
-      //     
-      //     double curv_wolfe;
-      //     curv_wolfe = as_scalar(
-      //       p_now.t()*mn_score_made(c_search_w,x_datta,y_datta,
-      //               bw,ahat_list, Dhat_list,link,k,r_mat) );
-      // 
-      //     wolfe_cond =+ (curv_wolfe >= wolfe_bound); 
-      //     
-      //     if (wolfe_cond == 1) {
-      //       m_ag = m_cg_wolfe;
-      //       break;
-      //     }
-      //     
-      //   }
-      //   if (test) { 
-      //     Rcout << "m_cg_wolfe=" << m_cg_wolfe;
-      //   } 
-      // } else if (((armijo_cond == 1) && (c_wolfe == 0) ) || 
-      //   ( m_cg == (max_iter_line - 1) ) ) { 
-      //   // no wolfe conditon
-      //   m_ag = m_cg;
-      //   break;
-      // } 
-      
-      // for the Approximate Wolfe line search of Hager-Zhang (2005)
-      // But still uses the backtracking step-size selection.
-      
-      // line search
-      arma::vec c_search; c_search = c_now - pow(beta_bt,m_cg)*s_now*p_now;
-      
-      int app_wolfe1 = 0; int app_wolfe2 = 0; //the two approx wolfe conditions
-      
-      double phi_dot0 = as_scalar(p_now.t()*grad_now);
-      double wolfe_bound1 = (2*delta_w - 1)*phi_dot0; 
-      double wolfe_bound2 = c_wolfe*phi_dot0;
-      
-      double curv_wolfe;
-      curv_wolfe = as_scalar(
-        p_now.t()*mn_score_made(c_search,x_datta,y_datta,
-                bw,ahat_list, Dhat_list,link,k,r_mat) );
-      
-      app_wolfe1 =+ ( wolfe_bound1 >= curv_wolfe); 
-      app_wolfe2 =+ ( curv_wolfe >= wolfe_bound2); 
-      
-      int error_cond=0;
-      double error_relax = 1e-5; // 10e-6 = 1e-5, Fixed error tolerance at minima
-      
-      double within_error = as_scalar(
-        mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) -
-          mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
-      error_cond =+ ( within_error <= error_relax); 
-      
-      if (app_wolfe1+app_wolfe2+error_cond == 3) {
+      if ( armijo_cond + armijo_cond2 + wolfe_cond == 3 ) { //  + armijo_cond2== 2
         m_ag = m_cg;
         break;
       }
       
-    }
-    if (test) { 
-      Rcout << "m_cg=" << m_cg; Rcout << "m_ag=" << m_ag; 
-    } 
+    } // End of line search loop
+    
+    
     double h_now = as_scalar( pow(beta_bt,m_ag)*s_now );
-    c_next = c_now - h_now*p_now;
-
-
+    c_next = c_now + h_now*p_now;
+    
     // #Step 2a: Compute Loss;
     arma::mat nll_next(1,1);
     nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;
 
     double nll_dist; nll_dist = as_scalar( nll_now - nll_next);
-
+    
     if (test) {
-      // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ",
+      // Rprintf("Printing: iter %iter, ll Dist %ll_dist, eu Dist %eu_dist ", 
       //         iter, ll_dist, eu_dist);
-      Rcout << "m_cg=" << m_cg; Rcout << "m_ag=" << m_ag;
-      Rcout << "Printing nll_dist, iter: " << nll_dist<< ", "  << iter << "\n" ;
+      Rcout << "Printing nll_dist: " << nll_dist<< ", m_ag:"  << m_ag << ", iter:"  << iter << "\n ";
     }
+
     if( nll_dist < tol) {
       break;
     } else {
@@ -734,30 +515,28 @@ arma::vec vecB_cg(arma::vec init,
 
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
-      // double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
-      //                                ( grad_now.t()*grad_now ) );
-
+      double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
+                                     ( grad_now.t()*grad_now ) );  
+      
       // Dai-Yuan
-      double beta_cg_dy = as_scalar( -( grad_next.t()*grad_next )/
+      double beta_cg_dy = as_scalar( ( grad_next.t()*grad_next )/
                                      ( p_now.t()*(grad_next-grad_now) ) );
-
+      
       // Hestenes-Stiefel
-      double beta_cg_hs= as_scalar( -( grad_next.t()*(grad_next-grad_now) )/
+      double beta_cg_hs= as_scalar( ( grad_next.t()*(grad_next-grad_now) )/
                                     ( p_now.t()*(grad_next-grad_now) ) );
-
-      // Hybrid
+      
+      // Hybird
       arma::vec beta2(2); beta2(0) = beta_cg_dy; beta2(1)=beta_cg_hs;
       arma::vec beta3(2); beta3(0) = 0; beta3(1)=min(beta2);
       double beta_cg_hybrid=max(beta3);
-
+      
       // Step 4: Update p
-      arma::vec p_next = grad_next - beta_cg_hybrid*p_now;
-
+      arma::vec p_next = -grad_next + beta_cg_dy*p_now;
+      
       // Update all inputs for next iteration
       c_now=c_next;
-      // nll_prev=nll_now;
       nll_now=nll_next;
-      // s_prev=s_now;
       grad_now=grad_next;
       p_now=p_next;
     }

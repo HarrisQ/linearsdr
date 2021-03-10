@@ -385,7 +385,8 @@ arma::mat mn_info_j(arma::vec c,
       arma::vec lcp=tVij_I*c;
       arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
       
-      mean_info_j += wj(i)*k(i)*tVij_I.t()*( diagmat(mu_ij) - mu_ij*mu_ij.t())*tVij_I/n;
+      mean_info_j += wj(i)*k(i)*tVij_I.t()*( diagmat(mu_ij) - 
+        mu_ij*mu_ij.t())*tVij_I/n;
       
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
     }
@@ -627,7 +628,8 @@ arma::mat mn_info_j_made(arma::vec c,
       arma::vec lcp=tXij_tD*c;
       arma::vec mu_ij = dot_b_multinom( ( ahat + lcp), k(i), link);
       
-      mean_info_j += wj(i)*k(i)*tXij_tD.t()*( diagmat(mu_ij) - mu_ij*mu_ij.t())*tXij_tD;
+      mean_info_j += wj(i)*k(i)*tXij_tD.t()*( diagmat(mu_ij) - 
+        mu_ij*mu_ij.t())*tXij_tD/n;
       
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
     }

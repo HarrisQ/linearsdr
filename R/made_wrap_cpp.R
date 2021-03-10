@@ -14,16 +14,16 @@
 ############################## MADE wrappers ##################################
 
 
-# x_matrix=X; y_matrix=Y; bw=1; ytype="multinomial"; B_mat = diag(1,p,d);
-# method="newton"; parallelize = T; r_mat=NULL; control_list=list();
+# x_matrix=X; y_matrix=Y; bw=1.25; ytype="multinomial"; B_mat = diag(1,p,d);
+# method=list(opcg="cg", made="newton"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
 # aD_list=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
-#                 method, parallelize, r_mat=NULL,
+#                 method=method$opcg, parallelize, r_mat=NULL,
 #                 control_list);
 # ahat_list = aD_list$ahat;  Dhat_list = aD_list$Dhat;
 
 #### MADE Block update ----
-
-#' This is an internal function called by opcg 
+#                 method, parallelize, r_mat=NULL,
+#                 control_list);
 #' 
 #'
 #'
@@ -38,12 +38,12 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
   control_args=control_list; control_names=names(control_args); 
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
   max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ;
-  max_B_iter=if ( "max_B_iter" %in% control_names ) {
-    control_args$max_B_iter
+  max_iter_made=if ( "max_iter_made" %in% control_names ) {
+    control_args$max_iter_made
   } else {
     25
   };
-  print_B_iter=if ( "print_B_iter" %in% control_names ) control_args$print_B_iter else F;
+  print_iter_made=if ( "print_iter_made" %in% control_names ) control_args$print_iter_made else F;
   
   # Setting parameters
   p=dim(x_matrix)[1]; n=dim(x_matrix)[2];  
@@ -77,20 +77,18 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # Don't need Empirical Link Transforms for MADE block step
     if (ytype=="multinomial" ) {
       linktype="expit";
-      k_vec = colSums(mv_Y);
-      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
-
     } else if (ytype=="ordinal" ) {
       linktype="culmit";
-      k_vec = as.vector(y_matrix);
-      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
-    }
+    };
+    k_vec = rep(1, n);  
+    mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
     
     # Loss function
     loss_made = function(c_param){ 
       mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
                    link=linktype, k=k_vec, r_mat)
     } # End of Loss function
+    
     # loss_made(c_init)
     
     # # Score function
@@ -101,12 +99,11 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     
   } # end of setting up response
   
+  
   # Running Optimization algorithm
   
-  if (method=="newton") {
+  if (method$made=="newton") {
     # Estimation using Newton-Raphson
-    
-    
     
     # This function returns the next newton iterate, i.e. one Newton Step
     c_next = function(c_param) { 
@@ -115,22 +112,22 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
       # This will need all loss, score and info over j and i
       
       # For each j
-      c_list_newton_j=function(j){ # j=10; c_param=c_init;
-
-        Xj=matcenter_cpp(x_matrix, index=j,x0=NULL);
-        Wj=gauss_kern_cpp( t(r_mat)%*%Xj,bw)
-
+      c_list_newton_j=function(c_param, j){ # j=10; c_param=c_init;
+        
+        Xj=linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL);
+        Wj=linearsdr:::gauss_kern_cpp( t(r_mat)%*%Xj,bw)
+        
         # Loss functions and related functions
         
-        score_j=mn_score_j_made(c_param, Xj, mv_Y, Wj,
-                                ahat=ahat_list[[j]], Dhat = Dhat_list[[j]],
-                                link=linktype, k=k_vec);
-        info_j=mn_info_j_made(c_param, Xj, mv_Y, Wj,
-                              ahat=(ahat_list[[j]]), Dhat = Dhat_list[[j]],
-                              link=linktype, k=k_vec) ;
+        score_j=linearsdr:::mn_score_j_made(c_param, Xj, mv_Y, Wj,
+                                            ahat=ahat_list[[j]], Dhat = Dhat_list[[j]],
+                                            link=linktype, k=k_vec);
+        info_j=linearsdr:::mn_info_j_made(c_param, Xj, mv_Y, Wj,
+                                          ahat=(ahat_list[[j]]), Dhat = Dhat_list[[j]],
+                                          link=linktype, k=k_vec) ;
         
         return(list(score=score_j, info=info_j))
-      } # c_list_newton_j(231)
+      } # c_list_newton_j(c_init,231)
       
       # Computing all local loss, score, info
       # Note the loss function is evaluated at c_0, not c_1
@@ -139,80 +136,81 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
         # list of info
         c_list_newton = foreach::foreach(j = iterators::icount(n),
                                   .packages = "linearsdr",
-                                  .export=c("x_matrix", 
-                                            "mv_Y", 
-                                            "r_mat", "bw",  
-                                            "ahat_list" ,"Dhat_list",  
-                                            "linktype", "k_vec") 
+                                  .export=c("x_matrix",
+                                            "mv_Y",
+                                            "r_mat", "bw",
+                                            "ahat_list" ,"Dhat_list",
+                                            "linktype", "k_vec")
                                   ) %dopar% {
                                     # Release results
-                                    return(c_list_newton_j(j))
+                                    return(c_list_newton_j(c_param,j))
                                   }
       } else { # No parallel, so for loop 
         c_list_newton = list();
         for(j in 1:n) {
-          c_list_newton[[j]] = c_list_newton_j(j);
+          c_list_newton[[j]] = c_list_newton_j(c_param, j);
         }; 
       } # end of computing loss, score, info
     
       score=lapply( 1:n , FUN=function(j) c_list_newton[[j]][[1]] );
       info=lapply( 1:n , FUN=function(j) c_list_newton[[j]][[2]] );
-      c_1 = vecB_hat(c_param, score, info);
+      # c_1 = vecB_hat(c_param, score, info);
       
-      # c_param + ginv(Reduce('+', info))%*%
-      #   Reduce('+', score)
-      # 
+      c_1=c_param - ginv(Reduce('+', info))%*%Reduce('+', score)
+
       return(c_1)
       
-    }   
-    # c_next(c_0)
+    } # End of function returning next newton iterate. 
     
-    c_0 = c_next(c_init); loss_0 = loss_made(c_0);
     
-    for(iter in 1:max_B_iter){ #print_B_iter=T
+    c_0 = c_next(c_init);
+    loss_0 = loss_made(c_0);
+    
+    for(iter in 1:max_iter_made){ #print_B_iter=T
       
-      # B_0=t(matrix(c_0, nrow=d, ncol=p));
+      B_0=t(matrix(c_0, nrow=d, ncol=p));
       
       c_1=c_next(c_0); loss_1 = loss_made(c_1);
-      # B_1=t(matrix(c_1, nrow=d, ncol=p));
+      
+      B_1=t(matrix(c_1, nrow=d, ncol=p));
       
       # A Matrix distance of B_1 to B_0;
-      # subspace_dist=mat_dist(B_1, B_0);
+      subspace_dist=mat_dist(B_1, B_0);
       
       # Vector Distance
-      # euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
+      euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
       
       # Loss Distance 
-      loss_dist = loss_0 - loss_1;
+      loss_dist = (loss_0 - loss_1)/loss_0;
       
-      if(print_B_iter) print(c("B Update: loss_dist is", loss_dist, iter));
+      if(print_iter_made) print(c("B Update: loss_dist is", loss_dist, 
+                               "euc_dist is", euc_dist,
+                               "subspace_dist is", subspace_dist,
+                               "Iter:", iter));
       if( loss_dist < tol_val ) {
         break();
       } else {
         # The new B_0 for next iteration
         # B_0 = B_1;
-        c_0=c_1; loss_0=loss_1;
+        c_0=c_1; loss_0=loss_1; 
       }
       
     }
     
   # End of Newton Algorithm  
-  } else if (method=="cg") { 
+  } else if (method$made=="cg") { 
     # Estimation using Conjugate Gradients
     
     # Control Parameter Defaults
     control_args=control_list; control_names=names(control_args); 
-    max_iter2=if ( "max_iter2" %in% control_names ) control_args$max_iter2 else 25 ; 
     test=if ( "test" %in% control_names ) control_args$test else F ; 
-    init_stepsize2=if ( "init_stepsize2" %in% control_names ) control_args$init_stepsize2 else rep(n^2,max_iter2); 
-    beta_bt2=if ( "beta_bt2" %in% control_names ) control_args$beta_bt2 else 0.5;
-    c_ag2=if ( "c_ag2" %in% control_names ) control_args$c_ag2 else 10e-4;
-    c_wolfe2=if ( "c_wolfe2" %in% control_names ) control_args$c_wolfe2 else 0.1; # 0.1 wiki-recom 
-    eps_wolfe=if ( "eps_wolfe" %in% control_names ) control_args$eps_wolfe else 0.01; # 0.1 wiki-recom 
-    max_iter_line2=if ( "max_iter_line2" %in% control_names ) control_args$max_iter_line2 else 100;
-    # psi=if ( "psi" %in% control_names ) control_args$psi else 5;
-    # l2_pen=if ( "l2_pen" %in% control_names ) control_args$l2_pen else 0;  
-    delta_w=if ( "delta_w" %in% control_names ) control_args$delta_w else 0.1; # 0.1 wiki-recom 
+    max_iter_made=if ( "max_iter_made" %in% control_names ) control_args$max_iter_made else 25 ; 
+    init_stepsize_made=if ( "init_stepsize_made" %in% control_names ) control_args$init_stepsize_made else rep(n,max_iter_made); 
+    beta_bt_made=if ( "beta_bt_made" %in% control_names ) control_args$beta_bt_made else 0.5;
+    c_ag1_made=if ( "c_ag1_made" %in% control_names ) control_args$c_ag1_made else 10e-3;
+    c_ag2_made=if ( "c_ag2_made" %in% control_names ) control_args$c_ag2_made else 0;
+    c_wolfe_made=if ( "c_wolfe_made" %in% control_names ) control_args$c_wolfe_made else 0; # 0.1 wiki-recom 
+    max_iter_line_made=if ( "max_iter_line_made" %in% control_names ) control_args$max_iter_line_made else 100;
     
     # Initial c_param value
     c_init = as.vector(t(B_mat));
@@ -221,18 +219,13 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                    bw, ahat_list, Dhat_list,
                    link=linktype, k=k_vec, r_mat,
                    control_list=list(tol_val=tol_val,
-                                     max_iter=max_iter2, 
-                                     init_stepsize=init_stepsize2,
-                                     beta_bt=beta_bt2,
-                                     c_ag=c_ag2,
-                                     c_wolfe=c_wolfe2,
-                                     eps_wolfe=eps_wolfe,
-                                     max_iter_line=max_iter_line2,
-                                     delta_w=delta_w
-                                     # psi=psi,
-                                     # eps1=.1,
-                                     # eps2=.1
-                                     ),
+                                     max_iter=max_iter_made, 
+                                     init_stepsize=init_stepsize_made,
+                                     beta_bt=beta_bt_made,
+                                     c_ag1=c_ag1_made,
+                                     c_ag2=c_ag2_made,
+                                     c_wolfe=c_wolfe_made, 
+                                     max_iter_line=max_iter_line_made),
                    test) 
   } # End of CG   
   return(c_0);
@@ -325,13 +318,13 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 #' @export
 #' 
 made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
-                 method="newton", parallelize=F, r_mat=NULL,
+                 method=list(opcg="newton", made="newton"), parallelize=F, r_mat=NULL,
                  control_list=list()) {
   
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="multinomial";
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="multinomial";
-  # method="newton"; parallelize=T; r_mat=NULL;
-  # control_list=list(print_iter=T, max_iter_made=25)
+  # method=list(opcg="newton", made="newton"); parallelize=T; r_mat=NULL;
+  # control_list=list(c_ag2=.9, print_iter=T, max_iter_made=25)
   
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
@@ -352,36 +345,36 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   
   # Block step for aD parameter
   aDhat=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
-                  method, parallelize, r_mat=NULL,
+                  method=method$opcg, parallelize, r_mat=NULL,
                   control_list);
   # Block step for B parameter
   c_0=made_update(x_matrix, y_matrix, d, bw,
                   aD_list = aDhat,
-                  B_mat, ytype, method, parallelize, r_mat,
+                  B_mat, ytype, method=method$made, parallelize, r_mat,
                   control_list);
   
-  # loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, 
-  #                       ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-  #                       link=linktype, k=k_vec, r_mat)
+  loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw,
+                        ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+                        link=linktype, k=k_vec, r_mat)
   
   for(iter in 1:max_iter_made){
     B_0=t(matrix(c_0, nrow=d, ncol=p));
 
     # aD-block update
     aDhat1=opcg_made(x_matrix, y_matrix, bw, B_mat=B_0, ytype,
-                    method, parallelize, r_mat=NULL,
+                     method=method$opcg, parallelize, r_mat=NULL,
                     control_list);
     # B-block update
     
     c_1=made_update(x_matrix, y_matrix, d,bw,
                     aD_list = aDhat1, B_0,
-                    ytype, method, parallelize, r_mat=NULL,
+                    ytype, method=method$made, parallelize, r_mat=NULL,
                     control_list);
     
     # Loss function
-    # loss_1 = mn_loss_made(c_1, x_matrix, mv_Y, bw, 
-    #                       ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
-    #                       link=linktype, k=k_vec, r_mat)
+    loss_1 = mn_loss_made(c_1, x_matrix, mv_Y, bw,
+                          ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
+                          link=linktype, k=k_vec, r_mat)
     
     # A Matrix distance of B_1 to B_0;
     # B_1=t(matrix(c_1, nrow=d, ncol=p));
@@ -390,10 +383,10 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
     euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
     
     # Loss Distance 
-    # loss_dist = loss_0 - loss_1;
+    loss_dist = (loss_0 - loss_1)/loss_0;
     # subspace_dist; euc_dist;
-    if(print_iter) print(c("MADE: euc_dist dist is", euc_dist, iter));
-    if( euc_dist < tol_val ) {
+    if(print_iter) print(c("MADE: loss_dist dist is", euc_dist, iter));
+    if( loss_dist < tol_val ) {
       break();
     } else{
       # The new B_0 for next iteration
