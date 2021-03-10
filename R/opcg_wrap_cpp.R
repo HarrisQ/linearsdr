@@ -70,22 +70,22 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     # j=1; test=T
     aD_j = function(j, test=F) {
       # centering data at obs j 
-      Xj <- matcenter_cpp(x_matrix,j,x0=NULL);
+      Xj <- linearsdr:::matcenter_cpp(x_matrix,j,x0=NULL);
       B_Xj <- t(B)%*%Xj
       Vj <- rbind(rep(1,n), B_Xj)
       
       # Kernel Weights at j
       if (is.null(r_mat)) {
-        Wj=gauss_kern_cpp(Xj,bw) 
+        Wj=linearsdr:::gauss_kern_cpp(Xj,bw) 
       } else { 
         rXj = t(r_mat)%*%Xj; 
-        Wj=gauss_kern_cpp(rXj,bw)
+        Wj=linearsdr:::gauss_kern_cpp(rXj,bw)
       }
       
       # Initial Value
       # WLS gives a (d+1)x(m-1) matrix; 
       # We want its transpose, a (m-1)x(d+1) matrix 
-      c_j_ls=as.vector(t(wls_cpp(Vj,mv_Y,Wj, reg=wls_reg))); 
+      c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,mv_Y,Wj, reg=wls_reg))); 
       
       # Don't need to return the wls starting values for this  
       ## for least squares, we undo the vec to get (m-1)x(d+1), which is t(Aj)
