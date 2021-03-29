@@ -1,25 +1,26 @@
-# # ###############################################################
-# #           Linear SDR Order Determination Methods
-# #                        Modified from 
-# #           Sufficient Dimension Reduction with R (Li, 2018)
-# # ###############################################################
-# 
-# 
-# #################################################################
-# # Internal Functions
-# #################################################################
-# 
-# cand_mat=function(x,y,method,nslices,ytype){
-#   
-#   out_m = switch(method, 
-#                  sir=sir(x,y,nslices,d,ytype,lambda=0)$cand_mat,
-#                  save=save_sdr(x,y,nslices,r,ytype,lambda=0)$cand_mat,
-#                  dr=dr(x,y,nslices,d,ytype,lambda=0)$cand_mat,
-#                  opcg=opcg(x,y,d)$cand_mat
-#                  ) 
-# 
-#   return(out_m)}
-# 
+# ###############################################################
+#           Linear SDR Order Determination Methods
+#                        Modified from
+#           Sufficient Dimension Reduction with R (Li, 2018)
+# ###############################################################
+
+
+#################################################################
+# Internal Functions
+#################################################################
+
+cand_mat=function(x,y,method,nslices,ytype, std, lambda){
+
+  out_m = switch(method,
+                 sir=sir(x,y,nslices,d,ytype,std, lambda)$cand_mat,
+                 save_sdr=save_sdr(x,y,nslices,d,ytype,std, lambda)$cand_mat,
+                 dr=dr(x,y,nslices,d,ytype,std, lambda)$cand_mat
+                 #,
+                 #opcg=opcg(x,y,d)$cand_mat
+                 )
+
+  return(out_m)}
+
 # # # # x=Reduce('rbind', y.R.0); y=Reduce('c', phi.R.0); r=6; h; method='dr';ytype; k=R.2;
 # # mean.candmat <- function(x,y,h,r,ytype,method,k,m=NULL, ensemble=NULL) {
 # #   if( is.list(y) ) {
@@ -62,113 +63,113 @@
 # #   }
 # #   return(out)
 # # }
-# 
-# 
-# # Variation in Eigenvalues component
-# phi_n=function(kmax,eval){
-#   den=1+sum(eval[1:(kmax+1)]);
-#   return(eval[1:(kmax+1)]/den)
-# }
-# 
-# # Variation in Eigenvectors sub-component 
-# # Measures variation/distance between two Eigen subspaces
-# # corresponind the the Eigen matrices given
-# prefn0=function(kmax,evec1,evec2){
-#   out=numeric();
-#   for(k in 0:kmax){
-#     if(k==0) out=c(out,0)
-#     if(k>0) out=c(out,1-abs(t(evec1[,1:k])%*%evec2[,1:k]))
-#     # if(k!=0&k!=1) out=c(out,1-abs(det(t(evec1[,1:k])%*%evec2[,1:k])))}
-#   return(out)
-# }
-# 
-# 
-# # minimizer=function(a,b) return(a[order(b)][1])
-# 
-# # x=t(y.R);y=phi.R;h=4;r=2;nboot=1000;method='dr';ytype='continuous'
-# 
-# ################################################################
-# # Ladle estimator
-# ################################################################
-# 
-# # # The number of bootstrap samples
-# # set.seed(1991)
-# # n_boot=500
-# # start_time3=Sys.time();
-# # opcg_boot_list=lapply(1:n_boot, function(rep) {
-# #   boot_set=sample(1:n,n, replace=T);
-# #   eigen_opcg=eigen_cpp(opcg_DD(X[,boot_set], matrix(Y[,boot_set], nrow=1, ncol=n), 
-# #                                h=1, ytype="multinomial", method="newton",
-# #                                parallelize=T)$opcg_mat); 
-# #   return(eigen_opcg);
-# # }  ) 
-# # end_time3=Sys.time();  end_time3 - start_time3 
-# # # about 30 mins on 15 cores for 200
-# # # 3 mins with cpp code for 200; # 1,3 mins with package for 200,500
-# # 
-# # 
-# # ### The whole OPG estimate
-# # eigen_opcg=eigen_cpp(opcg_DD(X, Y, h=1, ytype='multinomial', parallel = T)$opcg_mat);
-# # eigenval_opcg=eigen_opcg$values;
-# # eigenvec_opcg=eigen_opcg$vectors;
-# # 
-# # if(p<=10) kmax=p-2 else if(p>10) kmax=round(p/log(p))
-# 
-# 
-# 
-# 
-# ladle=function(x,y,method,nslices=NULL,bw=NULL,ytype,nboot,opcg_args=list()){
-#   
-#   #* for opcg, the extra arguments are
-#   #* method="newton", lambda2a=0, lambda2b=0, 
-#   #* parallelize=F, control_list=list()
-#   #*
-#   #*
-#   #*
-#   #*
-#   #*
-#   #*
-#   #* 
-#   #*     
-#   #*   
-#   
-#   # the dimension arg for SDR methods for ladle doesn't matter
-#   # just need some specified d to run the command
-#   d=2; n=dim(x)[2];p=dim(x)[1]
-#   
-#   if(p<=10) kmax=p-2 else if(p>10) kmax=round(p/log(p))
-#   
-#   # Computing the Candidate Matrix for the SDR method
-#   out=cand_mat(x,y,nslices,d,ytype,method)
-#   
-#   eval_full=eigen(out)$values; # calculate full eigenvectors
-#   evec_full=eigen(out)$vectors; # calculate full eigenvalues
-#   
-#   pn=phi_n(kmax,eval_full); #variation of eigenvalues component
-# 
-#   fn0=0;
-#   for(iboot in 1:nboot){
-#     # Draws Bootstrap Sample 
-#     bootindex=round(runif(n,min=-0.5,max=n+0.5));
-#     xs=x[bootindex,]; ys=y[bootindex]
-#     
-#     #Computes the Candidate Matrix and Eigenvectors
-#     mat=candmat(xs,ys,h,r,ytype,method)
-#     evec=eigen(mat)$vectors
-#     
-#     # Adds to the variation in Eigenvectors component
-#     fn0=fn0+prefn0(kmax,evec_full,evec)/nboot};
-#   # Final Variation in Eigenvectors component
-#   fn=fn0/(1+sum(fn0));
-#   
-#   # Ladle plot values and minimizer
-#   gn=pn+fn;
-#   rhat=minimizer(0:kmax,gn)
-#   return(list(kset=(0:kmax),gn=gn,rhat=rhat))
-# }
-# 
-# 
-# 
+
+
+# Variation in Eigenvalues component
+phi_n=function(kmax,eval){
+  den=1+sum(eval[1:(kmax+1)]);
+  return(eval[1:(kmax+1)]/den)
+}
+
+# Variation in Eigenvectors sub-component
+# Measures variation/distance between two Eigen subspaces
+# corresponind the the Eigen matrices given
+prefn0=function(kmax,evec1,evec2){
+  out=numeric();
+  for(k in 0:kmax){
+    if(k==0) out=c(out,0)
+    if(k>0) out=c(out,1-abs(t(evec1[,1:k])%*%evec2[,1:k]))
+    # if(k!=0&k!=1) out=c(out,1-abs(det(t(evec1[,1:k])%*%evec2[,1:k])))}
+  return(out)
+  }
+}
+
+minimizer=function(a,b) return(a[order(b)][1])
+
+# x=t(y.R);y=phi.R;h=4;r=2;nboot=1000;method='dr';ytype='continuous'
+
+################################################################
+# Ladle estimator
+################################################################
+
+# # The number of bootstrap samples
+# set.seed(1991)
+# n_boot=500
+# start_time3=Sys.time();
+# opcg_boot_list=lapply(1:n_boot, function(rep) {
+#   boot_set=sample(1:n,n, replace=T);
+#   eigen_opcg=eigen_cpp(opcg_DD(X[,boot_set], matrix(Y[,boot_set], nrow=1, ncol=n),
+#                                h=1, ytype="multinomial", method="newton",
+#                                parallelize=T)$opcg_mat);
+#   return(eigen_opcg);
+# }  )
+# end_time3=Sys.time();  end_time3 - start_time3
+# # about 30 mins on 15 cores for 200
+# # 3 mins with cpp code for 200; # 1,3 mins with package for 200,500
+#
+#
+# ### The whole OPG estimate
+# eigen_opcg=eigen_cpp(opcg_DD(X, Y, h=1, ytype='multinomial', parallel = T)$opcg_mat);
+# eigenval_opcg=eigen_opcg$values;
+# eigenvec_opcg=eigen_opcg$vectors;
+#
+# if(p<=10) kmax=p-2 else if(p>10) kmax=round(p/log(p))
+
+
+
+
+ladle=function(x,y,method,nslices=NULL,bw=NULL,ytype,nboot,opcg_args=list()){
+
+  #* for opcg, the extra arguments are
+  #* method="newton", lambda2a=0, lambda2b=0,
+  #* parallelize=F, control_list=list()
+  #*
+  #*
+  #*
+  #*
+  #*
+  #*
+  #*
+  #*
+  #*
+
+  # the dimension arg for SDR methods for ladle doesn't matter
+  # just need some specified d to run the command
+  d=2; n=dim(x)[2];p=dim(x)[1]
+
+  if(p<=10) kmax=p-2 else if(p>10) kmax=round(p/log(p))
+
+  # Computing the Candidate Matrix for the SDR method
+  out=cand_mat(x,y,nslices,d,ytype,method)
+
+  eval_full=eigen(out)$values; # calculate full eigenvectors
+  evec_full=eigen(out)$vectors; # calculate full eigenvalues
+
+  pn=phi_n(kmax,eval_full); #variation of eigenvalues component
+
+  fn0=0;
+  for(iboot in 1:nboot){
+    # Draws Bootstrap Sample
+    bootindex=round(runif(n,min=-0.5,max=n+0.5));
+    xs=x[bootindex,]; ys=y[bootindex]
+
+    #Computes the Candidate Matrix and Eigenvectors
+    mat=candmat(xs,ys,h,r,ytype,method)
+    evec=eigen(mat)$vectors
+
+    # Adds to the variation in Eigenvectors component
+    fn0=fn0+prefn0(kmax,evec_full,evec)/nboot};
+  # Final Variation in Eigenvectors component
+  fn=fn0/(1+sum(fn0));
+
+  # Ladle plot values and minimizer
+  gn=pn+fn;
+  rhat=minimizer(0:kmax,gn)
+  return(list(kset=(0:kmax),gn=gn,rhat=rhat))
+}
+
+
+
 # ################################################################
 # # K-fold Ladle estimator
 # ################################################################

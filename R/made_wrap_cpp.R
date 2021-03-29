@@ -15,7 +15,7 @@
 
 
 # x_matrix=X; y_matrix=Y; bw=1.25; ytype="multinomial"; B_mat = diag(1,p,d);
-# method=list(opcg="cg", made="newton"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
+# method=list(opcg="newton", made="newton"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
 # aD_list=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
 #                 method=method$opcg, parallelize, r_mat=NULL,
 #                 control_list);
@@ -338,6 +338,27 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
                   aD_list = aDhat,
                   B_mat, ytype, method=method$made, parallelize, r_mat,
                   control_list);
+  
+  if (ytype=="continuous") {
+    mv_Y=y_matrix;
+  } else if (ytype=="multinomial" ) { 
+    linktype="expit";
+    mv_Y=linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
+    
+    k_vec = colSums(mv_Y);
+    mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
+    
+    
+  } else if (ytype=="ordinal" ) {
+    linktype="culmit";
+    mv_Y=linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
+    
+    k_vec = rep(1, n) #as.vector(y_matrix);
+    mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
+
+    
+  }
+
   
   loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw,
                         ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
