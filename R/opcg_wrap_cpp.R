@@ -111,13 +111,13 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
        
     }
     # hi=aD_j(1,T)  
-  } else if (ytype %in% c("multinomial", "ordinal") ) {
+  } else if (ytype %in% c("cat", "ord-cat") ) {
     # y.matrix should be 1 x n 
     
     m_classes=as.numeric(levels(as.factor(y_matrix)));
     m=length(m_classes); 
     mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
-    if (ytype=="multinomial" ) { 
+    if (ytype=="cat" ) { 
       linktype="expit";
       
       k_vec = colSums(mv_Y);
@@ -127,7 +127,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       link_mv_y=linearsdr:::emp_logit( mv_Y, k_vec, tune=0.05 ) ;
       
       
-    } else if (ytype=="ordinal" ) {
+    } else if (ytype=="ord-cat" ) {
       linktype="culmit";
       
       k_vec = rep(1, n) #as.vector(y_matrix);

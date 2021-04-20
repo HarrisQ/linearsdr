@@ -29,7 +29,7 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
   
   arma::mat mv_Y(m,n); //mv_Y.zeros(m,n);  //sapply( seq_len(n), mv_Y_i);
   
-  if (ytype=="multinomial") {
+  if (ytype=="cat") {
     // Writing the For loop instead of sapply.
     arma::uword i;
     for (i = 0; i < n; i++ ) {
@@ -41,7 +41,7 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
       mv_Y.col(i) = Y_i;
     }
     
-  } if (ytype=="ordinal") {
+  } if (ytype=="ord-cat") {
     arma::uword i;
     for (i = 0; i < n; i++ ) {
       
@@ -190,7 +190,7 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     
     return dot_b;
     
-  } else if (link == "culmit") {
+  } else if (link == "adj-cat") {
     
     // creating upper/lower triangular matrices;
     arma::mat A; A.ones(m,m);
@@ -222,7 +222,7 @@ double b_expit(arma::vec lin_can_par, int k_i) {
 // # b.culmit
 double b_culmit(arma::vec lin_can_par, int k_i) {
   arma::uword m=lin_can_par.n_rows;
-  arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "culmit"); 
+  arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "ad-cat"); 
   return -k_i*log(  (1 - mu_i(0))  ) ;
 };  
 
@@ -263,7 +263,7 @@ arma::mat mn_loss_j(arma::vec c,
       // test = -wj(i)*( lcp.t()*( y_datta.col(i)) - b_expit(lcp, k(i) ) );
     } 
     
-  } else if (link=="culmit") {
+  } else if (link=="ad-cat") {
     
     // Writing the For loop instead of sapply.
     arma::uword i;
@@ -391,7 +391,7 @@ arma::mat mn_info_j(arma::vec c,
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
     }
     
-  } else if (link=="culmit") {
+  } else if (link=="ad-cat") {
     // Writing the For loop instead of sapply.
     arma::uword i;
     for (i = 0; i < n; i++ ) {
@@ -454,7 +454,7 @@ arma::mat mn_loss_j_made(arma::vec c,
       // test = -wj(i)*( lcp.t()*( y_datta.col(i)) - b_expit(lcp, k(i) ) );
     } 
     
-  } else if (link=="culmit") {
+  } else if (link=="ad-cat") {
     
     // Writing the For loop instead of sapply.
     arma::uword i;
@@ -634,7 +634,7 @@ arma::mat mn_info_j_made(arma::vec c,
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
     }
     
-  } else if (link=="culmit") {
+  } else if (link=="ad-cat") {
     // Writing the For loop instead of sapply.
     arma::uword i;
     for (i = 0; i < n; i++ ) {
