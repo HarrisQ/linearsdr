@@ -10,7 +10,7 @@ using namespace arma;
 // ##################################################################
 
 // ################################################################## 
-// #                 Empirical Logit and Culmit Transforms
+// #                 Empirical Logit and adcat Transforms
 // ################################################################## 
 
 // # Multinomial Y to Multivariate Y ####
@@ -107,7 +107,7 @@ arma::mat emp_logit(arma::mat y_matrix,
 // # Empirical Cumulative Transform ####
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat emp_culmit(arma::mat y_matrix,
+arma::mat emp_adcat(arma::mat y_matrix,
                      arma::vec k_vec,
                      double tune) {
   
@@ -148,16 +148,16 @@ arma::mat emp_culmit(arma::mat y_matrix,
   D_Y.elem( find(D_Y == 0) ).fill(tune);
   
   // # So that the numerator in log(p/(1-p)) is not zero
-  arma::mat emp_culmit(m-1,n);  
+  arma::mat emp_adcat(m-1,n);  
   
   // Writing the For loop instead of sapply.
   arma::uword j;
   for (j = 0; j < n; j++ ) {
-    emp_culmit.col(j) = k(j)*log( abs(diagmat(1/D_Y.col(j))*C_Y.col(j) ) );
+    emp_adcat.col(j) = k(j)*log( abs(diagmat(1/D_Y.col(j))*C_Y.col(j) ) );
     
   }
   
-  return emp_culmit;  // tau0; //
+  return emp_adcat;  // tau0; //
   
   
 };
@@ -219,8 +219,8 @@ double b_expit(arma::vec lin_can_par, int k_i) {
   return k_i*log( 1 + sum( exp( lin_can_par ) ) );
 };
 
-// # b.culmit
-double b_culmit(arma::vec lin_can_par, int k_i) {
+// # b.adcat
+double b_adcat(arma::vec lin_can_par, int k_i) {
   arma::uword m=lin_can_par.n_rows;
   arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "ad-cat"); 
   return -k_i*log(  (1 - mu_i(0))  ) ;
@@ -279,7 +279,7 @@ arma::mat mn_loss_j(arma::vec c,
       // Creating lin_can_parameter
       arma::vec lcp=tVij_I*c;
       
-      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_culmit(lcp, k(i) ) )/n;
+      mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_adcat(lcp, k(i) ) )/n;
     } 
     
   }
@@ -319,7 +319,7 @@ arma::mat mn_score_j(arma::vec c,
     mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
   }
   
-  // if (link=="culmit"){
+  // if (link=="adcat"){
   //   
   //   arma::uword i;
   //   for (i = 0; i < n; i++ ) {
@@ -417,7 +417,9 @@ arma::mat mn_info_j(arma::vec c,
   
 };
 
+//////////////////////////////////////////////////////////////////////////////
 // ############# The loss, score and info functions for MADE #################
+//////////////////////////////////////////////////////////////////////////////
 
 // A local Loss function for MADE 
 // [[Rcpp::depends(RcppArmadillo)]]
@@ -464,7 +466,7 @@ arma::mat mn_loss_j_made(arma::vec c,
       arma::vec lcp=tXij_tD*c;
       
       mean_nll_j += -wj(i)*( (ahat + lcp).t()* y_matrix.col(i) - 
-        b_culmit((ahat + lcp), k(i) ) )/n;
+        b_adcat((ahat + lcp), k(i) ) )/n;
       
     } 
   }
@@ -472,6 +474,7 @@ arma::mat mn_loss_j_made(arma::vec c,
   return mean_nll_j;
   
 } ; 
+
 
 
 // A Loss function for whole MADE 
@@ -514,6 +517,7 @@ arma::mat mn_loss_made(arma::vec c,
   return mean_nll; //pow(n,2)*
   
 } ;
+
 
 // A Local Score function for MADE 
 // [[Rcpp::depends(RcppArmadillo)]]
