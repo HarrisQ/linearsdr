@@ -9,7 +9,7 @@ using namespace arma;
 // ##################################################################
  
 // #######################################################################
-// #                  Empirical Logit and Culmit Transforms
+// #                  Empirical Logit and Ad-Cat Transforms
 // #######################################################################
 
 // # Multinomial Y to Multivariate Y ####
@@ -26,7 +26,7 @@ arma::mat emp_logit(arma::mat y_matrix,
 
 // # Empirical Cumulative Transform ####
  
-arma::mat emp_culmit(arma::mat y_matrix,
+arma::mat emp_adcat(arma::mat y_matrix,
                      arma::vec k_vec,
                      double tune);  
 
@@ -44,8 +44,8 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link );
 // # b.expit
 double b_expit(arma::vec lin_can_par, int k_i);  
 
-// # b.culmit
-double b_culmit(arma::vec lin_can_par, int k_i); 
+// # b.adcat
+double b_adcat(arma::vec lin_can_par, int k_i); 
 
 // #######################################################################
 // #           Multinomial GLM loss function (i.e. Deviance)
