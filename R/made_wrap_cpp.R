@@ -14,7 +14,7 @@
 ############################## MADE wrappers ##################################
 
 
-# x_matrix=X; y_matrix=Y; bw=1.25; ytype="multinomial"; B_mat = diag(1,p,d);
+# x_matrix=X; y_matrix=Y; bw=1.25; ytype="cat"; B_mat = diag(1,p,d);
 # method=list(opcg="newton", made="newton"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
 # aD_list=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
 #                 method=method$opcg, parallelize, r_mat=NULL,
@@ -67,7 +67,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # loss_made(c_init)
     
 
-  } else if (ytype %in% c( "multinomial", "ordinal")) {
+  } else if (ytype %in% c( "cat", "ord-cat")) {
     # y.matrix should be 1 x n
 
     m_classes=as.numeric(levels(as.factor(y_matrix)));
@@ -75,10 +75,10 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     mv_Y = mnY_to_mvY( y_matrix, m_classes, ytype);
 
     # Don't need Empirical Link Transforms for MADE block step
-    if (ytype=="multinomial" ) {
+    if (ytype=="cat" ) {
       linktype="expit";
-    } else if (ytype=="ordinal" ) {
-      linktype="culmit";
+    } else if (ytype=="ord-cat" ) {
+      linktype="ad-cat";
     };
     k_vec = rep(1, n);  
     mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
@@ -232,7 +232,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 
 } # End of made update
 
-# made_update(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="multinomial",
+# made_update(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="cat",
 #             method= method$made, parallelize=T, r_mat=NULL,
 #             control_list=list( ))
 
@@ -245,7 +245,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 #' paper Quach and Li (2021).
 #' 
 #' This version of MADE differs from that of Adragni and is currently available
-#' for continuous, multinomial, or ordinal response so far.
+#' for continuous, cat, or ord-cat response so far.
 #' 
 #' For scalar continuous response, the estimation is identical to OPG.
 #' 
@@ -285,7 +285,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 #'   \item gradients - The estimated local gradients; used in regularization of OPCG
 #'   \item weights - The kernel weights in the local-linear GLM. 
 #' }
-#' @param ytype specify the response as 'continuous', 'multinomial', or 'ordinal' 
+#' @param ytype specify the response as 'continuous', 'cat', or 'ord-cat' 
 #' @param B_mat 
 #' @param r_mat 
 #'
@@ -307,8 +307,8 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
                  method=list(opcg="newton", made="newton"), parallelize=F, r_mat=NULL,
                  control_list=list()) {
   
-  # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="multinomial";
-  # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="multinomial";
+  # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="cat";
+  # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="cat";
   # method=list(opcg="newton", made="newton"); parallelize=T; r_mat=NULL;
   # control_list=list(c_ag2=.9, print_iter=T, max_iter_made=25)
   
@@ -341,7 +341,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   
   if (ytype=="continuous") {
     mv_Y=y_matrix;
-  } else if (ytype=="multinomial" ) { 
+  } else if (ytype=="cat" ) { 
     linktype="expit";
     mv_Y=linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
     
@@ -349,8 +349,8 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
     mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
     
     
-  } else if (ytype=="ordinal" ) {
-    linktype="culmit";
+  } else if (ytype=="ord-cat" ) {
+    linktype="ad-cat";
     mv_Y=linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
     
     k_vec = rep(1, n) #as.vector(y_matrix);
