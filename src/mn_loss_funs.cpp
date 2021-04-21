@@ -352,19 +352,7 @@ arma::mat mn_score_j(arma::vec c,
   // always the same;
   // Writing the For loop instead of sapply.
   
-  if (link=="expit" | link=="adcat") {
-  
-    arma::uword i;
-    for (i = 0; i < n; i++ ) {
-      
-      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-      arma::vec lcp=tVij_I*c;
-      arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-      
-      mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-    }
-  
-  } else if (link=="clogit") {
+  if (link=="clogit") {
     
     
     arma::uword i;
@@ -395,7 +383,20 @@ arma::mat mn_score_j(arma::vec c,
     }
     
     // end of clogit
-  }
+  } else { //if (link=="expit" ) {
+    
+    arma::uword i;
+    for (i = 0; i < n; i++ ) {
+      
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+      arma::vec lcp=tVij_I*c;
+      arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+      
+      mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+    }
+    
+  } 
+    
   
   return mean_score_j;
   
