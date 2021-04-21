@@ -27,7 +27,7 @@ arma::mat emp_logit(arma::mat y_matrix,
 // # Empirical Cumulative Transform ####
  
 arma::mat emp_adcat(arma::mat y_matrix,
-                     arma::vec k_vec,
+                    // arma::vec k_vec,
                      double tune);  
 
 // #######################################################################

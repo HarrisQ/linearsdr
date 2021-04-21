@@ -274,13 +274,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // emp_adcat
-arma::mat emp_adcat(arma::mat y_matrix, arma::vec k_vec, double tune);
+arma::mat emp_adcat(arma::mat y_matrix, // arma::vec k_vec, double tune);
 RcppExport SEXP _linearsdr_emp_adcat(SEXP y_matrixSEXP, SEXP k_vecSEXP, SEXP tuneSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type y_matrix(y_matrixSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type k_vec(k_vecSEXP);
+    Rcpp::traits::input_parameter< // arma::vec >::type k_vec(k_vecSEXP);
     Rcpp::traits::input_parameter< double >::type tune(tuneSEXP);
     rcpp_result_gen = Rcpp::wrap(emp_adcat(y_matrix, k_vec, tune));
     return rcpp_result_gen;
