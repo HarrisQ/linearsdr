@@ -108,7 +108,7 @@ arma::mat emp_logit(arma::mat y_matrix,
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat emp_adcat(arma::mat y_matrix,
-                     arma::vec k_vec,
+                     // arma::vec k_vec,
                      double tune) {
   
   /***
@@ -117,7 +117,7 @@ arma::mat emp_adcat(arma::mat y_matrix,
   
   arma::uword n = y_matrix.n_cols;
   arma::rowvec ones_vec; ones_vec.ones(n);
-  arma::vec k = k_vec;
+  // arma::vec k = k_vec;
   
   
   // re-fill matrix with first (not last) row
@@ -153,7 +153,7 @@ arma::mat emp_adcat(arma::mat y_matrix,
   // Writing the For loop instead of sapply.
   arma::uword j;
   for (j = 0; j < n; j++ ) {
-    emp_adcat.col(j) = k(j)*log( abs(diagmat(1/D_Y.col(j))*C_Y.col(j) ) );
+    emp_adcat.col(j) = log( abs(diagmat(1/D_Y.col(j))*C_Y.col(j) ) );//k(j)*
     
   }
   
@@ -190,7 +190,7 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     
     return dot_b;
     
-  } else if (link == "ad-cat") {
+  } elseif (link == "ad-cat") {
     
     // creating upper/lower triangular matrices;
     arma::mat A; A.ones(m,m);
@@ -299,7 +299,7 @@ arma::mat mn_loss_j(arma::vec c,
       mean_nll_j += -wj(i)*( lcp.t()*y_datta.col(i) - b_adcat(lcp, k(i) ) )/n;
     } 
     
-  }  else if (link=="clogit") {
+  } else if (link=="clogit") {
     
     // Writing the For loop instead of sapply.
     arma::uword i;
@@ -312,17 +312,20 @@ arma::mat mn_loss_j(arma::vec c,
       arma::vec lcp=tVij_I*c;
       
       // inverse link 
-      arma::vec psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
+      arma::mat psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
       
       // inverse mean function, i.e. canonical link, no tune
-      arma::vec tau_psi_inv = emp_adcat(psi_inv, k(i), tune=0);
+      arma::vec tau_psi_inv = emp_adcat(psi_inv, 0);
+      
+      // arma::mat y_matrix,
+      // arma::vec k_vec,
       
       mean_nll_j += -wj(i)*( tau_psi_inv.t()*y_datta.col(i) - 
         b_adcat(tau_psi_inv, k(i) ) )/n;
     } 
-   
-   // End of cLogit
-  }
+    
+    // End of cLogit
+  } 
   
   return mean_nll_j;
   
@@ -379,55 +382,20 @@ arma::mat mn_score_j(arma::vec c,
       arma::vec v_m(m); v_m.ones(); //vec of ones
       arma::mat E; E = v_m*psi_inv.t();
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      
-      arma::vec var_psi_inv = E_syml - psi_inv*psi_inv.t();
+      arma::mat var_psi_inv = E_syml - psi_inv*psi_inv.t();
       
       
       // inverse dot psi
-      arma::vec dot_psi_inv = (1 - psi_inv)*psi_inv.t();
+      arma::mat dot_psi_inv = (1 - psi_inv)*psi_inv.t();
       
       
-      mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*var_psi_inv*
+      mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
+        var_psi_inv*
         ( y_datta.col(i) - psi_inv)/n; 
     }
     
+    // end of clogit
   }
-  
-  
-  // if (link=="adcat"){
-  //   
-  //   arma::uword i;
-  //   for (i = 0; i < n; i++ ) {
-  //     
-  //     // Without constant gradient per class
-  //     // arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-  //     
-  //     // Imposing constant gradient per class
-  //     // matrix(Vj[,1], nrow=m-1, ncol=p+(m-1) ) 
-  //     arma::mat tVij_I=reshape(vj.col(i),m,pm );
-  //     
-  //     // Creating lin_can_parameter
-  //     arma::vec lcp=tVij_I*c;
-  //     
-  //     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-  //     
-  //     mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-  //   }
-  //   
-  // } else {
-  //   
-  //   arma::uword i;
-  //   for (i = 0; i < n; i++ ) {
-  //     
-  //     arma::mat tVij_I=kron( (vj.col(i)).t(),I);
-  //     arma::vec lcp=tVij_I*c;
-  //     arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-  //     
-  //     mean_score_j += -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-  //   }
-  //   
-  //   
-  // }
   
   return mean_score_j;
   

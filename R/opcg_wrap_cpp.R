@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="multinomial"; #"continuous";#"multinomial";
+  # bw;  ytype="clogit"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -136,6 +136,15 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # Empirical ad-cat Transform of the reponse
       link_mv_y=linearsdr:::emp_adcat( mv_Y, k_vec, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
+    } else if (ytype=="clogit" ) {
+      linktype="clogit";
+      
+      k_vec = rep(1, n) #as.vector(y_matrix);
+      mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
+      # mv_Y[1,] # mv_Y[,1:20]
+      # Empirical ad-cat Transform of the reponse
+      link_mv_y=linearsdr:::emp_adcat( mv_Y, k_vec, tune=0.05 ); #
+      # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
     }
     
     
@@ -178,17 +187,23 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                                         c_wolfe=c_wolfe,
                                         max_iter_line=max_iter_line ),
                       test);
-
+        
+        
+        # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec) 
+        # 
+        # mn_score_j(c_j_ls, Vj, mv_Y, Wj, link="clogit", k_vec) 
+        # 
+        # linearsdr:::dot_b_multinom(c_j_ls, 1, "expit")
+          
         # c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
         #                    control_list=list(tol_val=tol_val,
-        #                           max_iter=max_iter1,
-        #                           init_stepsize=init_stepsize1,
-        #                           beta_bt=beta_bt1,
-        #                           c_ag=c_ag1,
-        #                           c_ag2=c_ag2,
-        #                           c_wolfe=c_wolfe1,
-        #                           max_iter_line=max_iter_line1,
-        #                           l2_pen=l2_pen),
+        #                                      max_iter=max_iter_cg,
+        #                                      init_stepsize=init_stepsize_cg,
+        #                                      beta_bt=beta_bt,
+        #                                      c_ag1=c_ag1,
+        #                                      c_ag2=c_ag2,
+        #                                      c_wolfe=c_wolfe,
+        #                                      max_iter_line=max_iter_line ),
         #                    test)
         
       } else if (method=="newton") {
