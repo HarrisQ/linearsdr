@@ -190,7 +190,7 @@ arma::vec dot_b_multinom(arma::vec lin_can_par, int k_i, String link ){
     
     return dot_b;
     
-  } else if (link == "adj-cat") {
+  } else if (link == "ad-cat") {
     
     // creating upper/lower triangular matrices;
     arma::mat A; A.ones(m,m);
