@@ -85,8 +85,8 @@ emp_logit <- function(y_matrix, k_vec, tune) {
     .Call(`_linearsdr_emp_logit`, y_matrix, k_vec, tune)
 }
 
-emp_culmit <- function(y_matrix, k_vec, tune) {
-    .Call(`_linearsdr_emp_culmit`, y_matrix, k_vec, tune)
+emp_adcat <- function(y_matrix, k_vec, tune) {
+    .Call(`_linearsdr_emp_adcat`, y_matrix, k_vec, tune)
 }
 
 dot_b_multinom <- function(lin_can_par, k_i, link) {

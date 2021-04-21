@@ -273,16 +273,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// emp_culmit
-arma::mat emp_culmit(arma::mat y_matrix, arma::vec k_vec, double tune);
-RcppExport SEXP _linearsdr_emp_culmit(SEXP y_matrixSEXP, SEXP k_vecSEXP, SEXP tuneSEXP) {
+// emp_adcat
+arma::mat emp_adcat(arma::mat y_matrix, arma::vec k_vec, double tune);
+RcppExport SEXP _linearsdr_emp_adcat(SEXP y_matrixSEXP, SEXP k_vecSEXP, SEXP tuneSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type y_matrix(y_matrixSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k_vec(k_vecSEXP);
     Rcpp::traits::input_parameter< double >::type tune(tuneSEXP);
-    rcpp_result_gen = Rcpp::wrap(emp_culmit(y_matrix, k_vec, tune));
+    rcpp_result_gen = Rcpp::wrap(emp_adcat(y_matrix, k_vec, tune));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -587,7 +587,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_linearsdr_mgauss_info_j_made", (DL_FUNC) &_linearsdr_mgauss_info_j_made, 6},
     {"_linearsdr_mnY_to_mvY", (DL_FUNC) &_linearsdr_mnY_to_mvY, 3},
     {"_linearsdr_emp_logit", (DL_FUNC) &_linearsdr_emp_logit, 3},
-    {"_linearsdr_emp_culmit", (DL_FUNC) &_linearsdr_emp_culmit, 3},
+    {"_linearsdr_emp_adcat", (DL_FUNC) &_linearsdr_emp_adcat, 3},
     {"_linearsdr_dot_b_multinom", (DL_FUNC) &_linearsdr_dot_b_multinom, 3},
     {"_linearsdr_mn_loss_j", (DL_FUNC) &_linearsdr_mn_loss_j, 6},
     {"_linearsdr_mn_score_j", (DL_FUNC) &_linearsdr_mn_score_j, 6},
