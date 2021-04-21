@@ -223,7 +223,24 @@ double b_expit(arma::vec lin_can_par, int k_i) {
 double b_adcat(arma::vec lin_can_par, int k_i) {
   arma::uword m=lin_can_par.n_rows;
   arma::vec mu_i=dot_b_multinom( lin_can_par, k_i, "ad-cat"); 
-  return -k_i*log(  (1 - mu_i(0))  ) ;
+  
+  // creating upper/lower triangular matrices;
+  arma::mat A; A.ones(m,m);
+  //arma::mat U=trimatu(A); 
+  arma::mat L=trimatl(A);
+  
+  // creating Permutation and Differencing Matrices, P, Q
+  //arma::mat I(m,m); I.eye();
+  arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+  // arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); 
+  
+  arma::vec phi_i = L*exp( L*lin_can_par  );  
+  double dem; dem = 1 + phi_i(m-1); // same as 1 + e_1^\top P L exp(L th)  
+  // arma::vec num = Q*P*phi_i;
+  
+  // dot_b = num/dem;
+  
+  return log( dem ) ;
 };  
 
 // #######################################################################
