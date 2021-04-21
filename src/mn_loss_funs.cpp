@@ -108,8 +108,7 @@ arma::mat emp_logit(arma::mat y_matrix,
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat emp_adcat(arma::mat y_matrix,
-                     // arma::vec k_vec,
-                     double tune) {
+                    double tune) {
   
   /***
    * y_matrix is m x n
