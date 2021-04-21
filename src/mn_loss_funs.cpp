@@ -230,7 +230,7 @@ double b_adcat(arma::vec lin_can_par, int k_i) {
   arma::mat L=trimatl(A);
   
   // creating Permutation and Differencing Matrices, P, Q
-  //arma::mat I(m,m); I.eye();
+  arma::mat I(m,m); I.eye();
   arma::mat P(m,m); P.zeros(); P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
   // arma::mat Q(m,m); Q = -I; Q.col(0).fill(1); 
   
