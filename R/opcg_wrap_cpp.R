@@ -134,7 +134,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
       # mv_Y[1,] # mv_Y[,1:20]
       # Empirical ad-cat Transform of the reponse
-      link_mv_y=linearsdr:::emp_adcat( mv_Y, k_vec, tune=0.05 ); #
+      link_mv_y=linearsdr:::emp_adcat( mv_Y, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
     } else if (ytype=="clogit" ) {
       linktype="clogit";
@@ -143,7 +143,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
       # mv_Y[1,] # mv_Y[,1:20]
       # Empirical ad-cat Transform of the reponse
-      link_mv_y=linearsdr:::emp_adcat( mv_Y, k_vec, tune=0.05 ); #
+      link_mv_y=linearsdr:::emp_adcat( mv_Y, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
     }
     
