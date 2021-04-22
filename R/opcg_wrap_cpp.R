@@ -116,8 +116,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     
     m_classes=as.numeric(levels(as.factor(y_matrix)));
     m=length(m_classes); 
-    mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
-    if (ytype=="cat" ) {  
+    if (ytype=="cat" ) { 
+      mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
       linktype="expit";
       
       k_vec = colSums(mv_Y);
@@ -127,7 +127,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       link_mv_y=linearsdr:::emp_logit( mv_Y, k_vec, tune=0.05 ) ;
       
       
-    } else if (ytype=="ord-cat" ) { 
+    } else if (ytype=="ord-cat" ) {
+      mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype="ord-cat");
       linktype="ad-cat";
       
       k_vec = rep(1, n) #as.vector(y_matrix);
@@ -137,6 +138,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       link_mv_y=linearsdr:::emp_adcat( mv_Y, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
     } else if (ytype %in% c("clogit", "cprobit", "cloglog" ) { 
+      mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype="ord-cat");
       linktype="clogit";
       
       k_vec = rep(1, n) #as.vector(y_matrix);

@@ -41,7 +41,7 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
       mv_Y.col(i) = Y_i;
     }
     
-  } else if (ytype=="ord-cat" | ytype=="clogit" | ytype=="cprobit" | ytype=="cloglog") {
+  } else if (ytype=="ord-cat") {
     arma::uword i;
     for (i = 0; i < n; i++ ) {
       
