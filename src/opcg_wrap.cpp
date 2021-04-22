@@ -317,9 +317,13 @@ arma::vec aD_j_cg(arma::vec init,
       Rcout << "Printing nll_dist: " << nll_dist<< ", m_ag:"  << m_ag << ", iter:"  << iter << "\n ";
     }
     
-    if( nll_dist < tol | Rcpp::is_nan(nll_dist) ) {
+    if ( nll_dist < tol ) {
+      
+    } else if( Rcpp::is_nan(nll_dist) ) {
+      c_next=c_now;
       break;
-    } else {
+      
+    } else { 
       
       // #Step 2b: Compute gradient;
       arma::vec grad_next = mn_score_j(c_next,vj,y_datta,wj,link,k);
@@ -354,12 +358,10 @@ arma::vec aD_j_cg(arma::vec init,
     
   } // end of cg iter  
   
-  if( Rcpp::is_nan(nll_dist) ) {
-    return c_now;//things;
-  } else {
-    return c_next;//c_now;//things;
-  }
+  return c_next;//c_now;//things;
   
+  
+
   
 }
 
