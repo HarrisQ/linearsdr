@@ -318,7 +318,7 @@ arma::vec aD_j_cg(arma::vec init,
     }
     
     if( nll_dist < tol | Rcpp::is_nan(nll_dist) ) {
-      if ( Rcpp::is_nan(nll_dist) ) c_next=cnow;
+      if ( Rcpp::is_nan(nll_dist) ) c_next=c_now;
       break;
     } else {
       
