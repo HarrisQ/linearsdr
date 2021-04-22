@@ -317,7 +317,7 @@ arma::vec aD_j_cg(arma::vec init,
       Rcout << "Printing nll_dist: " << nll_dist<< ", m_ag:"  << m_ag << ", iter:"  << iter << "\n ";
     }
     
-    if( nll_dist < tol) {
+    if( nll_dist < tol | Rcpp::is_nan(nll_dist) ) {
       break;
     } else {
       

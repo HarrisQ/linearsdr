@@ -148,7 +148,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
     }
     
     
-    # j=1; test=T
+    # j=17; test=T
     aD_j = function(j, test=F) {
       
       # centering data at obs j 
@@ -231,7 +231,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                       weights=Wj) );
       }
       
-    } # hi=aD_j(150,T)
+    } # hi=aD_j(17,T)
     
   }
   # hi=aD_j(1, test=T)
@@ -295,11 +295,11 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
   
   
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="ordinal"; #"continuous";#"multinomial";
+  # bw;  ytype="clogit"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list(); # B_mat=init_mat;
-  
+
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
   
   DD_list=opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype, 
@@ -309,6 +309,9 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
   
   DD_mean=list_mean(DD_list$Dhat);
   DD_mean_ls=list_mean(DD_list$Dhat_ls);
+  
+  #sapply(1:n, function(j) !is.nan(DD_list$Dhat[[j]][1] ))
+  #DD_mean = list_mean( DD_list$Dhat[sapply(1:n, function(j) !is.nan(DD_list$Dhat[[j]][1] ))] )
   
   # symmetrize the candidate matrices
   DD_mean = .5*(DD_mean + t(DD_mean));
