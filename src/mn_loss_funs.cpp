@@ -324,6 +324,60 @@ arma::mat mn_loss_j(arma::vec c,
     } 
     
     // End of cLogit
+    
+  } else if (link=="cprobit") {
+    
+    // Writing the For loop instead of sapply.
+    arma::uword i;
+    for (i = 0; i < n; i++ ) {
+      
+      // Without constant gradient per class
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I); 
+      
+      // Creating lin_can_parameter
+      arma::vec lcp=tVij_I*c;
+      
+      // inverse link 
+      arma::mat psi_inv = 1 - normcdf(lcp);
+      
+      // inverse mean function, i.e. canonical link, no tune
+      arma::vec tau_psi_inv = emp_adcat(psi_inv, 0);
+      
+      // arma::mat y_matrix,
+      // arma::vec k_vec,
+      
+      mean_nll_j += -wj(i)*( tau_psi_inv.t()*y_datta.col(i) - 
+        b_adcat(tau_psi_inv, k(i) ) )/n;
+    } 
+    
+    // End of cProbit
+    
+  } else if (link=="cloglog") {
+    
+    // Writing the For loop instead of sapply.
+    arma::uword i;
+    for (i = 0; i < n; i++ ) {
+      
+      // Without constant gradient per class
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I); 
+      
+      // Creating lin_can_parameter
+      arma::vec lcp=tVij_I*c;
+      
+      // inverse link 
+      arma::mat psi_inv = exp(-exp(-lcp));
+      
+      // inverse mean function, i.e. canonical link, no tune
+      arma::vec tau_psi_inv = emp_adcat(psi_inv, 0);
+      
+      // arma::mat y_matrix,
+      // arma::vec k_vec,
+      
+      mean_nll_j += -wj(i)*( tau_psi_inv.t()*y_datta.col(i) - 
+        b_adcat(tau_psi_inv, k(i) ) )/n;
+    } 
+    
+    // End of cloglog
   } 
   
   return mean_nll_j;
