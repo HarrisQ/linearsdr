@@ -137,7 +137,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # Empirical ad-cat Transform of the reponse
       link_mv_y=linearsdr:::emp_adcat( mv_Y, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
-    } else if (ytype %in% c("clogit", "cprobit", "cloglog" ) { 
+    } else if (ytype %in% c("clogit", "cprobit", "cloglog" ) ) { 
       mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype="ord-cat");
       linktype="clogit";
       
