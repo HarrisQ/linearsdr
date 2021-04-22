@@ -41,7 +41,7 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
       mv_Y.col(i) = Y_i;
     }
     
-  } else if (ytype=="ord-cat" | ytype=="clogit") {
+  } else if (ytype=="ord-cat" | ytype=="clogit" | ytype=="cprobit" | ytype=="cloglog") {
     arma::uword i;
     for (i = 0; i < n; i++ ) {
       
@@ -364,6 +364,68 @@ arma::mat mn_score_j(arma::vec c,
       
       // inverse link
       arma::vec psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
+      
+      // var function on inverse psi
+      arma::vec v_m(m); v_m.ones(); //vec of ones
+      arma::mat E; E = v_m*psi_inv.t();
+      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+      arma::mat var_psi_inv = pinv(E_syml - psi_inv*psi_inv.t());
+      
+      
+      // inverse dot psi
+      arma::mat dot_psi_inv = (1 - psi_inv)*psi_inv.t();
+      
+      
+      mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
+        var_psi_inv*
+        ( y_datta.col(i) - psi_inv)/n; 
+    }
+    
+    // end of clogit
+  } else if (link=="cprobit") {
+    
+    
+    arma::uword i;
+    for (i = 0; i < n; i++ ) {
+      
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+      arma::vec lcp=tVij_I*c;
+      // arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+      
+      
+      // inverse link
+      arma::vec psi_inv = 1 - normcdf(lcp);
+      
+      // var function on inverse psi
+      arma::vec v_m(m); v_m.ones(); //vec of ones
+      arma::mat E; E = v_m*psi_inv.t();
+      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+      arma::mat var_psi_inv = pinv(E_syml - psi_inv*psi_inv.t());
+      
+      
+      // inverse dot psi
+      arma::mat dot_psi_inv = (1 - psi_inv)*psi_inv.t();
+      
+      
+      mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
+        var_psi_inv*
+        ( y_datta.col(i) - psi_inv)/n; 
+    }
+    
+    // end of clogit
+  } else if (link=="cloglog") {
+    
+    
+    arma::uword i;
+    for (i = 0; i < n; i++ ) {
+      
+      arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+      arma::vec lcp=tVij_I*c;
+      // arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+      
+      
+      // inverse link
+      arma::vec psi_inv = exp(-exp(-lcp));
       
       // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
