@@ -319,9 +319,9 @@ arma::vec aD_j_cg(arma::vec init,
     
     if ( nll_dist < tol ) {
       break;
-    // } else if( !( (nll_now - nll_next).is_finite() ) )  {
-    //   c_next=c_now;
-    //   break;
+    } else if( !( (nll_now - nll_next).is_finite() ) )  {
+      c_next=c_now;
+      break;
 
     } else { 
       
