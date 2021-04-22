@@ -373,7 +373,7 @@ arma::mat mn_score_j(arma::vec c,
       
       
       // inverse dot psi
-      arma::mat dot_psi_inv = - diagmat( ( (1 - psi_inv)*psi_inv.t() ).diag() );
+      arma::mat dot_psi_inv = diagmat( - ( (1 - psi_inv)*psi_inv.t() ).diag() );
       
       
       mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
