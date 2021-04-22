@@ -405,7 +405,8 @@ arma::mat mn_score_j(arma::vec c,
       
       
       // inverse dot psi
-      arma::mat dot_psi_inv = diagmat(-normpdf(lcp) )
+      arma::vec tmp = -normpdf(lcp);
+      arma::mat dot_psi_inv = diagmat( tmp );
       
       
       mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
