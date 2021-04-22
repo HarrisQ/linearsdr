@@ -319,7 +319,7 @@ arma::vec aD_j_cg(arma::vec init,
     
     if ( nll_dist < tol ) {
       break;
-    } else if( is_nan(nll_next) ) {
+    } else if( nll_dist.is_finite() ) {
       c_next=c_now;
       break;
       
