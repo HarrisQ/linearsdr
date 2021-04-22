@@ -111,7 +111,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
        
     }
     # hi=aD_j(1,T)  
-  } else if (ytype %in% c("cat", "ord-cat") ) {
+  } else if (ytype %in% c("cat", "ord-cat", "clogit") ) {
     # y.matrix should be 1 x n 
     
     m_classes=as.numeric(levels(as.factor(y_matrix)));
@@ -243,15 +243,15 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   if (parallelize) {
     
     # Compute estimates
-    # aD_list = foreach::foreach(j = iterators::icount(n), 
-    #                            .packages = "linearsdr" ) %dopar%{ 
-    #                            # Release results
-    #                            return(aD_j(j));
-    #                            }
-    aD_list = foreach::foreach(j = iterators::icount(n) ) %dopar%{ 
-                                 # Release results
-                                 return(aD_j(j));
+    aD_list = foreach::foreach(j = iterators::icount(n),
+                               .packages = "linearsdr" ) %dopar%{
+                               # Release results
+                               return(aD_j(j));
                                }
+    # aD_list = foreach::foreach(j = iterators::icount(n) ) %dopar%{ 
+    #                              # Release results
+    #                              return(aD_j(j));
+    #                            }
   } else {
     aD_list = list();
     
@@ -278,8 +278,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 # opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
 #           method="cg", parallelize, r_mat, control_list)$Dhat
 
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="ordinal",
-#           method="newton", parallelize, r_mat, control_list)$Dhat
+# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="clogit",
+#           method="cg", parallelize, r_mat, control_list)$Dhat
 
 ############### OPCG Candidate Matrix #########################
 #' This is an internal function called by opcg 
