@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="clogit"; #"continuous";#"multinomial";
+  # bw;  ytype="cprobit"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -111,7 +111,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
        
     }
     # hi=aD_j(1,T)  
-  } else if (ytype %in% c("cat", "ord-cat", "clogit") ) {
+  } else if (ytype %in% 
+             c("cat", "ord-cat", "clogit","cprobit","cloglog") ) {
     # y.matrix should be 1 x n 
     
     m_classes=as.numeric(levels(as.factor(y_matrix)));
