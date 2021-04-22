@@ -369,7 +369,7 @@ arma::mat mn_score_j(arma::vec c,
       arma::vec v_m(m); v_m.ones(); //vec of ones
       arma::mat E; E = v_m*psi_inv.t();
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      arma::mat var_psi_inv = inv(E_syml - psi_inv*psi_inv.t());
+      arma::mat var_psi_inv = pinv(E_syml - psi_inv*psi_inv.t());
       
       
       // inverse dot psi
