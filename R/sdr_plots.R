@@ -263,11 +263,11 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
 # )
 
 ### Plotly Function ====
-plotly_plot <- function(x_datta,y_datta,edr_est,
+plotly_plot <- function(y_datta, preds,
                         clas_col=NULL, clas_symb=NULL, symb_size=2,
                         method=NULL, legend=T) {
   
-  dattaframe = data.frame(t(rbind(t(edr_est)%*%x_datta,y_datta)));
+  dattaframe = data.frame(preds ,y_datta);
   colnames(dattaframe) = c('x','y','z','resp');
   
   plot_ly(dattaframe, x=dattaframe$x, y=dattaframe$y , z=dattaframe$z,
