@@ -145,7 +145,7 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   ylabel=unique(ydis)
   prob=numeric() 
   for(i in 1:nslices) prob=c(prob,length(ydis[ydis==ylabel[i]])/n)
-  vxy = array(0,c(p,p,h))
+  vxy = array(0,c(p,p,nslices))
   for(i in 1:nslices) vxy[,,i] = var(xst[ydis==ylabel[i],]) 
   savemat=0
   for(i in 1:nslices){
