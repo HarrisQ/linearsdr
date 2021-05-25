@@ -128,10 +128,17 @@ tuning_plot_km = function(h_list, tuning_list, x_lab=NULL,y_lab=NULL) {
 ### 3D Plot
 
 
-ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
-                         sdr_method='', size=2, show.legend=F, label_size=5) {
-  
-  # alpha = 125 # 175 seems good
+ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial", 
+                         y_color, y_symbol,
+                         sdr_method='', size=2, show.legend=F, label_size=5,
+                         image=NULL,image_size=0.05) {
+
+    
+  # alpha=125; x_datta=(nlopcg_fit$pred_test[1:3,]);
+  # y_datta=1:n; ytype="multinomial"; 
+  # y_color=clas_col; y_symbol=clas_symb;
+  # sdr_method='OPCG'; size=2; show.legend=F; label_size=5;
+  # image=image_vec
   
   # x_datta=t(B_hat_opcg)%*%(X); y_datta=Y;
   # y_color=clas_col; y_symbol=clas_symb; sdr_method = 'OPCG';
@@ -217,23 +224,78 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, y_color, y_symbol,
   # p_blank
   # 
   
-  p_blank + 
-    ggplot2::geom_point(data = data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
-                                                          function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
-                                                   label=t(y_datta) ), aes(y = y,x = x, 
-                            color = factor(label), shape=factor(label)), 
-                        size=size, show.legend=show.legend) +
-    ggplot2::scale_colour_manual(values = y_color)+
-    ggplot2::scale_shape_manual(values = y_symbol)+
-    theme_void() +
-    # labs(x='x', y='y')+
-    ggplot2::theme(legend.position="none",
-                   plot.background = element_blank(),
-                   panel.grid.major = element_blank(), 
-                   panel.grid.minor = element_blank(),
-                   panel.background = element_blank(), 
-                   axis.line = element_blank(),#element_line(colour = "black"),
-                   legend.background = element_rect(fill = 'transparent')) 
+  
+  
+  if(ytype=="multinomial"){
+    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+                                 function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
+                          label=c(y_datta) )
+    tmp_plot =
+      p_blank +  
+      ggplot2::geom_point(data = tmp_datta , aes(y = y,x = x, 
+                                                 color = factor(label), shape=factor(label)), 
+                          size=size, show.legend=show.legend) +
+      ggplot2::scale_colour_manual(values = y_color)+
+      ggplot2::scale_shape_manual(values = y_symbol)+
+      theme_void() +
+      # labs(x='x', y='y')+
+      ggplot2::theme(legend.position="none",
+                     plot.background = element_blank(),
+                     panel.grid.major = element_blank(), 
+                     panel.grid.minor = element_blank(),
+                     panel.background = element_blank(), 
+                     axis.line = element_blank(),#element_line(colour = "black"),
+                     legend.background = element_rect(fill = 'transparent')) 
+  
+  } else if (ytype=="continuous") {
+    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+                                 function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
+                          label=c(y_datta), 
+                          image=image)
+   
+    if(!is.null(image)){
+      tmp_plot =
+        p_blank +  
+        ggplot2::geom_point(data = tmp_datta , aes(y = y,x = x), 
+                            size=size, show.legend=show.legend)  +
+        ggplot2::scale_colour_manual(values = y_color)+
+        ggplot2::scale_shape_manual(values = y_symbol)+
+        theme_void() +
+        # labs(x='x', y='y')+
+        ggplot2::theme(legend.position="none",
+                       plot.background = element_blank(),
+                       panel.grid.major = element_blank(), 
+                       panel.grid.minor = element_blank(),
+                       panel.background = element_blank(), 
+                       axis.line = element_blank(),#element_line(colour = "black"),
+                       legend.background = element_rect(fill = 'transparent')) +
+        ggimage::geom_image(data=tmp_datta, aes(image=image), size=image_size)
+      
+    } else {
+      tmp_plot = 
+        p_blank +  
+        ggplot2::geom_point(data = data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+                                                      function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
+                                               label=t(y_datta) ), 
+                            aes(y = y,x = x), 
+                            size=size, show.legend=show.legend) +
+        ggplot2::scale_colour_manual(values = y_color)+
+        ggplot2::scale_shape_manual(values = y_symbol)+
+        theme_void() +
+        # labs(x='x', y='y')+
+        ggplot2::theme(legend.position="none",
+                       plot.background = element_blank(),
+                       panel.grid.major = element_blank(), 
+                       panel.grid.minor = element_blank(),
+                       panel.background = element_blank(), 
+                       axis.line = element_blank(),#element_line(colour = "black"),
+                       legend.background = element_rect(fill = 'transparent')) 
+    }
+    
+  }
+  
+  
+  return(tmp_plot)
   
   
 }
