@@ -200,11 +200,14 @@ tuning_skmkm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
 #' @export
 #' 
 kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
-                         class_labels, n_cpc, method="newton", parallelize = F,
+                         class_labels, n_cpc, method="newton", std=NULL,
+                         parallelize = F,
                          control_list=list(),
                          iter.max = 100, nstart = 100) {
 
   n=dim(x_datta)[2]; n_hlist = length(h_list);
+  p=dim(x_datta)[1];
+  
   # k = 3;
   # x_datta=X; y_datta=Y; ytype="multinomial"; parallelize=T
   # class_labels=m_classes; iter.max = 100; nstart = 100
@@ -234,6 +237,24 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
     X_train=x_datta[,-which(partitions==fold) ];
     Y_train=matrix(y_datta[,-which(partitions==fold) ] , 1, ncol=(n-dim(X_tune)[2]) ) ;
 
+    if (std=="cov") {
+      X_train=matpower_cpp(cov(t(X_train)), -1/2)%*%
+        t(sapply(1:p, FUN= function(j) center_cpp(X_train[j,], NULL) ) );
+      
+      X_tune=matpower_cpp(cov(t(X_tune)), -1/2)%*%
+        t(sapply(1:p, FUN= function(j) center_cpp(X_tune[j,], NULL) ) );
+      
+    } else if (std=="marg"){
+      
+      # Standardize marginally at least to bring variation in line, if total 
+      # isotropic transformation is not possible due to high correlation between
+      # predictors.
+      
+      X_train=t(sapply(1:p, FUN= function(j) center_cpp(X_train[j,], NULL)/sd(X_train[j,]) ) );
+      X_tune=t(sapply(1:p, FUN= function(j) center_cpp(X_tune[j,], NULL)/sd(X_tune[j,]) ) );
+
+    }
+    
     # dim(X_tune)[2] + dim(X_train)[2]
     # table(partitions)
 
