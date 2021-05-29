@@ -200,7 +200,7 @@ tuning_skmkm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
 #' @export
 #' 
 kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
-                         class_labels, n_cpc, method="newton", std=NULL,
+                         class_labels, n_cpc, method="newton", std="none",
                          parallelize = F,
                          control_list=list(),
                          iter.max = 100, nstart = 100) {
