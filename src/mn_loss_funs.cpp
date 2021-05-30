@@ -254,16 +254,24 @@ arma::mat mn_loss_j(arma::vec c,
                     arma::mat vj, 
                     arma::mat y_datta, 
                     arma::vec wj, 
+                    double lambda,
                     Rcpp::String link, 
                     arma::vec k) {
   
   arma::uword pm=c.n_elem; 
+  arma::uword p=vj.n_rows; 
   arma::uword n=y_datta.n_cols;
   arma::uword m=y_datta.n_rows;
   arma::mat I(m,m); I.eye();
   
   arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
   // arma::mat test;
+  
+  arma::mat slope_mat(p,m); 
+  arma::mat slope_mat = reshape(c.rows( m, pm-1 ), p, m);
+                         
+  arma::mat pen_term(1,1); pen_term = lambda*trace( slope_mat*slope_mat.t() )
+  
   
   if (link=="expit"){
     
@@ -380,7 +388,7 @@ arma::mat mn_loss_j(arma::vec c,
     // End of cloglog
   } 
   
-  return mean_nll_j;
+  return mean_nll_j+pen_term;
   
 } ;
 
