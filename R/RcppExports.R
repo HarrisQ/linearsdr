@@ -93,8 +93,8 @@ dot_b_multinom <- function(lin_can_par, k_i, link) {
     .Call(`_linearsdr_dot_b_multinom`, lin_can_par, k_i, link)
 }
 
-mn_loss_j <- function(c, vj, y_datta, wj, link, k) {
-    .Call(`_linearsdr_mn_loss_j`, c, vj, y_datta, wj, link, k)
+mn_loss_j <- function(c, vj, y_datta, wj, lambda, link, k) {
+    .Call(`_linearsdr_mn_loss_j`, c, vj, y_datta, wj, lambda, link, k)
 }
 
 mn_score_j <- function(c, vj, y_datta, wj, link, k) {

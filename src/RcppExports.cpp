@@ -299,8 +299,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // mn_loss_j
-arma::mat mn_loss_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, Rcpp::String link, arma::vec k);
-RcppExport SEXP _linearsdr_mn_loss_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP linkSEXP, SEXP kSEXP) {
+arma::mat mn_loss_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, double lambda, Rcpp::String link, arma::vec k);
+RcppExport SEXP _linearsdr_mn_loss_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP lambdaSEXP, SEXP linkSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -308,9 +308,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type vj(vjSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type y_datta(y_dattaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type link(linkSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(mn_loss_j(c, vj, y_datta, wj, link, k));
+    rcpp_result_gen = Rcpp::wrap(mn_loss_j(c, vj, y_datta, wj, lambda, link, k));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -588,7 +589,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_linearsdr_emp_logit", (DL_FUNC) &_linearsdr_emp_logit, 3},
     {"_linearsdr_emp_adcat", (DL_FUNC) &_linearsdr_emp_adcat, 2},
     {"_linearsdr_dot_b_multinom", (DL_FUNC) &_linearsdr_dot_b_multinom, 3},
-    {"_linearsdr_mn_loss_j", (DL_FUNC) &_linearsdr_mn_loss_j, 6},
+    {"_linearsdr_mn_loss_j", (DL_FUNC) &_linearsdr_mn_loss_j, 7},
     {"_linearsdr_mn_score_j", (DL_FUNC) &_linearsdr_mn_score_j, 6},
     {"_linearsdr_mn_info_j", (DL_FUNC) &_linearsdr_mn_info_j, 6},
     {"_linearsdr_mn_loss_j_made", (DL_FUNC) &_linearsdr_mn_loss_j_made, 8},
