@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="cprobit"; #"continuous";#"multinomial";
+  # bw;  ytype="cat"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -180,8 +180,11 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       # WLS gives a (d+1)x(m-1) matrix; 
       # We want its transpose, a (m-1)x(d+1) matrix wls_reg
       
+     
       c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
       
+      # mn_loss_pen(c_j_ls, Vj, mv_Y, Wj, lambda=3, linktype, k_vec  )
+                
       
       if (method=="cg") { 
         # Run Conjugate Gradients

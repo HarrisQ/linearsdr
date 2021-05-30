@@ -269,7 +269,7 @@ arma::mat mn_loss_j(arma::vec c,
   
   arma::mat slope_mat(p,m);
   slope_mat = reshape(c.rows( m, pm-1 ), p, m);
-                         
+  
   arma::mat pen_term(1,1); pen_term = lambda*trace( slope_mat*slope_mat.t() );
   
   
