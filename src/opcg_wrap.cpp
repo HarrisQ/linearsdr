@@ -111,7 +111,7 @@ arma::vec aD_j_newton(arma::vec init,
     
     c_next = c_now - pinv(I_j)*S_j;
     
-    arma::mat nll_next(1,1); nll_next = mn_loss_j(c_next,vj,y_datta,wj,link,k); 
+    arma::mat nll_next(1,1); nll_next = mn_loss_j(c_next,vj,y_datta,wj,lambda,link,k); 
     
     double ll_dist; ll_dist = as_scalar( nll_now - nll_next);
     double eu_dist; eu_dist = euc_norm_cpp(c_now - c_next)/euc_norm_cpp(c_now);
