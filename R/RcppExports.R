@@ -97,12 +97,12 @@ mn_loss_j <- function(c, vj, y_datta, wj, lambda, link, k) {
     .Call(`_linearsdr_mn_loss_j`, c, vj, y_datta, wj, lambda, link, k)
 }
 
-mn_score_j <- function(c, vj, y_datta, wj, link, k) {
-    .Call(`_linearsdr_mn_score_j`, c, vj, y_datta, wj, link, k)
+mn_score_j <- function(c, vj, y_datta, wj, lambda, link, k) {
+    .Call(`_linearsdr_mn_score_j`, c, vj, y_datta, wj, lambda, link, k)
 }
 
-mn_info_j <- function(c, vj, y_datta, wj, link, k) {
-    .Call(`_linearsdr_mn_info_j`, c, vj, y_datta, wj, link, k)
+mn_info_j <- function(c, vj, y_datta, wj, lambda, link, k) {
+    .Call(`_linearsdr_mn_info_j`, c, vj, y_datta, wj, lambda, link, k)
 }
 
 mn_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
@@ -129,16 +129,16 @@ list_mean <- function(est_list) {
     .Call(`_linearsdr_list_mean`, est_list)
 }
 
-aD_j_newton <- function(init, vj, y_datta, wj, link, k, tol, max_iter, test) {
-    .Call(`_linearsdr_aD_j_newton`, init, vj, y_datta, wj, link, k, tol, max_iter, test)
+aD_j_newton <- function(init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test) {
+    .Call(`_linearsdr_aD_j_newton`, init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test)
 }
 
 vecB_hat <- function(c0, score_list, info_list) {
     .Call(`_linearsdr_vecB_hat`, c0, score_list, info_list)
 }
 
-aD_j_cg <- function(init, vj, y_datta, wj, link, k, control_list, test) {
-    .Call(`_linearsdr_aD_j_cg`, init, vj, y_datta, wj, link, k, control_list, test)
+aD_j_cg <- function(init, vj, y_datta, wj, lambda, link, k, control_list, test) {
+    .Call(`_linearsdr_aD_j_cg`, init, vj, y_datta, wj, lambda, link, k, control_list, test)
 }
 
 vecB_cg <- function(init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test) {

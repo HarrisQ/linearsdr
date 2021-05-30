@@ -316,8 +316,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // mn_score_j
-arma::mat mn_score_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, Rcpp::String link, arma::vec k);
-RcppExport SEXP _linearsdr_mn_score_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP linkSEXP, SEXP kSEXP) {
+arma::mat mn_score_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, double lambda, Rcpp::String link, arma::vec k);
+RcppExport SEXP _linearsdr_mn_score_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP lambdaSEXP, SEXP linkSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -325,15 +325,16 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type vj(vjSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type y_datta(y_dattaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type link(linkSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(mn_score_j(c, vj, y_datta, wj, link, k));
+    rcpp_result_gen = Rcpp::wrap(mn_score_j(c, vj, y_datta, wj, lambda, link, k));
     return rcpp_result_gen;
 END_RCPP
 }
 // mn_info_j
-arma::mat mn_info_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, Rcpp::String link, arma::vec k);
-RcppExport SEXP _linearsdr_mn_info_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP linkSEXP, SEXP kSEXP) {
+arma::mat mn_info_j(arma::vec c, arma::mat vj, arma::mat y_datta, arma::vec wj, double lambda, Rcpp::String link, arma::vec k);
+RcppExport SEXP _linearsdr_mn_info_j(SEXP cSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP lambdaSEXP, SEXP linkSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -341,9 +342,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type vj(vjSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type y_datta(y_dattaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type link(linkSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(mn_info_j(c, vj, y_datta, wj, link, k));
+    rcpp_result_gen = Rcpp::wrap(mn_info_j(c, vj, y_datta, wj, lambda, link, k));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -451,8 +453,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // aD_j_newton
-arma::vec aD_j_newton(arma::vec init, arma::mat vj, arma::mat y_datta, arma::vec wj, Rcpp::String link, arma::vec k, double tol, arma::uword max_iter, bool test);
-RcppExport SEXP _linearsdr_aD_j_newton(SEXP initSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP linkSEXP, SEXP kSEXP, SEXP tolSEXP, SEXP max_iterSEXP, SEXP testSEXP) {
+arma::vec aD_j_newton(arma::vec init, arma::mat vj, arma::mat y_datta, arma::vec wj, double lambda, Rcpp::String link, arma::vec k, double tol, arma::uword max_iter, bool test);
+RcppExport SEXP _linearsdr_aD_j_newton(SEXP initSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP lambdaSEXP, SEXP linkSEXP, SEXP kSEXP, SEXP tolSEXP, SEXP max_iterSEXP, SEXP testSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -460,12 +462,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type vj(vjSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type y_datta(y_dattaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type link(linkSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k(kSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     Rcpp::traits::input_parameter< arma::uword >::type max_iter(max_iterSEXP);
     Rcpp::traits::input_parameter< bool >::type test(testSEXP);
-    rcpp_result_gen = Rcpp::wrap(aD_j_newton(init, vj, y_datta, wj, link, k, tol, max_iter, test));
+    rcpp_result_gen = Rcpp::wrap(aD_j_newton(init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -483,8 +486,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // aD_j_cg
-arma::vec aD_j_cg(arma::vec init, arma::mat vj, arma::mat y_datta, arma::vec wj, Rcpp::String link, arma::vec k, Rcpp::List control_list, bool test);
-RcppExport SEXP _linearsdr_aD_j_cg(SEXP initSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP linkSEXP, SEXP kSEXP, SEXP control_listSEXP, SEXP testSEXP) {
+arma::vec aD_j_cg(arma::vec init, arma::mat vj, arma::mat y_datta, arma::vec wj, double lambda, Rcpp::String link, arma::vec k, Rcpp::List control_list, bool test);
+RcppExport SEXP _linearsdr_aD_j_cg(SEXP initSEXP, SEXP vjSEXP, SEXP y_dattaSEXP, SEXP wjSEXP, SEXP lambdaSEXP, SEXP linkSEXP, SEXP kSEXP, SEXP control_listSEXP, SEXP testSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -492,11 +495,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type vj(vjSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type y_datta(y_dattaSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type wj(wjSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< Rcpp::String >::type link(linkSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type k(kSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type control_list(control_listSEXP);
     Rcpp::traits::input_parameter< bool >::type test(testSEXP);
-    rcpp_result_gen = Rcpp::wrap(aD_j_cg(init, vj, y_datta, wj, link, k, control_list, test));
+    rcpp_result_gen = Rcpp::wrap(aD_j_cg(init, vj, y_datta, wj, lambda, link, k, control_list, test));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -590,17 +594,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_linearsdr_emp_adcat", (DL_FUNC) &_linearsdr_emp_adcat, 2},
     {"_linearsdr_dot_b_multinom", (DL_FUNC) &_linearsdr_dot_b_multinom, 3},
     {"_linearsdr_mn_loss_j", (DL_FUNC) &_linearsdr_mn_loss_j, 7},
-    {"_linearsdr_mn_score_j", (DL_FUNC) &_linearsdr_mn_score_j, 6},
-    {"_linearsdr_mn_info_j", (DL_FUNC) &_linearsdr_mn_info_j, 6},
+    {"_linearsdr_mn_score_j", (DL_FUNC) &_linearsdr_mn_score_j, 7},
+    {"_linearsdr_mn_info_j", (DL_FUNC) &_linearsdr_mn_info_j, 7},
     {"_linearsdr_mn_loss_j_made", (DL_FUNC) &_linearsdr_mn_loss_j_made, 8},
     {"_linearsdr_mn_loss_made", (DL_FUNC) &_linearsdr_mn_loss_made, 9},
     {"_linearsdr_mn_score_j_made", (DL_FUNC) &_linearsdr_mn_score_j_made, 8},
     {"_linearsdr_mn_score_made", (DL_FUNC) &_linearsdr_mn_score_made, 9},
     {"_linearsdr_mn_info_j_made", (DL_FUNC) &_linearsdr_mn_info_j_made, 8},
     {"_linearsdr_list_mean", (DL_FUNC) &_linearsdr_list_mean, 1},
-    {"_linearsdr_aD_j_newton", (DL_FUNC) &_linearsdr_aD_j_newton, 9},
+    {"_linearsdr_aD_j_newton", (DL_FUNC) &_linearsdr_aD_j_newton, 10},
     {"_linearsdr_vecB_hat", (DL_FUNC) &_linearsdr_vecB_hat, 3},
-    {"_linearsdr_aD_j_cg", (DL_FUNC) &_linearsdr_aD_j_cg, 8},
+    {"_linearsdr_aD_j_cg", (DL_FUNC) &_linearsdr_aD_j_cg, 9},
     {"_linearsdr_vecB_cg", (DL_FUNC) &_linearsdr_vecB_cg, 11},
     {"_linearsdr_rcpparma_hello_world", (DL_FUNC) &_linearsdr_rcpparma_hello_world, 0},
     {"_linearsdr_rcpparma_outerproduct", (DL_FUNC) &_linearsdr_rcpparma_outerproduct, 1},
