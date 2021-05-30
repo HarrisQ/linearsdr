@@ -267,11 +267,12 @@ arma::mat mn_loss_j(arma::vec c,
   arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
   // arma::mat test;
   
-  arma::mat slope_mat(p,m);
-  slope_mat = reshape(c.rows( m, pm-1 ), p, m);
+  // arma::mat slope_mat(p,m);
+  // slope_mat = reshape(c.rows( m, pm-1 ), p, m);
+  // arma::mat pen_term(1,1); pen_term = lambda*trace( slope_mat*slope_mat.t() );
   
-  arma::mat pen_term(1,1); pen_term = lambda*trace( slope_mat*slope_mat.t() );
-  
+  arma::mat pen_term(1,1);
+  pen_term = lambda*c.rows( m, pm-1 ).t()*c.rows( m, pm-1 );
   
   if (link=="expit"){
     
@@ -398,16 +399,21 @@ arma::mat mn_score_j(arma::vec c,
                      arma::mat vj,
                      arma::mat y_datta,
                      arma::vec wj,
+                     double lambda,
                      Rcpp::String link,
                      arma::vec k) {
   
   arma::uword pm=c.n_elem;
+  arma::uword p=vj.n_rows; 
   arma::uword n=y_datta.n_cols;
   arma::uword m=y_datta.n_rows;
   arma::mat I(m,m); I.eye();
   
   arma::mat mean_score_j(pm,1); mean_score_j.zeros();
   // arma::mat test;
+  
+  arma::vec pen_term = lambda*c.rows( m, pm-1 );
+  
   
   // Link only matters for the mean, the form of the score is
   // always the same;
@@ -524,7 +530,7 @@ arma::mat mn_score_j(arma::vec c,
   } 
     
   
-  return mean_score_j;
+  return mean_score_j + pen_term;
   
 };
 
@@ -534,6 +540,7 @@ arma::mat mn_info_j(arma::vec c,
                     arma::mat vj,
                     arma::mat y_datta,
                     arma::vec wj,
+                    double lambda,
                     Rcpp::String link,
                     arma::vec k) {
   // # c <- c.j.ls
@@ -544,6 +551,9 @@ arma::mat mn_info_j(arma::vec c,
   
   arma::mat mean_info_j(pm,pm); mean_info_j.zeros();
   // arma::mat test;
+  
+  arma::mat pen_term(pm,pm); pen_term.eye();
+  pen_term = lambda*pen_term;
   
   if (link=="expit"){
     
@@ -583,7 +593,7 @@ arma::mat mn_info_j(arma::vec c,
   }
   
   arma::mat I_j; I_j = (mean_info_j + mean_info_j.t())/2;
-  return I_j;
+  return I_j + pen_term;
   
 };
 

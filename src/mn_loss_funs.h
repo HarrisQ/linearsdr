@@ -65,6 +65,7 @@ arma::mat mn_score_j(arma::vec c,
                      arma::mat vj,
                      arma::mat y_datta,
                      arma::vec wj,
+                     double lambda,
                      Rcpp::String link,
                      arma::vec k);  
 
@@ -73,6 +74,7 @@ arma::mat mn_info_j(arma::vec c,
                     arma::mat vj,
                     arma::mat y_datta,
                     arma::vec wj,
+                    double lambda,
                     Rcpp::String link,
                     arma::vec k);  
 

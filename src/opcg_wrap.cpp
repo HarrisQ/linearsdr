@@ -71,6 +71,7 @@ arma::vec aD_j_newton(arma::vec init,
                       arma::mat vj, 
                       arma::mat y_datta, 
                       arma::vec wj, 
+                      double lambda,
                       Rcpp::String link, 
                       arma::vec k,
                       double tol,
@@ -103,10 +104,10 @@ arma::vec aD_j_newton(arma::vec init,
   arma::vec c_next;
   for (iter = 0; iter < max_iter; iter++ ) { 
     
-    arma::mat nll_now(1,1); nll_now = mn_loss_j(c_now,vj,y_datta,wj,link,k); 
+    arma::mat nll_now(1,1); nll_now = mn_loss_j(c_now,vj,y_datta,wj,lambda,link,k); 
     
-    arma::vec S_j = mn_score_j(c_now,vj,y_datta,wj,link,k);
-    arma::mat I_j = mn_info_j(c_now,vj,y_datta,wj,link,k);
+    arma::vec S_j = mn_score_j(c_now,vj,y_datta,wj,lambda,link,k);
+    arma::mat I_j = mn_info_j(c_now,vj,y_datta,wj,lambda,link,k);
     
     c_next = c_now - pinv(I_j)*S_j;
     
@@ -179,6 +180,7 @@ arma::vec aD_j_cg(arma::vec init,
                        arma::mat vj,
                        arma::mat y_datta,
                        arma::vec wj,
+                       double lambda,
                        Rcpp::String link,
                        arma::vec k, 
                        Rcpp::List control_list,
@@ -229,8 +231,8 @@ arma::vec aD_j_cg(arma::vec init,
   
   arma::mat nll_now(1,1);  
   arma::vec grad_now; 
-  nll_now = mn_loss_j(c_now,vj,y_datta,wj,link,k);
-  grad_now = mn_score_j(c_now,vj,y_datta,wj,link,k);
+  nll_now = mn_loss_j(c_now,vj,y_datta,wj,lambda,link,k);
+  grad_now = mn_score_j(c_now,vj,y_datta,wj,lambda,link,k);
   arma::vec p_now = -grad_now; 
   
   arma::vec c_next;
@@ -258,8 +260,8 @@ arma::vec aD_j_cg(arma::vec init,
       arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
       
       double suff_dec_ag;
-      suff_dec_ag = as_scalar( mn_loss_j(c_search,vj,y_datta,wj,link,k) - 
-        mn_loss_j(c_now,vj,y_datta,wj,link,k) );
+      suff_dec_ag = as_scalar( mn_loss_j(c_search,vj,y_datta,wj,lambda,link,k) - 
+        mn_loss_j(c_now,vj,y_datta,wj,lambda,link,k) );
       int armijo_cond = (suff_dec_ag <= armijo_bound);
       
       // things(3)=suff_dec_ag;
@@ -284,7 +286,7 @@ arma::vec aD_j_cg(arma::vec init,
         
         // evaluation for curvature in weak wolfe
         double curv_wolfe;
-        curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,link,k) );
+        curv_wolfe = as_scalar( p_now.t()*mn_score_j(c_search,vj,y_datta,wj,lambda,link,k) );
         
         wolfe_cond =+ (curv_wolfe <= wolfe_bound);
         
@@ -326,7 +328,7 @@ arma::vec aD_j_cg(arma::vec init,
     } else { 
       
       // #Step 2b: Compute gradient;
-      arma::vec grad_next = mn_score_j(c_next,vj,y_datta,wj,link,k);
+      arma::vec grad_next = mn_score_j(c_next,vj,y_datta,wj,lambda,link,k);
       
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
