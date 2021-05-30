@@ -554,8 +554,8 @@ arma::mat mn_info_j(arma::vec c,
   // arma::mat test;
   
   arma::mat pen_term(pm,pm); pen_term.eye();
-  arma::vec pen_a(m,m); pen_a.zeros();
-  arma::vec pen_b(pm-m,pm-m); pen_b.ones();
+  arma::vec pen_a(m); pen_a.zeros();
+  arma::vec pen_b(pm-m); pen_b.ones();
   pen_term.diag() = join_cols(pen_a,lambda*pen_b);
   
   if (link=="expit"){
