@@ -17,7 +17,7 @@
 #' @keywords internal
 #' @noRd
 #' 
-opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous', 
+opcg_made <- function(x_matrix, y_matrix, bw, lambda=0,B_mat=NULL, ytype='continuous', 
                       method="newton", parallelize=F, r_mat=NULL, 
                       control_list=list()) {
   # y.matrix should be m x n, with m depending on ytype
@@ -188,7 +188,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (method=="cg") { 
         # Run Conjugate Gradients
-        c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj,lambda=1, linktype, k_vec,
+        c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj,lambda, linktype, k_vec,
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter_cg,
                                         init_stepsize=init_stepsize_cg,
@@ -202,8 +202,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
         
         # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
-        mn_score_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
+        # mn_score_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
+        mn_info_j(c_j_ls, Vj, mv_Y, Wj, lambda=1e-3,linktype, k_vec)
         # linearsdr:::dot_b_multinom(c_j_ls, 1, "expit")
           
         # c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
@@ -300,7 +301,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
 #' @keywords internal
 #' @noRd
 #' 
-opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous', 
+opcg_DD <- function(x_matrix, y_matrix, bw, lambda=0, ytype='continuous', 
                     method="newton", parallelize=F, r_mat=NULL, 
                     control_list=list()) {
   
@@ -313,7 +314,7 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
   
-  DD_list=opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype, 
+  DD_list=opcg_made(x_matrix, y_matrix, bw, lambda, B_mat=NULL, ytype, 
                     method, parallelize, r_mat, control_list); 
   # DD_mean=list_mean(list(matrix(0,3,2), matrix(1,3,2), matrix(2,3,2)))
   # DD_mean=list_mean(lapply(1:n, function(j) matrix(rowMeans(DD_list$Dhat[[j]]),ncol=1) ))
@@ -337,12 +338,12 @@ opcg_DD <- function(x_matrix, y_matrix, bw, ytype='continuous',
 
 ############### OPCG wrapper #########################
 
-opcg_wrap <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
+opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda=0, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
   # Rcpp::sourceCpp("../forwardsdr/src/opcg_wrap.cpp")
-  cand_mat=opcg_DD(x_matrix, y_matrix, bw, ytype, method, 
+  cand_mat=opcg_DD(x_matrix, y_matrix, bw,lambda, ytype, method, 
                    parallelize, r_mat , control_list)
   
   # x_matrix=X; y_matrix=Y; d=2; bw=4; ytype='multinomial';
@@ -424,11 +425,11 @@ opcg_wrap <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
 #' @export
 #' 
 #' 
-opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
+opcg <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
-  beta=opcg_wrap(x_matrix, y_matrix, d, bw, ytype,
+  beta=opcg_wrap(x_matrix, y_matrix, d, bw,lambda, ytype,
                      method, parallelize, r_mat,
                      control_list)$opcg 
   
@@ -442,20 +443,20 @@ opcg <- function(x_matrix, y_matrix, d, bw, ytype='continuous',
 
 # A wrapper for Refined OPCG
 
-ropcg=function(x_matrix, y_matrix, d, bw, ytype='continuous',
+ropcg=function(x_matrix, y_matrix, d, bw,lambda, ytype='continuous',
                method="newton", parallelize=F, r_mat = NULL,
                control_list=list()) {
   
-  est0=opcg(x_matrix, y_matrix, d, bw, ytype,
+  est0=opcg(x_matrix, y_matrix, d, bw, lambda, ytype,
            method, parallelize, r_mat,
            control_list)$opcg 
   
-  refined_est0 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
+  refined_est0 = opcg(x_matrix, y_matrix, d, bw/4, lambda, ytype,
                      method, parallelize, r_mat = est0,
                      control_list)$opcg 
   
   for(iter in 1:25) {
-    refined_est1 = opcg(x_matrix, y_matrix, d, bw/4, ytype,
+    refined_est1 = opcg(x_matrix, y_matrix, d, bw/4, lambda, ytype,
                         method, parallelize, r_mat = refined_est0,
                         control_list)$opcg 
     
