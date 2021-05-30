@@ -56,6 +56,7 @@ arma::mat mn_loss_j(arma::vec c,
                     arma::mat vj, 
                     arma::mat y_datta, 
                     arma::vec wj, 
+                    double lambda,
                     Rcpp::String link, 
                     arma::vec k);  
 
