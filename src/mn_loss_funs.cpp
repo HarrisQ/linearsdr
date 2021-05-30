@@ -267,8 +267,8 @@ arma::mat mn_loss_j(arma::vec c,
   arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
   // arma::mat test;
   
-  // arma::mat slope_mat(p,m); 
-  arma::mat slope_mat = reshape(c.rows( m, pm-1 ), p, m);
+  arma::mat slope_mat(p,m);
+  slope_mat = reshape(c.rows( m, pm-1 ), p, m);
                          
   arma::mat pen_term(1,1); pen_term = lambda*trace( slope_mat*slope_mat.t() );
   
