@@ -412,7 +412,8 @@ arma::mat mn_score_j(arma::vec c,
   arma::mat mean_score_j(pm,1); mean_score_j.zeros();
   // arma::mat test;
   
-  arma::vec pen_term = lambda*c.rows( m, pm-1 );
+  arma::vec pen_term(pm,1); mean_score_j.zeros();
+  pen_term.rows(m, pm-1 ) = lambda*c.rows( m, pm-1 );
   
   
   // Link only matters for the mean, the form of the score is

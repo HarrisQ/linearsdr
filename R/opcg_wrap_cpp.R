@@ -30,7 +30,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
   
    
   # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
-  # bw;  ytype="cat"; #"continuous";#"multinomial";
+  # bw=1;  ytype="cat"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
@@ -188,7 +188,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
       
       if (method=="cg") { 
         # Run Conjugate Gradients
-        c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
+        c_j_1=linearsdr:::aD_j_cg(c_j_ls, Vj, mv_Y, Wj,lambda=1, linktype, k_vec,
                       control_list=list(tol_val=tol_val,
                                         max_iter=max_iter_cg,
                                         init_stepsize=init_stepsize_cg,
@@ -200,9 +200,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
                       test);
         
         
-        # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec) 
+        # mn_loss_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
-        # mn_score_j(c_j_ls, Vj, mv_Y, Wj, link="clogit", k_vec) 
+        mn_score_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
         # linearsdr:::dot_b_multinom(c_j_ls, 1, "expit")
           
@@ -219,7 +219,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, B_mat=NULL, ytype='continuous',
         
       } else if (method=="newton") {
         # Run Newton-Raphson
-        c_j_1=aD_j_newton(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec, 
+        c_j_1=aD_j_newton(c_j_ls, Vj, mv_Y, Wj, lambda, linktype, k_vec, 
                           tol_val,max_iter, test);
       }
       
