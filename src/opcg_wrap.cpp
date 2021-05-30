@@ -310,7 +310,7 @@ arma::vec aD_j_cg(arma::vec init,
     
     // #Step 2a: Compute Loss;
     arma::mat nll_next(1,1); 
-    nll_next=mn_loss_j(c_next,vj,y_datta,wj,link,k); 
+    nll_next=mn_loss_j(c_next,vj,y_datta,wj,lambda,link,k); 
     double nll_dist; nll_dist = as_scalar( nll_now - nll_next);
     
     if (test) {
