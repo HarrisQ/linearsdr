@@ -204,7 +204,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
         # 
         # mn_score_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
-        mn_info_pen(c_j_ls, Vj, mv_Y, Wj, lambda=1e-3,linktype, k_vec)
+        # mn_info_pen(c_j_ls, Vj, mv_Y, Wj, lambda=1e-3,linktype, k_vec)
         # linearsdr:::dot_b_multinom(c_j_ls, 1, "expit")
           
         # c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
