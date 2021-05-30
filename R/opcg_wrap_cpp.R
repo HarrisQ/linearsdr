@@ -204,7 +204,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
         # 
         # mn_score_j(c_j_ls, Vj, mv_Y, Wj, lambda=1,linktype, k_vec)
         # 
-        mn_info_j(c_j_ls, Vj, mv_Y, Wj, lambda=1e-3,linktype, k_vec)
+        # mn_info_j(c_j_ls, Vj, mv_Y, Wj, lambda=1e-3,linktype, k_vec)
         # linearsdr:::dot_b_multinom(c_j_ls, 1, "expit")
           
         # c_j_1=aD_j_cg_test(c_j_ls, Vj, mv_Y, Wj, linktype, k_vec,
@@ -301,7 +301,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
 #' @keywords internal
 #' @noRd
 #' 
-opcg_DD <- function(x_matrix, y_matrix, bw, lambda=0, ytype='continuous', 
+opcg_DD <- function(x_matrix, y_matrix, bw, lambda, ytype='continuous', 
                     method="newton", parallelize=F, r_mat=NULL, 
                     control_list=list()) {
   
@@ -338,7 +338,7 @@ opcg_DD <- function(x_matrix, y_matrix, bw, lambda=0, ytype='continuous',
 
 ############### OPCG wrapper #########################
 
-opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda=0, ytype='continuous',
+opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
