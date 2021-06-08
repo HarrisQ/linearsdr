@@ -13,12 +13,12 @@
 
 ############################## MADE wrappers ##################################
 
-
+# 
 # x_matrix=X; y_matrix=Y; bw=1.25; ytype="cat"; B_mat = diag(1,p,d);
-# method=list(opcg="newton", made="newton"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
-# aD_list=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
-#                 method=method$opcg, parallelize, r_mat=NULL,
-#                 control_list);
+# method=list(opcg="cg", made="cg"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
+# aD_list=opcg_made(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous', 
+#                   method="newton", parallelize=F, r_mat=NULL, 
+#                   control_list=list())
 # ahat_list = aD_list$ahat;  Dhat_list = aD_list$Dhat;
 
 #### MADE Block update ----
@@ -303,7 +303,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 #'  
 #' @export
 #' 
-made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
+made <- function(x_matrix, y_matrix, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                  method=list(opcg="newton", made="newton"), parallelize=F, r_mat=NULL,
                  control_list=list()) {
   
@@ -330,7 +330,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   if (is.null(r_mat)) r_mat= diag(1,p,p);
   
   # Block step for aD parameter
-  aDhat=opcg_made(x_matrix, y_matrix, bw, B_mat, ytype,
+  aDhat=opcg_made(x_matrix, y_matrix, bw, lambda, B_mat, ytype,
                   method=method$opcg, parallelize, r_mat=NULL,
                   control_list);
   # Block step for B parameter
@@ -340,6 +340,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
                   control_list);
   
   if (ytype=="continuous") {
+    linktype="continuous"
     mv_Y=y_matrix;
   } else if (ytype=="cat" ) { 
     linktype="expit";
@@ -360,7 +361,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
   }
 
   
-  loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw,
+  loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
                         ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
                         link=linktype, k=k_vec, r_mat)
   
@@ -368,9 +369,9 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
     B_0=t(matrix(c_0, nrow=d, ncol=p));
 
     # aD-block update
-    aDhat1=opcg_made(x_matrix, y_matrix, bw, B_mat=B_0, ytype,
+    aDhat1=opcg_made(x_matrix, y_matrix, bw, lambda, B_mat=B_0, ytype,
                      method=method$opcg, parallelize, r_mat=NULL,
-                    control_list);
+                     control_list);
     # B-block update
     
     c_1=made_update(x_matrix, y_matrix, d,bw,
@@ -379,7 +380,7 @@ made <- function(x_matrix, y_matrix, d, bw, B_mat=NULL, ytype="continuous",
                     control_list);
     
     # Loss function
-    loss_1 = mn_loss_made(c_1, x_matrix, mv_Y, bw,
+    loss_1 = mn_loss_made(c_1, x_matrix, mv_Y, bw, #lambda,
                           ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
                           link=linktype, k=k_vec, r_mat)
     
