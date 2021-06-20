@@ -74,7 +74,7 @@ tuning_skm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
     # We can use class_bss3 for the between class SS (calculate the mean of each class)
     
     class_bss1= sum( sapply(1:n_classes, FUN=function(j) km_ss[[j]][[3]]));
-    class_bss2= sum(diag(var( Reduce('rbind', class_cen) )))*(n_classes-1);
+    class_bss2= sum(diag(var( Reduce('rbind', class_cen) )))*(length(n_cpc_vec)-1);
     # class_bss3= sum(diag(var( Reduce('rbind', class_grand_means) )))*(n_classes-1);
     
     if ( sum(n_cpc_vec)>n_classes) {
