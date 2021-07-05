@@ -36,6 +36,10 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
     # Shapes for Discrete Y
     if(!is.null(y_symbols)) {
       p_base = p_base + ggplot2::scale_shape_manual(values = y_symbols)
+    } else {
+      p_base = p_base + ggplot2::scale_shape_manual(values = rep(16,
+                                                                 length(levels(factor(datta_frame0$y)))
+                                                                        ))
     }
     
     # Add points
@@ -70,6 +74,10 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
     # Shapes for continuous Y
     if(!is.null(y_symbols)) {
       p_base = p_base + ggplot2::scale_shape_manual(values = y_symbols)
+    } else {
+      p_base = p_base + ggplot2::scale_shape_manual(values = rep(16,
+                                                                 length(levels(factor(datta_frame0$y)))
+      ))
     }
     
     
