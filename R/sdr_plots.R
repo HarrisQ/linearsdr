@@ -142,11 +142,21 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial",
                          image=NULL,image_size=0.05) {
 
     
+  # alpha=125; x_datta=Re(tpg_fit$pred_test[1:3,]);
+  # y_datta=Y_test; ytype="multinomial";
+  # y_color=clas_col; y_symbol=clas_symb;
+  # sdr_method='OPCG'; size=2; show.legend=F; label_size=5;
+  alpha=175; x_datta=t(Re(tpg_fit$pred_test)[1:3,]);
+  y_datta=Y_test; ytype="multinomial";
+  y_color=clas_col; y_symbol=clas_symb;
+  dr_method='TPCG'; size=2; show.legend=F; label_size=5;
+  
   # alpha=125; x_datta=(nlopcg_fit$pred_test[1:3,]);
   # y_datta=1:n; ytype="multinomial"; 
   # y_color=clas_col; y_symbol=clas_symb;
   # sdr_method='OPCG'; size=2; show.legend=F; label_size=5;
   # image=image_vec
+  
   
   # x_datta=t(B_hat_opcg)%*%(X); y_datta=Y;
   # y_color=clas_col; y_symbol=clas_symb; sdr_method = 'OPCG';
