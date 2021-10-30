@@ -229,7 +229,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       ## for least squares, we undo the vec to get (m-1)x(p+1), which is t(Aj)
       
       tA_hatj=matrix(c_j_1, nrow = m-1, ncol = d+1);
-      a_hatj=tA_hatj[,1]; D_hatj=t( tA_hatj[,2:(d+1)] );
+      a_hatj=tA_hatj[,1]; tD_hatj=tA_hatj[,2:(d+1)]; D_hatj=t(tD_hatj);
       D_hatj_ls=t( matrix(c_j_ls, nrow = m-1, ncol = d+1)[,2:(d+1)] )
       
       if (m > 2) {

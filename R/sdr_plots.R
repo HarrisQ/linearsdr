@@ -17,6 +17,15 @@ ggplot_fsdr <- function(y_datta, x_datta, y_on_axis=F, ytype="multinomial",
   # y_colors=NULL; y_symbols=NULL
   # ellipse=T;
   
+  # y_datta=Y; x_datta=t( B_hat_opcg )%*%(X);
+  # y_on_axis=F; ytype="continuous";#"multinomial";
+  # size=1; h_lab=NULL; v_lab=NULL; main_lab=NULL;
+  # show_legend=T; h_lim=NULL; v_lin=NULL;
+  # y_colors=NULL; y_symbols=NULL
+  # ellipse=T;
+  
+  
+  
   datta_frame0 <- data.frame( t( rbind(y_datta, x_datta) ));
   colnames(datta_frame0) <- c('y', 
                               sapply(1:(dim(datta_frame0)[2]-1), 
@@ -136,27 +145,38 @@ tuning_plot_km = function(h_list, tuning_list, x_lab=NULL,y_lab=NULL) {
 ### 3D Plot
 
 
-ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial", 
+ggplot3D_fsdr = function(alpha, beta, x_datta, y_datta, ytype="multinomial", 
                          y_color, y_symbol,
                          sdr_method='', size=2, show.legend=F, label_size=5,
-                         image=NULL,image_size=0.05) {
+                         image=NULL,image_size=0.05, 
+                         verts=NULL) {
 
     
   # alpha=125; x_datta=Re(tpg_fit$pred_test[1:3,]);
   # y_datta=Y_test; ytype="multinomial";
   # y_color=clas_col; y_symbol=clas_symb;
   # sdr_method='OPCG'; size=2; show.legend=F; label_size=5;
-  alpha=175; x_datta=t(Re(tpg_fit$pred_test)[1:3,]);
-  y_datta=Y_test; ytype="multinomial";
-  y_color=clas_col; y_symbol=clas_symb;
-  dr_method='TPCG'; size=2; show.legend=F; label_size=5;
+  # alpha=175; x_datta=t(Re(tpg_fit$pred_test)[1:3,]);
+  # y_datta=Y_test; ytype="multinomial";
+  # y_color=clas_col; y_symbol=clas_symb;
+  # dr_method='TPCG'; size=2; show.legend=F; label_size=5;
   
-  # alpha=125; x_datta=(nlopcg_fit$pred_test[1:3,]);
-  # y_datta=1:n; ytype="multinomial"; 
+  # alpha=125; beta=45;
+  # x_datta=(nlopcg_fit$pred_test[1:3,]);
+  # y_datta=1:n;
+  # ytype="multinomial";
   # y_color=clas_col; y_symbol=clas_symb;
   # sdr_method='OPCG'; size=2; show.legend=F; label_size=5;
-  # image=image_vec
+  # image=image_vec; image_size = 0.05;
+  # verts=c(-.25,.25);
   
+  # 725, 
+  # x_datta=(nlopcg_fit$pred_test[1:3,]); y_datta = 1:n;
+  # ytype="continuous";
+  # y_color=clas_col; y_symbol=clas_symb;
+  # sdr_method='nlOPG'; size=4; show.legend=F; label_size=5;
+  # image = image_vec; image_size = 0.05;
+  # 
   
   # x_datta=t(B_hat_opcg)%*%(X); y_datta=Y;
   # y_color=clas_col; y_symbol=clas_symb; sdr_method = 'OPCG';
@@ -166,38 +186,73 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial",
   # Internal Functions
   
   # Cabinet Projection, see Wikipedia on 3D projection and Oblique projection
-  proj_3to2d <- function(alpha) {
-    P <- as.matrix( 
-      rbind(c(1,0,.5*cos(alpha)),
-            c(0,1,.5*sin(alpha)),
-            c(0,0,0)) 
+  # proj_3to2d <- function(alpha) {
+  #   P <- as.matrix( 
+  #     rbind(c(1,0,.5*cos(alpha)),
+  #           c(0,1,.5*sin(alpha)),
+  #           c(0,0,0)) 
+  #   )
+  #   return(P)
+  # }
+  
+  # Isometric Projection, see Wikipedia on 3D projection and Oblique projection
+  proj_3to2d <- function(alpha, beta) {
+    P_alpha <- as.matrix( 
+      rbind(c(1,0,0),
+            c(0,cos(alpha),sin(alpha)),
+            c(0,-sin(alpha),cos(alpha))) 
     )
-    return(P)
+    P_beta <- as.matrix( 
+      rbind(c(cos(beta),0,-sin(beta)),
+            c(0,1,0),
+            c(sin(beta),0,cos(beta))) 
+    )
+    return(P_alpha%*%P_beta)
   }
   
-  map3to2d <- function(df,alpha) {
+  
+  
+  map3to2d <- function(df,alpha, beta) {
     # Takes in a dattaframe with 3 columns
-    df_2d=as.data.frame( t(proj_3to2d(alpha)%*%t(df)))[,1:2]
+    df_2d=as.data.frame( t(proj_3to2d(alpha, beta)%*%t(df)))[,c(1,3)]
     colnames(df_2d) <- c('x','y')
     return(df_2d)
   }
   
   # Creating Blank Cube plot ----------
   
-  # Define the corners of the cube for perspective alpha
-  vertices <- function(alpha) {
-    corners <- expand.grid(c(-1,1), c(-1,1), c(-1,1) )
-    V <- as.data.frame( t(proj_3to2d(alpha)%*%t(corners)))[,1:2]
-    # Z <- c(1,2,3,4,1,2,3,4) # Z <- rowSums(sign(V)) but with no diag 
-    Z <- c(1,2,3,4,1,2,3,4) 
-    cube <- data.frame(V,Z)
-    colnames(cube) <- c('x','y','group')
-    return(cube)
+  if (is.null(verts)) {
+    # Define the corners of the cube for perspective alpha
+    vertices <- function(alpha, beta) {
+      corners <- expand.grid(c(-1,1), c(-1,1), c(-1,1) )
+      V <- as.data.frame( t(proj_3to2d(alpha, beta)%*%t(corners)))[,c(1,3)]
+      # Z <- c(1,2,3,4,1,2,3,4) # Z <- rowSums(sign(V)) but with no diag 
+      Z <- c(1,2,3,4,1,2,3,4) 
+      cube <- data.frame(V,Z)
+      colnames(cube) <- c('x','y','group')
+      return(cube)
+    }
+    
+  } else {
+    # Define the corners of the cube for perspective alpha
+    vertices <- function(alpha, beta) {
+      corners <- expand.grid(c(verts[1],verts[2]), 
+                             c(verts[1],verts[2]), 
+                             c(verts[1],verts[2]) )
+      V <- as.data.frame( t(proj_3to2d(alpha, beta)%*%t(corners)))[,c(1,3)]
+      # Z <- c(1,2,3,4,1,2,3,4) # Z <- rowSums(sign(V)) but with no diag 
+      Z <- c(1,2,3,4,1,2,3,4) 
+      cube <- data.frame(V,Z)
+      colnames(cube) <- c('x','y','group')
+      return(cube)
+    }
   }
+  
+
   
   # vertices(alpha)
   
-  p_blank=ggplot2::ggplot(aes(x=x, y=y), data = data.frame( vertices(alpha) ) )+
+  p_blank=ggplot2::ggplot(aes(x=x, y=y), data = data.frame( vertices(alpha, beta) ) )+
     ggplot2::geom_segment(aes(x = x[6], y = y[6], xend = x[2], yend = y[2] ), 
                           color='black', linetype=3  )+
     ggplot2::geom_segment(aes(x = x[6], y = y[6], xend = x[5], yend = y[5] ), 
@@ -222,15 +277,21 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial",
     # geom_line( aes(group=y ), color='black' ) +
     # geom_line( aes(group=x ), color='black') +
     # geom_line( aes(group=group ), color='black')+
-    ggplot2::geom_text(aes(x = x[1], y = y[1], label = paste(sdr_method,'2') ), size=label_size,
-              # data=surface.2d.labels, 
-              nudge_x = -.25, nudge_y = 1 )  +
-    ggplot2::geom_text(aes(x = x[5], y = y[5], label = paste(sdr_method,'3') ), size=label_size,
-              # data=surface.2d.labels, 
-              nudge_x = +.15, nudge_y = .25 )  +
-    ggplot2::geom_text(aes(x = x[6], y = y[6], label = paste(sdr_method,'1') ), size=label_size,
-              # data=surface.2d.labels, 
-              nudge_x = -1, nudge_y = -.1 )  +
+    ggplot2::geom_text(aes(x = x[1], y = y[1], label = paste(sdr_method,'2') ), 
+                       size=label_size#,
+                       # data=surface.2d.labels, 
+                       #nudge_x = -.25, nudge_y = 1 
+    )  +
+    ggplot2::geom_text(aes(x = x[5], y = y[5], label = paste(sdr_method,'3') ), 
+                       size=label_size#,
+                       # data=surface.2d.labels, 
+                       #nudge_x = +.15, nudge_y = .25 
+    )  +
+    ggplot2::geom_text(aes(x = x[6], y = y[6], label = paste(sdr_method,'1') ), 
+                       size=label_size#,
+                       # data=surface.2d.labels, 
+                       #nudge_x = -1, nudge_y = -.1 
+    )  +
     theme_void() +
     # labs(x='x', y='y')+
     ggplot2::theme(legend.position="none",
@@ -239,13 +300,12 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial",
                    panel.background = element_blank(), 
                    axis.line = element_line(colour = "black"),
                    legend.background = element_rect(fill = 'transparent')) 
-  # p_blank
-  # 
+  
   
   
   
   if(ytype=="multinomial"){
-    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha, beta), 2, 
                                  function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
                           label=c(y_datta) )
     tmp_plot =
@@ -266,7 +326,7 @@ ggplot3D_fsdr = function(alpha, x_datta, y_datta, ytype="multinomial",
                      legend.background = element_rect(fill = 'transparent')) 
   
   } else if (ytype=="continuous") {
-    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha), 2, 
+    tmp_datta=data.frame( apply( map3to2d(t( x_datta ), alpha, beta), 2, 
                                  function(vec) (vec-mean(vec))/(.55*max(abs(vec))) ), 
                           label=c(y_datta), 
                           image=image)
