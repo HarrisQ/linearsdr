@@ -24,9 +24,9 @@ Minor Things to do:
 
 Major Things to do:
 ---
-* Write Vignettes/Examples Script  
+* Write Vignettes/Examples   
 * Finish code for Multivariate Continuous Response   
-* Write more Documentation  
+* Write more Documentation for functions  
 
 
 
