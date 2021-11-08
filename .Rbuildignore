@@ -65,3 +65,6 @@ Rplots.pdf$
 #----------------------------
 ^.ghi
 ^.issues
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
