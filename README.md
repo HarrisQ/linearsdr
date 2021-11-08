@@ -13,21 +13,19 @@ The 'Experimental Code' folder is where I have stored code for aspects of Linear
 
 Things that work:
 ---
-* OPG/OPCG, MAVE/MADE (Newton_Raphson)  
-* SIR, DR, SAVE  
-* OPCG Tuning 
+* Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG  
+* Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization  
 
 Minor Things to do:
 ---
 * Clean up OPG/OPCG and MAVE/MADE code  
-* Limit function exports to just the ones peopel will use  
-* Clean Regularized OPG/OPCG (RADE) Code  
+* (Maybe) Limit function exports to just the ones people will use  
+* (Maybe) Clean Regularized OPG/OPCG (RADE) Code  
 
 Major Things to do:
 ---
-* Build Test Script  
-* Finish/Clean Code for OPCG and Multivariate Continuous Response  
-* Check/Tune CG for MADE (Currently runs slower than Newton and crashes) 
+* Write Vignettes/Examples Script  
+* Finish code for Multivariate Continuous Response   
 * Write more Documentation  
 
 
