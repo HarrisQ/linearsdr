@@ -45,4 +45,5 @@ linearsdr.Rproj
 # Files #
 ######################
 *.pdf
-# docs
+NAMESPACE - oxy
+NAMESPACE - no oxy
