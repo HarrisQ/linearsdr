@@ -1,4 +1,4 @@
-# linearsdr
+# Linear Sufficient Dimension Reduction (linearsdr)
  Linear Sufficient Dimension Reduction methods
 
 Contains code for my forthcoming paper on "Generalized Forward Regression for Sufficient Dimension Reduction with Multinomial Response". 
