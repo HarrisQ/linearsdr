@@ -11,6 +11,8 @@ The 'NAMESPACE - oxy' is NAMESPACE file generated from rOxygen.
 
 The 'Experimental Code' folder is where I have stored code for aspects of Linear SDR that I have been working on sparingly and is not quite ready for use. 
 
+Current State of Package:
+
 Things that work:
 ---
 * Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG  
