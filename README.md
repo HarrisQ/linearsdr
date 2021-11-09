@@ -13,7 +13,6 @@ The 'Experimental Code' folder is where I have stored code for aspects of Linear
 
 Current State of Package:
 ---
-
 * Things that work:
     + Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG  
     + Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization  
