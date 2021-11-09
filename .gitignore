@@ -39,6 +39,7 @@ Thumbs.db
 # Folders #
 ######################
 experimental code/
+src-i386/
 .Rproj.user
 linearsdr.Rproj 
 
