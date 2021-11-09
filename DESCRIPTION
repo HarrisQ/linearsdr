@@ -1,7 +1,7 @@
 Package: linearsdr
 Title: Forward and Inverse Linear Sufficient Reduction Methods
 Date: 2020-10-9
-Version: 0.0.0.9000
+Version: 0.1
 Authors@R: 
     person("Harris", "Quach", , "harris.quach@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
