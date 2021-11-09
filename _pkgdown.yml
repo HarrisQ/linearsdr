@@ -1,133 +1,98 @@
 url: https://harrisq.github.io/linearsdr/
 
-destination: "."
+home:
+  title: Build websites for R packages
+
+authors:
+  Jay Hesselberth:
+    href: https://hesselberthlab.org
+  Maëlle Salmon:
+    href: https://masalmon.eu
 
 template:
+  bootstrap: 5
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+
   params:
     bootswatch: cosmo
-    ganalytics: G-RP3VXX4HME
+    ganalytics: UA-115082821-1
+  includes:
+    in_header:
+      <script defer data-domain="pkgdown.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
+code:
+  width: 72
 
-navbar:
-  title: "bayesplot"
-  left:
-    - icon: fa-home fa-lg
-      href: index.html
-    - text: "Vignettes"
-      href: articles/index.html
-    - text: "Functions"
-      href: reference/index.html
-    - text: "News"
-      href: news/index.html
-    - text: "Other Packages"
-      menu:
-        - text: "rstan"
-          href: https://mc-stan.org/rstan
-        - text: "cmdstanr"
-          href: https://mc-stan.org/cmdstanr
-        - text: "rstanarm"
-          href: https://mc-stan.org/rstanarm
-        - text: "shinystan"
-          href: https://mc-stan.org/shinystan
-        - text: "loo"
-          href: https://mc-stan.org/loo
-        - text: "projpred"
-          href: https://mc-stan.org/projpred
-        - text: "rstantools"
-          href: https://mc-stan.org/rstantools
-        - text: "posterior"
-          href: https://mc-stan.org/posterior
-    - text: "Stan"
-      href: https://mc-stan.org
-  right:
-   - icon: fa-twitter
-     href: https://twitter.com/mcmc_stan
-   - icon: fa-github
-     href: https://github.com/stan-dev/bayesplot
-   - icon: fa-users
-     href: https://discourse.mc-stan.org/
-
-home:
-  links:
-  - text: Ask a question
-    href: https://discourse.mc-stan.org/
+development:
+  mode: auto
 
 articles:
-  - title: "Getting Started"
-    desc: >
-      These vignettes provide an introduction to visualizing MCMC draws and
-      diagnostics and performing graphical posterior predictive checks using
-      the **bayesplot** package.
-    contents:
-      - plotting-mcmc-draws
-      - visual-mcmc-diagnostics
-      - graphical-ppcs
+- title: Customise your site
+  navbar: ~
+  contents:
+  - pkgdown
+  - customise
+  - linking
+  - search
+  - metadata
+- title: Testing
+  desc: >
+    These articles are used to test various pkgdown features that can not
+    easily be tested automatically.
+  contents:
+  - starts_with("test")
 
 reference:
-  - title: "Aesthetics"
-    desc: >
-      Functions for setting the color scheme and ggplot theme used
-      by **bayesplot**. (Also see the separate **ggplot helpers** section
-      below.)
-    contents:
-      - bayesplot-colors
-      - bayesplot_theme_get
-      - theme_default
-  - title: "PPC"
-    desc: >
-      Functions for carrying out a wide variety of graphical model checks
-      based on comparing observed data to draws from the posterior (or prior)
-      predictive distribution.
-    contents:
-      - PPC-overview
-      - starts_with("ppc")
-      - pp_check
-  - title: "MCMC"
-    desc: >
-      Functions for creating plots of MCMC draws of model parameters and
-      general MCMC diagnostics.
-    contents:
-      - MCMC-overview
-      - MCMC-diagnostics
-      - MCMC-distributions
-      - MCMC-intervals
-      - MCMC-recover
-      - MCMC-scatterplots
-      - MCMC-parcoord
-      - MCMC-traces
-      - MCMC-combos
-  - title: "HMC/NUTS diagnostics"
-    desc: >
-      Functions for plotting diagnostics specific to Hamiltonian Monte Carlo (HMC)
-      and the No-U-Turn Sampler (NUTS). Some of the general MCMC plotting functions
-      (`mcmc_parcoord()`, `mcmc_pairs()`, `mcmc_scatter()`, `mcmc_trace()`) can also
-      show HMC/NUTS diagnostic information if optional arguments are specified,
-      but the special functions below are _only_ intended for use with HMC/NUTS.
-    contents:
-      - MCMC-nuts
-  - title: "Tidy parameter selection for MCMC plots"
-    desc: >
-      Helper functions for tidy parameter selection and examples of using
-      **bayesplot** with [**dplyr**](https://dplyr.tidyverse.org/).
-    contents:
-      - tidy-params
-  - title: "ggplot helpers"
-    desc: >
-      Convenience functions for arranging multiple plots, adding features
-      to plots, and shortcuts for modifying individual ggplot theme elements.
-    contents:
-      - bayesplot_grid
-      - bayesplot-helpers
-  - title: "Extractors"
-    desc: >
-      Functions extracting various quantities needed for plotting from different
-      types of fitted model objects.
-    contents:
-      - bayesplot-extractors
-  - title: "Miscellaneous"
-    desc: >
-      Functions for generating data for examples and listing available
-      plotting functions.
-    contents:
-      - example-data
-      - available_ppc
+- title: Build
+  desc:  Build a complete site or one of its components.
+  contents:
+  - build_site
+  - build_articles
+  - build_favicons
+  - build_home
+  - build_news
+  - build_tutorials
+  - build_reference
+  - build_search
+  - init_site
+  - preview_site
+  - pkgdown_sitrep
+
+- title: Deployment
+  contents:
+  - starts_with("deploy_")
+  - build_site_github_pages
+
+- title: Templates
+  contents:
+  - template_navbar
+  - render_page
+
+- title: Helpers
+  contents:
+  - clean_site
+  - rd2html
+  - as_pkgdown
+  - in_pkgdown
+
+- title: Regression tests
+  contents:
+  - starts_with("test", internal = TRUE)
+
+news:
+  releases:
+  - text: "Version 1.6.0"
+    href: https://www.tidyverse.org/blog/2020/09/pkgdown-1-6-0/
+  - text: "Version 1.5.0"
+    href: https://www.tidyverse.org/blog/2020/03/pkgdown-1-5-0/
+  - text: "Version 1.4.0"
+    href: https://www.tidyverse.org/articles/2019/09/pkgdown-1-4-0/
+  - text: "Version 1.3.0"
+    href: https://www.tidyverse.org/articles/2018/12/pkgdown-1-3-0/
+  - text: "Version 1.1.0"
+    href: https://www.tidyverse.org/articles/2018/06/pkgdown-1-1-0/
+  - text: "Version 1.0.0"
+    href: https://www.tidyverse.org/articles/2018/05/pkgdown-1-0-0/
