@@ -1,8 +1,8 @@
-# Linear Sufficient Dimension Reduction (linearsdr)
+# Linear Sufficient Dimension Reduction
 
 Contains code for my forthcoming paper on "Generalized Forward Regression for Sufficient Dimension Reduction with Multinomial Response". 
 
-The code can be installed as a package via the install_github function in devtools:
+The package can be installed by running:
 `devtools::install_github("HarrisQ/linearsdr");`
 
 The 'NAMESPACE - no oxy' is the original NAMESPACE file prior to when I started using rOxygen and is kept as a reference.
