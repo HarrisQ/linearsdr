@@ -5,9 +5,8 @@ destination: "."
 template:
   params:
     bootswatch: cosmo
-    docsearch:
-      api_key: 28ab84fbf0d3f58232875561b9a208cd
-      index_name: bayesplot
+    ganalytics: G-RP3VXX4HME
+
 
 navbar:
   title: "bayesplot"
