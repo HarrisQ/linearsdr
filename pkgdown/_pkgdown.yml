@@ -82,17 +82,4 @@ reference:
   contents:
   - starts_with("test", internal = TRUE)
 
-news:
-  releases:
-  - text: "Version 1.6.0"
-    href: https://www.tidyverse.org/blog/2020/09/pkgdown-1-6-0/
-  - text: "Version 1.5.0"
-    href: https://www.tidyverse.org/blog/2020/03/pkgdown-1-5-0/
-  - text: "Version 1.4.0"
-    href: https://www.tidyverse.org/articles/2019/09/pkgdown-1-4-0/
-  - text: "Version 1.3.0"
-    href: https://www.tidyverse.org/articles/2018/12/pkgdown-1-3-0/
-  - text: "Version 1.1.0"
-    href: https://www.tidyverse.org/articles/2018/06/pkgdown-1-1-0/
-  - text: "Version 1.0.0"
-    href: https://www.tidyverse.org/articles/2018/05/pkgdown-1-0-0/
+changelog:
