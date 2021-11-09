@@ -17,8 +17,8 @@
 #' @param l2_pen Default is '0', i.e. no ridge penalty. 
 #' @param l1_pen Default is '0', i.e no LASSO Penalty. The LASSO estimation is carried out
 #' through the 'glmnet' package. To select the L1 penalty through Cross-Validation in 
-#' glmnet, set 'l1_pen = -1'. Otherwise, provide a sequence of penalty values (glmnet 
-#' strongly discourages supplying a single value.)
+#' glmnet, set 'l1_pen = -1'. Otherwise, provide a sequence of penalty values; glmnet 
+#' strongly discourages supplying a single value.
 #' @param control_list a list of control parameters for the Newton-Raphson 
 #' or Conjugate Gradient methods
 #' \itemize{
@@ -42,6 +42,9 @@
 #'
 #' @examples
 #' 
+#' 
+
+
 rade<-function(x_matrix, y_matrix, d, bw, bw2=NULL, init_mat=NULL, ytype='continuous', 
                method="newton", parallelize=F, r_mat=NULL,
                l2_pen=0, l1_pen=0, print_opcg=F, control_list=list() ){
