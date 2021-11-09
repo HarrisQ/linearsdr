@@ -2,14 +2,6 @@
 ################ RADE and Regularized OPCG - Ridge and LASSO ##################
 ###############################################################################
 
-
-# .rs.restartR()
-# Rcpp::compileAttributes("../linearsdr");
-# devtools::install("../linearsdr");
-# library("linearsdr")
-
-# library(glmnet)
-
 #' Regularized Regressing Average Derivative Estimates
 #'
 #' @param x_matrix a 'pxn' matrix of predictors;
