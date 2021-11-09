@@ -26,60 +26,60 @@ code:
 
 development:
   mode: auto
-
-articles:
-- title: Customise your site
-  navbar: ~
-  contents:
-  - pkgdown
-  - customise
-  - linking
-  - search
-  - metadata
-- title: Testing
-  desc: >
-    These articles are used to test various pkgdown features that can not
-    easily be tested automatically.
-  contents:
-  - starts_with("test")
-
-reference:
-- title: Build
-  desc:  Build a complete site or one of its components.
-  contents:
-  - build_site
-  - build_articles
-  - build_favicons
-  - build_home
-  - build_news
-  - build_tutorials
-  - build_reference
-  - build_search
-  - init_site
-  - preview_site
-  - pkgdown_sitrep
-
-- title: Deployment
-  contents:
-  - starts_with("deploy_")
-  - build_site_github_pages
-
-- title: Templates
-  contents:
-  - template_navbar
-  - render_page
-
-- title: Helpers
-  contents:
-  - clean_site
-  - rd2html
-  - as_pkgdown
-  - in_pkgdown
-
-- title: Regression tests
-  contents:
-  - starts_with("test", internal = TRUE)
-
-changelog:
+# 
+# articles:
+# - title: Customise your site
+#   navbar: ~
+#   contents:
+#   - pkgdown
+#   - customise
+#   - linking
+#   - search
+#   - metadata
+# - title: Testing
+#   desc: >
+#     These articles are used to test various pkgdown features that can not
+#     easily be tested automatically.
+#   contents:
+#   - starts_with("test")
+# 
+# reference:
+# - title: Build
+#   desc:  Build a complete site or one of its components.
+#   contents:
+#   - build_site
+#   - build_articles
+#   - build_favicons
+#   - build_home
+#   - build_news
+#   - build_tutorials
+#   - build_reference
+#   - build_search
+#   - init_site
+#   - preview_site
+#   - pkgdown_sitrep
+# 
+# - title: Deployment
+#   contents:
+#   - starts_with("deploy_")
+#   - build_site_github_pages
+# 
+# - title: Templates
+#   contents:
+#   - template_navbar
+#   - render_page
+# 
+# - title: Helpers
+#   contents:
+#   - clean_site
+#   - rd2html
+#   - as_pkgdown
+#   - in_pkgdown
+# 
+# - title: Regression tests
+#   contents:
+#   - starts_with("test", internal = TRUE)
+# 
+# changelog:
 
 
