@@ -8,14 +8,14 @@ authors:
     href: https://harrisq.github.io
 
 template:
-  bootstrap: 5
+  # bootstrap: 5 # changes site template 
   # bslib:
   #   primary: "#0054AD"
   #   border-radius: 0.5rem
   #   btn-border-radius: 0.25rem
 
   params:
-    bootswatch: cosmo
+    bootswatch: sandstone
     ganalytics: G-1XP1GZGPTF
   # includes:
   #   in_header:
