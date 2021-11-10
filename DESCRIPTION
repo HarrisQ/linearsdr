@@ -6,9 +6,8 @@ Authors@R:
     person("Harris", "Quach", , "harris.quach@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Maintainer: Harris Quach <harris.quach@gmail.com>           
-Description: Contains Sufficiennt Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: Contains Sufficient Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
