@@ -1,5 +1,5 @@
 ---
-title: "linearsdr overview"
+title: "Tuning OPCG"
 author: "Harris Quach"
 date: '`r Sys.Date()`'
 output:
@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 3
     vignette: >
-      %\VignetteIndexEntry{linearsdr overview}
+      %\VignetteIndexEntry{Tuning OPCG}
       %\VignetteEngine{knitr::rmarkdown}
       %\VignetteEncoding{UTF-8}
 ---
