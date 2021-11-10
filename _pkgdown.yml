@@ -110,12 +110,12 @@ navbar:
   left:
     - text: Home
       href: index.html
-    - text: Functions
-      href: reference/index.html
     - text: Articles
       menu:
-      - text: Introduction to mkin
-        href: articles/mkin.html
+      - text: Overview to Linear SDR
+        href: articles/linearsdr.html
+      - text: Tuning OPCG 
+        href: articles/linearsdr.html  
       # - text: Example evaluation of FOCUS Example Dataset D
       #   href: articles/FOCUS_D.html
       # - text: Example evaluation of FOCUS Laboratory Data L1 to L3
@@ -130,6 +130,8 @@ navbar:
       #   href: articles/web_only/NAFTA_examples.html
       # - text: Some benchmark timings
       #   href: articles/web_only/benchmarks.html
+    - text: Functions
+      href: reference/index.html  
     - text: changelog
-      href: news/index.html
+      href: index.html
 
