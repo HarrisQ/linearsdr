@@ -50,7 +50,7 @@ discretize=function(y,h){
 #' The L2-regularization option corresponds to the SIR regularization idea 
 #' by Zhang et al.(2005).
 #' 
-#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param x a 'n x p' matrix of predictors; n sample size, p dimension
 #' @param y a scalar response
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
@@ -112,7 +112,7 @@ sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
 #' by Zhang et al.(2005). While they do not apply the idea to SAVE, we find that the 
 #' context is analogous and that such a regularization works. 
 #' 
-#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param x a 'n x p' matrix of predictors; n sample size, p dimension
 #' @param y a scalar response
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
@@ -177,7 +177,7 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
 #' by Zhang et al.(2005). While they do not apply the idea to SAVE, we find that the 
 #' context is analogous and that such a regularization works. 
 #' 
-#' @param x a 'p x n' matrix of predictors; n sample size, p dimension
+#' @param x a 'n x p' matrix of predictors; n sample size, p dimension
 #' @param y a scalar response
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
