@@ -1,7 +1,0 @@
-useDynLib(linearsdr, .registration=TRUE)
-importFrom(Rcpp, evalCpp)
-importFrom(doParallel,registerDoParallel)
-importFrom(foreach,"%dopar%")
-importFrom(foreach,foreach)
-importFrom(iterators,icount)
-exportPattern("^[^\\.]")
