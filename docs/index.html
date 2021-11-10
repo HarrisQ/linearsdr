@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Forward and Inverse Linear Sufficient Reduction Methods">
-<meta property="og:description" content="Contains Sufficiennt Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).">
+<meta property="og:description" content="Contains Sufficient Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -70,15 +70,65 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-Contains Sufficiennt Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).
+
+<div class="section level1">
+<div class="page-header"><h1 id="linear-sufficient-dimension-reduction">Linear Sufficient Dimension Reduction<a class="anchor" aria-label="anchor" href="#linear-sufficient-dimension-reduction"></a>
+</h1></div>
+<p>The ‘linearsdr’ package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper “Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses”.</p>
+</div>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<p>The package can be installed by running:</p>
+<!-- ::: .pkgdown-devel -->
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Install development version from GitHub</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"HarrisQ/linearsdr"</span><span class="op">)</span></code></pre></div>
+<!-- ::: -->
+<p>The ‘NAMESPACE - no oxy’ is the original NAMESPACE file prior to when I started using rOxygen and is kept as a reference. The ‘NAMESPACE - oxy’ is NAMESPACE file generated from rOxygen.</p>
+<div class="section level2">
+<h2 id="current-state-of-package">Current State of Package:<a class="anchor" aria-label="anchor" href="#current-state-of-package"></a>
+</h2>
+<ul>
+<li>Things that work:
+<ul>
+<li>Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG<br>
+</li>
+<li>Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization<br>
+</li>
+</ul>
+</li>
+<li>Minor Things to do:
+<ul>
+<li>Clean up OPG/OPCG and MAVE/MADE code<br>
+</li>
+<li>(Maybe) Limit function exports to just the ones people will use<br>
+</li>
+<li>(Maybe) Clean Regularized OPG/OPCG (RADE) Code</li>
+</ul>
+</li>
+<li>Major Things to do:
+<ul>
+<li>Write Vignettes/Examples<br>
+</li>
+<li>Finish code for Multivariate Continuous Response<br>
+</li>
+<li>Write more Documentation for functions</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>`use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license</li>
+<li>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
 
