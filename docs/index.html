@@ -70,44 +70,32 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
 <div class="section level1">
 <div class="page-header"><h1 id="linear-sufficient-dimension-reduction">Linear Sufficient Dimension Reduction<a class="anchor" aria-label="anchor" href="#linear-sufficient-dimension-reduction"></a>
 </h1></div>
 <p>The ‘linearsdr’ package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper “Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses”.</p>
-</div>
-<div class="section level1">
-<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h1>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The package can be installed by running:</p>
 <!-- ::: .pkgdown-devel -->
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Install development version from GitHub</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"HarrisQ/linearsdr"</span><span class="op">)</span></code></pre></div>
 <!-- ::: -->
-<p>The ‘NAMESPACE - no oxy’ is the original NAMESPACE file prior to when I started using rOxygen and is kept as a reference. The ‘NAMESPACE - oxy’ is NAMESPACE file generated from rOxygen.</p>
+</div>
 <div class="section level2">
 <h2 id="current-state-of-package">Current State of Package:<a class="anchor" aria-label="anchor" href="#current-state-of-package"></a>
 </h2>
 <ul>
-<li>Things that work:
+<li>Current features of the package:
 <ul>
 <li>Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG<br>
 </li>
-<li>Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization<br>
-</li>
+<li>Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization</li>
 </ul>
 </li>
-<li>Minor Things to do:
-<ul>
-<li>Clean up OPG/OPCG and MAVE/MADE code<br>
-</li>
-<li>(Maybe) Limit function exports to just the ones people will use<br>
-</li>
-<li>(Maybe) Clean Regularized OPG/OPCG (RADE) Code</li>
-</ul>
-</li>
-<li>Major Things to do:
+<li>Immediate tasks to complete:
 <ul>
 <li>Write Vignettes/Examples<br>
 </li>
@@ -116,10 +104,18 @@
 <li>Write more Documentation for functions</li>
 </ul>
 </li>
+<li>Not-so pressing tasks to complete:
+<ul>
+<li>Clean up OPG/OPCG and MAVE/MADE code<br>
+</li>
+<li>Limit function exports to just the ones people will use<br>
+</li>
+<li>Clean Regularized OPG/OPCG (RADE) Code</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

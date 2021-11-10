@@ -6,7 +6,7 @@ dimension reduction as well as some more recent methods in the
 forthcoming paper “Generalized Forward Sufficient Dimension Reduction
 for Categorical and Ordinal Responses”.
 
-# Installation
+## Installation
 
 The package can be installed by running:
 

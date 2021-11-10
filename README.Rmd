@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 The 'linearsdr' package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper "Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses".
 
-# Installation
+## Installation
 
 The package can be installed by running:
 
@@ -28,6 +28,7 @@ devtools::install_github("HarrisQ/linearsdr")
 
 Current State of Package:
 ----
+
 * Current features of the package:
     + Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG  
     + Inverse Linear SDR methods: SIR, DR, SAVE with options for regularization  
