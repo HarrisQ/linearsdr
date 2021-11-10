@@ -19,22 +19,17 @@ devtools::install_github("HarrisQ/linearsdr")
 
 <!-- ::: -->
 
-The ‘NAMESPACE - no oxy’ is the original NAMESPACE file prior to when I
-started using rOxygen and is kept as a reference. The ‘NAMESPACE - oxy’
-is NAMESPACE file generated from rOxygen.
-
 ## Current State of Package:
 
-  - Things that work:
+  - Current features of the package:
       - Forward Linear SDR methods: OPG/OPCG, MAVE/MADE, Tuning OPCG  
       - Inverse Linear SDR methods: SIR, DR, SAVE with options for
-        regularization  
-  - Minor Things to do:
-      - Clean up OPG/OPCG and MAVE/MADE code  
-      - (Maybe) Limit function exports to just the ones people will
-        use  
-      - (Maybe) Clean Regularized OPG/OPCG (RADE) Code
-  - Major Things to do:
+        regularization
+  - Immediate tasks to complete:
       - Write Vignettes/Examples  
       - Finish code for Multivariate Continuous Response  
       - Write more Documentation for functions
+  - Not-so pressing tasks to complete:
+      - Clean up OPG/OPCG and MAVE/MADE code  
+      - Limit function exports to just the ones people will use  
+      - Clean Regularized OPG/OPCG (RADE) Code
