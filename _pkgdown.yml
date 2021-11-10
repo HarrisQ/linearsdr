@@ -1,4 +1,5 @@
-url: https://harrisq.github.io/linearsdr/
+url: https://github.com/HarrisQ/linearsdr
+# https://harrisq.github.io/linearsdr/
 
 home:
   title: Linear SDR
@@ -97,4 +98,38 @@ reference:
 # 
 # changelog:
 
+navbar:
+  title: ~
+  type: default
+  # structure:
+    # left:  [home, articles, reference, news]
+    # right:  [github]
+  right:
+    - text: github
+      href: index.html
+  left:
+    - text: Home
+      href: index.html
+    - text: Functions
+      href: reference/index.html
+    - text: Articles
+      menu:
+      - text: Introduction to mkin
+        href: articles/mkin.html
+      # - text: Example evaluation of FOCUS Example Dataset D
+      #   href: articles/FOCUS_D.html
+      # - text: Example evaluation of FOCUS Laboratory Data L1 to L3
+      #   href: articles/FOCUS_L.html
+      # - text: Example evaluation of FOCUS Example Dataset Z
+      #   href: articles/web_only/FOCUS_Z.html
+      # - text: Performance benefit by using compiled model definitions in mkin
+      #   href: articles/web_only/compiled_models.html
+      # - text: Calculation of time weighted average concentrations with mkin
+      #   href: articles/twa.html
+      # - text: Example evaluation of NAFTA SOP Attachment examples
+      #   href: articles/web_only/NAFTA_examples.html
+      # - text: Some benchmark timings
+      #   href: articles/web_only/benchmarks.html
+    - text: changelog
+      href: news/index.html
 

@@ -1,5 +1,5 @@
-
-# Linear Sufficient Dimension Reduction
+Linear Sufficient Dimension Reduction
+================
 
 The ‘linearsdr’ package contains popular methods for sufficient
 dimension reduction as well as some more recent methods in the
