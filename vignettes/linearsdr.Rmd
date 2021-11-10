@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 3
     vignette: >
-      %\VignetteIndexEntry{linearsdr-overview}
+      %\VignetteIndexEntry{linearsdr overview}
       %\VignetteEngine{knitr::rmarkdown}
       %\VignetteEncoding{UTF-8}
 ---
