@@ -8,7 +8,7 @@ authors:
     href: https://harrisq.github.io
 
 template:
-  # bootstrap: 5
+  bootstrap: 5
   # bslib:
   #   primary: "#0054AD"
   #   border-radius: 0.5rem
