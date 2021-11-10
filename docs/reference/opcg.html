@@ -65,8 +65,8 @@ paper Quach and Li (2021).</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">opcg</span><span class="op">(</span>
-  <span class="va">x_matrix</span>,
-  <span class="va">y_matrix</span>,
+  <span class="va">x</span>,
+  <span class="va">y</span>,
   <span class="va">d</span>,
   <span class="va">bw</span>,
   lambda <span class="op">=</span> <span class="fl">0</span>,
@@ -80,11 +80,7 @@ paper Quach and Li (2021).</p>
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x_matrix</dt>
-<dd><p>a 'pxn' matrix of predictors;</p></dd>
-<dt>y_matrix</dt>
-<dd><p>a 'mxn' matrix response</p></dd>
-<dt>d</dt>
+    <dl><dt>d</dt>
 <dd><p>specified the reduced dimension</p></dd>
 <dt>bw</dt>
 <dd><p>the bandwidth parameter for the kernel; the default kernel is gaussian</p></dd>
@@ -108,6 +104,10 @@ the initial value; this is used in other functions for order determination</p></
 <li><p>gradients - The estimated local gradients; used in regularization of OPCG</p></li>
 <li><p>weights - The kernel weights in the local-linear GLM.</p></li>
 </ul></dd>
+<dt>x_matrix</dt>
+<dd><p>a 'nxp' matrix of predictors;</p></dd>
+<dt>y_matrix</dt>
+<dd><p>a 'nxm' matrix response</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

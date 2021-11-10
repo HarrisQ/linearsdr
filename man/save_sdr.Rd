@@ -7,7 +7,7 @@
 save_sdr(x, y, nslices, d, ytype, std = T, lambda = 0)
 }
 \arguments{
-\item{x}{a 'p x n' matrix of predictors; n sample size, p dimension}
+\item{x}{a 'n x p' matrix of predictors; n sample size, p dimension}
 
 \item{y}{a scalar response}
 

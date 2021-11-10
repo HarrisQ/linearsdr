@@ -5,8 +5,8 @@
 \title{Outer Product of Canonical Gradients}
 \usage{
 opcg(
-  x_matrix,
-  y_matrix,
+  x,
+  y,
   d,
   bw,
   lambda = 0,
@@ -18,9 +18,9 @@ opcg(
 )
 }
 \arguments{
-\item{x_matrix}{a 'pxn' matrix of predictors;}
+\item{x}{a 'nxp' matrix of predictors;}
 
-\item{y_matrix}{a 'mxn' matrix response}
+\item{y}{a 'nxm' response}
 
 \item{d}{specified the reduced dimension}
 

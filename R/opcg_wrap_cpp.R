@@ -37,7 +37,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   
   
   # Parameters for the problem/model
-  p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
+  p <- dim(x_matrix)[2]; n <- dim(x_matrix)[1]; 
   B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; 
   d <- dim(as.matrix(B))[2];  
   
@@ -64,7 +64,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
     
     
     mv_Y=y_matrix
-    m=dim(y_matrix)[1]
+    m=dim(y_matrix)[2]
     
     # j=1; test=T
     aD_j = function(j, test=F) {
@@ -383,9 +383,9 @@ opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
 #' convergence is satisfactory. Should the initial values be suspect, then maybe
 #' enforcing the Wolfe condition is a reasonable trade-off.  
 #' 
+#' @param x a 'nxp' matrix of predictors;
+#' @param y a 'nxm' response 
 #' @param d specified the reduced dimension 
-#' @param x_matrix a 'pxn' matrix of predictors;
-#' @param y_matrix a 'mxn' matrix response 
 #' @param bw the bandwidth parameter for the kernel; the default kernel is gaussian
 #' @param method "newton" or "cg" methods; for carrying out the optimization using
 #' the standard newton-raphson (i.e. Fisher Scoring) or using Congugate Gradients 
@@ -412,11 +412,16 @@ opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
 #' @export
 #' 
 #' 
-opcg <- function(x_matrix, y_matrix, d, bw, lambda=0, ytype='continuous',
+opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
-  beta=opcg_wrap(x_matrix, y_matrix, d, bw,lambda, ytype,
+  if (!is.matrix(y)) {
+    n=length(y)
+    y = matrix(y, ncol=1, nrow =n )
+  }
+  
+  beta=opcg_wrap(x_matrix = x, y_matrix = y, d, bw,lambda, ytype,
                      method, parallelize, r_mat,
                      control_list)$opcg 
   
