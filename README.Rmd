@@ -1,15 +1,35 @@
+---
+output: github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/"
+)
+```
+
 # Linear Sufficient Dimension Reduction
 
-Contains code for my forthcoming paper on "Generalized Forward Regression for Sufficient Dimension Reduction with Multinomial Response". 
+The 'linearsdr' package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper "Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses".
+
+# Installation
 
 The package can be installed by running:
-`devtools::install_github("HarrisQ/linearsdr");`
+
+<!-- ::: .pkgdown-devel -->
+```{r, eval = FALSE}
+# Install development version from GitHub
+devtools::install_github("HarrisQ/linearsdr")
+```
+<!-- ::: -->
+
+
 
 The 'NAMESPACE - no oxy' is the original NAMESPACE file prior to when I started using rOxygen and is kept as a reference.
 The 'NAMESPACE - oxy' is NAMESPACE file generated from rOxygen.
 
-<!-- The 'Experimental Code' folder is where I have stored code for aspects of Linear SDR that I have been working on sparingly and is not quite ready for use. 
- -->
 
 Current State of Package:
 ----

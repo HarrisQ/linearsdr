@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://harrisq.github.io/linearsdr/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/articles/index.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/articles/linearsdr.html</loc>
+    <loc>/articles/linearsdr.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/articles/Tuning OPCG.html</loc>
+    <loc>/articles/Tuning OPCG.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/dr.html</loc>
+    <loc>/reference/dr.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/ggplot_fsdr.html</loc>
+    <loc>/reference/ggplot_fsdr.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/kfold_km_tuning.html</loc>
+    <loc>/reference/kfold_km_tuning.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/linearsdr-package.html</loc>
+    <loc>/reference/linearsdr-package.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/made.html</loc>
+    <loc>/reference/made.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/opcg.html</loc>
+    <loc>/reference/opcg.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/rcpparma_hello_world.html</loc>
+    <loc>/reference/rcpparma_hello_world.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/save_sdr.html</loc>
+    <loc>/reference/save_sdr.html</loc>
   </url>
   <url>
-    <loc>https://harrisq.github.io/linearsdr/reference/sir.html</loc>
+    <loc>/reference/sir.html</loc>
   </url>
 </urlset>
