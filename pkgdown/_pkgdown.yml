@@ -43,7 +43,21 @@ development:
 #   contents:
 #   - starts_with("test")
 # 
-# reference:
+reference:
+  - title: Forward SDR Methods
+    desc:  Methods that are considered Forward SDR methods, along with their related functions
+    contents:
+    - opcg
+    - made
+    - kfold_km_tuning 
+    
+  - title: Inverse SDR Methods
+    desc:  Methods that are considered Inverse SDR methods, along with their related functions
+    contents:
+    - sir
+    - save_sdr
+    - dr
+    
 # - title: Build
 #   desc:  Build a complete site or one of its components.
 #   contents:
