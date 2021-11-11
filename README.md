@@ -1,5 +1,9 @@
-Linear Sufficient Dimension Reduction
-================
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# Linear Sufficient Dimension Reduction
+
+<!-- # pkgdown <img src="man/figures/logo.png" align="right" alt="" width="120" /> -->
 
 The ‘linearsdr’ package contains popular methods for sufficient
 dimension reduction as well as some more recent methods in the

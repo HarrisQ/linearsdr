@@ -99,14 +99,14 @@ reference:
 # changelog:
 
 navbar:
-  title: ~
-  type: default
+  # title: ~
+  # type: default
   # structure:
     # left:  [home, articles, reference, news]
     # right:  [github]
-  right:
-    - text: github
-      href: index.html
+  # right:
+  #   - text: github
+  #     href: index.html
   left:
     - text: Home
       href: index.html

@@ -1,4 +1,8 @@
-# Linear Sufficient Dimension Reduction
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -8,8 +12,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Linear Sufficient Dimension Reduction
+
+<!-- # pkgdown <img src="man/figures/logo.png" align="right" alt="" width="120" /> -->
 
 The 'linearsdr' package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper "Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses".
+
 
 ## Installation
 
