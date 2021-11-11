@@ -69,8 +69,14 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # was originally written
   
   if ( dim(x_matrix)[2] != dim(y_matrix)[2] ){
-    y_matrix = t(y_matrix);
-    x_matrix = t(x_matrix)
+    
+    if( which(dim(x_matrix) %in% dim(y_matrix)) == 1 ) {
+      x_matrix = t(x_matrix)
+      
+    } else if ( which(dim(x_matrix) %in% dim(y_matrix)) == 2 ) {
+      y_matrix = t(y_matrix);
+    }
+      
   } 
   
   # Parameters for the problem/model
