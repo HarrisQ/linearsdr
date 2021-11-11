@@ -48,5 +48,5 @@ linearsdr.Rproj
 *.pdf
 NAMESPACE - oxy
 NAMESPACE - no oxy
-docs
-inst/doc
+# docs
+# inst/doc
