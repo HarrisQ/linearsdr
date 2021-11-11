@@ -367,6 +367,8 @@ opcg_DD <- function(x_matrix, y_matrix, bw, lambda, ytype='continuous',
 
 ############### OPCG wrapper #########################
 
+#' @noRd
+#' @export
 opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
@@ -448,11 +450,19 @@ opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
   if (!is.matrix(y)) {
     n=length(y)
     y = matrix(y, ncol=1, nrow =n )
+    
+  } 
+  
+  if (dim(y)[2] != dim(x)[1] ){
+    beta=opcg_wrap(x_matrix = x, y_matrix = y, d, bw,lambda, ytype,
+                   method, parallelize, r_mat,
+                   control_list)$opcg 
+  } else {
+    stop("This is an error message")
   }
   
-  beta=opcg_wrap(x_matrix = x, y_matrix = y, d, bw,lambda, ytype,
-                     method, parallelize, r_mat,
-                     control_list)$opcg 
+  
+  
   
   return(beta)
   
