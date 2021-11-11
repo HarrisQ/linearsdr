@@ -1,5 +1,5 @@
 Package: linearsdr
-Title: Forward and Inverse Linear Sufficient Reduction Methods
+Title: Linear Sufficient Reduction Methods
 Date: 2020-10-9
 Version: 0.1
 Authors@R: 
@@ -7,6 +7,7 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Maintainer: Harris Quach <harris.quach@gmail.com>           
 Description: Contains Sufficient Dimension Reduction methods for Linear dimension reduction. Forward methods available are OPG, OPCG, MAVE and MADE. Inverse methods available include modified versions of SIR, DR and SAVE from Dr. Bing Li's book on SDR (2019). The modifications for Inverse methods allow regularization in a similar spirit to Zhang et. al. (2005).
+URL: https://harrisq.github.io/linearsdr/, https://github.com/HarrisQ/linearsdr/ 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
