@@ -64,7 +64,7 @@ matpower=function(a,alpha, lead=NULL, ignore=10^(-15)){
 #' @keywords internal
 #' 
 #' @noRd
-#' 
+#' @export
 mat_dist=function(v1,v2){
   v1=as.matrix(v1);v2=as.matrix(v2)
   if(dim(v1)[1]>1){
