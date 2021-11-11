@@ -4,7 +4,7 @@
 \alias{dr}
 \title{Directional Regression}
 \usage{
-dr(x, y, nslices, d, ytype, std = T, lambda = 0)
+dr(x, y, nslices, d, ytype, lambda = 0)
 }
 \arguments{
 \item{x}{a 'n x p' matrix of predictors; n sample size, p dimension}
@@ -16,8 +16,6 @@ dr(x, y, nslices, d, ytype, std = T, lambda = 0)
 \item{d}{specify the reduced dimension}
 
 \item{ytype}{specify the response as 'continuous' or 'categorical'}
-
-\item{std}{should the predictors be standardized? Default is 'TRUE'}
 
 \item{lambda}{a L2 or Tikonov regularizer for the sample covariance matrix;
 default is '0', i.e. no regularization}

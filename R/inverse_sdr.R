@@ -55,7 +55,7 @@ discretize=function(y,h){
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
 #' @param ytype specify the response as 'continuous' or 'categorical' 
-#' @param std should the predictors be standardized? Default is 'TRUE'
+# @param std should the predictors be standardized? Default is 'TRUE'
 #' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
 #' default is '0', i.e. no regularization
 #' 
@@ -68,16 +68,14 @@ discretize=function(y,h){
 #'  
 #' @export
 #' 
-sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
+sir=function(x,y,nslices,d,ytype, lambda=0){
   
   p=ncol(x);n=nrow(x)
-  if (std) {
-    signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
-    xc=t(t(x)-colMeans(x))
-    xst=xc%*%signrt
-  } else {
-    xst=x
-  }
+  # standardize the predictor
+  signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
+  xc=t(t(x)-colMeans(x))
+  xst=xc%*%signrt
+
   if(ytype=="continuous") ydis=discretize(y,nslices)
   if(ytype=="categorical") ydis=y
   ylabel=unique(ydis)
@@ -86,11 +84,7 @@ sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
   for(i in 1:nslices) exy=rbind(exy,colMeans(xst[ydis==ylabel[i],]))
   sirmat=t(exy)%*%diag(prob)%*%exy;
   
-  if (std) {
-    beta=signrt%*%eigen_cpp(sirmat)$vectors[,1:d];
-  } else {
-    beta=eigen_cpp(sirmat)$vectors[,1:d];
-  }
+  beta=signrt%*%eigen_cpp(sirmat)$vectors[,1:d];
   
   return( list(beta=beta, cand_mat=sirmat) )
 }
@@ -117,7 +111,7 @@ sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
 #' @param ytype specify the response as 'continuous' or 'categorical' 
-#' @param std should the predictors be standardized? Default is 'TRUE'
+# @param std should the predictors be standardized? Default is 'TRUE'
 #' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
 #' default is '0', i.e. no regularization
 #' 
@@ -133,13 +127,11 @@ sir=function(x,y,nslices,d,ytype, std = T, lambda=0){
 save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   
   p=ncol(x);n=nrow(x)
-  if (std) {
-    signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
-    xc=t(t(x)-colMeans(x))
-    xst=xc%*%signrt
-  } else {
-    xst=x
-  }
+  # standardize the predictor
+  signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
+  xc=t(t(x)-colMeans(x))
+  xst=xc%*%signrt
+  
   if(ytype=="continuous") ydis=discretize(y,nslices)
   if(ytype=="categorical") ydis=y
   ylabel=unique(ydis)
@@ -151,12 +143,8 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   for(i in 1:nslices){
     savemat=savemat+prob[i]*(vxy[,,i]-diag(p))%*%(vxy[,,i]-diag(p))};
   
+  beta=signrt%*%eigen_cpp(savemat)$vectors[,1:d];
   
-  if (std) {
-    beta=signrt%*%eigen_cpp(savemat)$vectors[,1:d];
-  } else {
-    beta=eigen_cpp(savemat)$vectors[,1:d];
-  }
   return( list(beta=beta, cand_mat=savemat) )
 }
 
@@ -182,7 +170,7 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
 #' @param nslices specify the number of slices to conduct; 
 #' @param d specify the reduced dimension 
 #' @param ytype specify the response as 'continuous' or 'categorical' 
-#' @param std should the predictors be standardized? Default is 'TRUE'
+# @param std should the predictors be standardized? Default is 'TRUE'
 #' @param lambda a L2 or Tikonov regularizer for the sample covariance matrix; 
 #' default is '0', i.e. no regularization
 #' 
@@ -195,15 +183,14 @@ save_sdr=function(x,y,nslices,d,ytype,std=T,lambda=0){
 #' 
 #' @export
 #' 
-dr=function(x,y,nslices,d,ytype,std=T,lambda=0){
+dr=function(x,y,nslices,d,ytype, lambda=0){
   p=ncol(x);n=nrow(x)
-  if (std) {
-    signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
-    xc=t(t(x)-colMeans(x))
-    xst=xc%*%signrt
-  } else {
-    xst=x
-  }
+  # standardize the predictor
+  signrt=matpower_cpp(var(x)+diag(lambda,p,p),-1/2)
+  xc=t(t(x)-colMeans(x))
+  xst=xc%*%signrt
+  
+  
   if(ytype=="continuous") ydis=discretize(y,nslices)
   if(ytype=="categorical") ydis=y
   ylabel=unique(ydis)
@@ -218,11 +205,7 @@ dr=function(x,y,nslices,d,ytype,std=T,lambda=0){
   }
   drmat = 2*mat1+2*mat2%*%mat2+2*sum(diag(mat2))*mat2-2*diag(p)
   
-  if (std) {
-    beta=signrt%*%eigen_cpp(drmat)$vectors[,1:d];
-  } else {
-    beta=eigen_cpp(drmat)$vectors[,1:d];
-  }
+  beta=signrt%*%eigen_cpp(drmat)$vectors[,1:d];
   
   return( list(beta=beta, cand_mat=drmat) )
 }

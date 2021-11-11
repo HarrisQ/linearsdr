@@ -67,7 +67,7 @@ to improve speed and to allow for the option of standardizing and regularizing</
 
     <div class="ref-usage section level2 sourceCode">
     <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">dr</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">nslices</span>, <span class="va">d</span>, <span class="va">ytype</span>, std <span class="op">=</span> <span class="cn">T</span>, lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre>
+    <pre class="sourceCode r"><code><span class="fu">dr</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">nslices</span>, <span class="va">d</span>, <span class="va">ytype</span>, lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre>
     </div>
 
     <div id="ref-sections">
@@ -83,8 +83,6 @@ to improve speed and to allow for the option of standardizing and regularizing</
 <dd><p>specify the reduced dimension</p></dd>
 <dt>ytype</dt>
 <dd><p>specify the response as 'continuous' or 'categorical'</p></dd>
-<dt>std</dt>
-<dd><p>should the predictors be standardized? Default is 'TRUE'</p></dd>
 <dt>lambda</dt>
 <dd><p>a L2 or Tikonov regularizer for the sample covariance matrix;
 default is '0', i.e. no regularization</p></dd>

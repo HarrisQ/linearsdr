@@ -61,6 +61,11 @@ reference:
     - save_sdr
     - dr
     
+  - title: Example Data
+    desc: Some datasets used in this package as examples 
+    contents:
+    - sdr_airfoil
+    
 # - title: Build
 #   desc:  Build a complete site or one of its components.
 #   contents:

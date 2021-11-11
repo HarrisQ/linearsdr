@@ -17,8 +17,6 @@ save_sdr(x, y, nslices, d, ytype, std = T, lambda = 0)
 
 \item{ytype}{specify the response as 'continuous' or 'categorical'}
 
-\item{std}{should the predictors be standardized? Default is 'TRUE'}
-
 \item{lambda}{a L2 or Tikonov regularizer for the sample covariance matrix;
 default is '0', i.e. no regularization}
 }
