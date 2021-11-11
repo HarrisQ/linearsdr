@@ -58,7 +58,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # other: Custom Loss Functions - to be done at a later date
   
    
-  # x_matrix=X; y_matrix=Y;#matrix(Y[2,],1,n)#Y;
+  # x_matrix=X; y_matrix=Y;
   # bw=1;  ytype="cat"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
@@ -93,7 +93,7 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
     
     
     mv_Y=y_matrix
-    m=dim(y_matrix)[2]
+    m=dim(y_matrix)[1]
     
     # j=1; test=T
     aD_j = function(j, test=F) {
@@ -368,7 +368,7 @@ opcg_DD <- function(x_matrix, y_matrix, bw, lambda, ytype='continuous',
 ############### OPCG wrapper #########################
 
 #' @noRd
-#' @export
+# @export
 opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
