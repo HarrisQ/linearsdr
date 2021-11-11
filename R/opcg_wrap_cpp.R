@@ -49,6 +49,7 @@
 opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous', 
                       method="newton", parallelize=F, r_mat=NULL, 
                       control_list=list()) {
+  
   # y.matrix should be m x n, with m depending on ytype
   
   # Supported ytypes are 
@@ -64,9 +65,16 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
   
+  # Transform X into p x n and Y into m x n since that's how the code
+  # was originally written
+  
+  if ( dim(x_matrix)[2] != dim(y_matrix)[2] ){
+    y_matrix = t(y_matrix);
+    x_matrix = t(x_matrix)
+  } 
   
   # Parameters for the problem/model
-  p <- dim(x_matrix)[2]; n <- dim(x_matrix)[1]; 
+  p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 
   B <- if(is.null(B_mat)) diag(1,p,p) else B_mat; 
   d <- dim(as.matrix(B))[2];  
   
