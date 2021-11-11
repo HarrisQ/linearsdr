@@ -120,6 +120,8 @@ navbar:
       menu:
       - text: Overview to Linear SDR
         href: articles/linearsdr.html
+      - text: Linear SDR for scalar Y 
+        href: articles/sdr_airfoil.html    
       - text: Tuning OPCG 
         href: articles/Tuning OPCG.html  
       # - text: Example evaluation of FOCUS Example Dataset D
