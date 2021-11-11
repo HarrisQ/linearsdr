@@ -16,12 +16,14 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(linearsdr)
+data('airfoil_datta', package="linearsdr")
+
 ```
 
 ```{r}
 library(ggplot2)
 
-use
+
 
 X = as.matrix(airfoil_datta[,1:5])
 Y = c(airfoil_datta[,6])
@@ -29,16 +31,16 @@ Y = c(airfoil_datta[,6])
 b_hat_sir = sir(x=X, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
 
 
-ggplot_fsdr(Y, t((X)%*%b_hat_sir), y_on_axis=T, ytype="continuous",
-                     h_lab='SIR 1', v_lab='SIR 2',
-                     main_lab= paste0('SIR'), size=3)
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir), y_on_axis=T, ytype="continuous",
+                        h_lab='SIR 1', v_lab='SIR 2',
+                        main_lab= paste0('SIR'), size=3)
 
 b_hat_dr = dr(x=X, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
 
 
-ggplot_fsdr(Y, t((X)%*%b_hat_dr), y_on_axis=F, ytype="continuous",
-                     h_lab='DR 1', v_lab='DR 2',
-                     main_lab= paste0('DR'), size=3)
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr), y_on_axis=F, ytype="continuous",
+                        h_lab='DR 1', v_lab='DR 2',
+                        main_lab= paste0('DR'), size=3)
 
 
 
@@ -50,7 +52,6 @@ Forward methods using OPG
 library("doParallel")
 library("foreach")
 
-stopCluster(cl)
 print( paste( as.character(detectCores()), "cores detected" ) );
 # Create cluster with desired number of cores
 if ( !grepl("hxq5", getwd()) ) {
@@ -63,14 +64,15 @@ if ( !grepl("hxq5", getwd()) ) {
 doParallel::registerDoParallel(cl)
 # Find out how many cores are being used
 print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
-## [1] 3
+# stopCluster(cl)
 
 b_hat_opg = opcg(x=X, y=Y, bw = 2, d=2, ytype = "continuous", 
                  method= "cg", parallelize = T )
 
 
-ggplot_fsdr(Y, t((X)%*%b_hat_opg)[1:2,], y_on_axis=F, ytype="continuous",
-                     h_lab='OPG 1', v_lab='OPG 2',
-                     main_lab= paste0('DR'), size=3)
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_opg)[1:2,], y_on_axis=F,
+                        ytype="continuous",
+                        h_lab='OPG 1', v_lab='OPG 2',
+                        main_lab= paste0('DR'), size=3)
 
 ```

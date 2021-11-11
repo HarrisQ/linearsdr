@@ -10,6 +10,9 @@
     <loc>https://github.com/HarrisQ/linearsdr/articles/linearsdr.html</loc>
   </url>
   <url>
+    <loc>https://github.com/HarrisQ/linearsdr/articles/sdr_airfoil.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/HarrisQ/linearsdr/articles/Tuning OPCG.html</loc>
   </url>
   <url>
@@ -23,6 +26,9 @@
   </url>
   <url>
     <loc>https://github.com/HarrisQ/linearsdr/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/HarrisQ/linearsdr/reference/airfoil_datta.html</loc>
   </url>
   <url>
     <loc>https://github.com/HarrisQ/linearsdr/reference/dr.html</loc>

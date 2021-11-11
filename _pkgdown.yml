@@ -64,7 +64,7 @@ reference:
   - title: Example Data
     desc: Some datasets used in this package as examples 
     contents:
-    - sdr_airfoil
+    - airfoil_datta
     
 # - title: Build
 #   desc:  Build a complete site or one of its components.
@@ -136,7 +136,7 @@ navbar:
       #   href: articles/web_only/NAFTA_examples.html
       # - text: Some benchmark timings
       #   href: articles/web_only/benchmarks.html
-    - text: Functions
+    - text: Functions and Datasets
       href: reference/index.html  
     - text: changelog
       href: index.html
