@@ -13,54 +13,93 @@ stand_vec_cpp <- function(x) {
     .Call('_linearsdr_stand_vec_cpp', PACKAGE = 'linearsdr', x)
 }
 
+#' @noRd
+#' @export
 normalize_cpp <- function(x) {
     .Call('_linearsdr_normalize_cpp', PACKAGE = 'linearsdr', x)
 }
 
+#' @noRd
+#' @export
 euc_norm_cpp <- function(x) {
     .Call('_linearsdr_euc_norm_cpp', PACKAGE = 'linearsdr', x)
 }
 
+#' @noRd
+#' @export
 list_sum <- function(listA, listB) {
     .Call('_linearsdr_list_sum', PACKAGE = 'linearsdr', listA, listB)
 }
 
+#' General Matrix Power Function
+#' 
+#' This is an internal function used for computing matrix powers
+#' 
+#' @param a a square matrix 
+#' @param alpha power of matrix to be taken 
+#' @param lead number of leading eigenvalues to consider; default is all
+#' @param ignore decimal place to ignore; default is 10^(-15)
+#'
+#' @return a matrix to the power alpha
+#'
+#' @keywords internal
+#' 
+#' @noRd
+#' @export
 matpower_cpp <- function(a, alpha, lead = NULL, ignore = NULL) {
     .Call('_linearsdr_matpower_cpp', PACKAGE = 'linearsdr', a, alpha, lead, ignore)
 }
 
+#' @noRd
+#' @export
 matcenter_cpp <- function(x_matrix, index = NULL, x0 = NULL) {
     .Call('_linearsdr_matcenter_cpp', PACKAGE = 'linearsdr', x_matrix, index, x0)
 }
 
+#' @noRd
+#' @export
 eigen_cpp <- function(A) {
     .Call('_linearsdr_eigen_cpp', PACKAGE = 'linearsdr', A)
 }
 
+#' @noRd
+#' @export
 gev_cpp <- function(A, B) {
     .Call('_linearsdr_gev_cpp', PACKAGE = 'linearsdr', A, B)
 }
 
+#' @noRd
+#' @export
 inv_sympd_cpp <- function(A) {
     .Call('_linearsdr_inv_sympd_cpp', PACKAGE = 'linearsdr', A)
 }
 
+#' @noRd
+#' @export
 sqrtmat_cpp <- function(A) {
     .Call('_linearsdr_sqrtmat_cpp', PACKAGE = 'linearsdr', A)
 }
 
+#' @noRd
+#' @export
 chol_cpp <- function(A) {
     .Call('_linearsdr_chol_cpp', PACKAGE = 'linearsdr', A)
 }
 
+#' @noRd
+#' @export
 solve_cpp <- function(A, B) {
     .Call('_linearsdr_solve_cpp', PACKAGE = 'linearsdr', A, B)
 }
 
+#' @noRd
+#' @export
 gauss_kern_cpp <- function(centered_data, bw) {
     .Call('_linearsdr_gauss_kern_cpp', PACKAGE = 'linearsdr', centered_data, bw)
 }
 
+#' @noRd
+#' @export
 wls_cpp <- function(x_matrix, y_matrix, weights, reg) {
     .Call('_linearsdr_wls_cpp', PACKAGE = 'linearsdr', x_matrix, y_matrix, weights, reg)
 }

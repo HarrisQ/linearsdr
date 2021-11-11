@@ -47,7 +47,6 @@ Rcpp::NumericVector stand_vec_cpp(Rcpp::NumericVector x) {
 // ##########  Normalizing a Vector 
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::vec normalize_cpp(arma::colvec x) {
   //  double norm = arma::as_scalar( pow( x.t()*x , 0.5) );
@@ -65,7 +64,6 @@ arma::vec normalize_cpp(arma::colvec x) {
 // ##########  Euclidean Norm
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 double euc_norm_cpp(arma::vec x) {
   double norm = arma::as_scalar( pow( x.t()*x , 0.5) );
@@ -76,7 +74,6 @@ double euc_norm_cpp(arma::vec x) {
 
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat list_sum(Rcpp::List listA, Rcpp::List listB){
   /***
@@ -125,8 +122,6 @@ arma::mat list_sum(Rcpp::List listA, Rcpp::List listB){
 //' 
 //' @noRd
 //' @export
-//' 
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat matpower_cpp(arma::mat a, double alpha,
                        Rcpp::Nullable<double> lead = R_NilValue,
@@ -172,7 +167,6 @@ arma::mat matpower_cpp(arma::mat a, double alpha,
 // centers the matrix
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat matcenter_cpp(arma::mat x_matrix, 
                         Rcpp::Nullable<unsigned int> index = R_NilValue,
@@ -193,7 +187,6 @@ arma::mat matcenter_cpp(arma::mat x_matrix,
 // For doing eigen decomp of sym pos-def mat
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 Rcpp::List eigen_cpp(arma::mat A){
   /***
@@ -214,7 +207,6 @@ Rcpp::List eigen_cpp(arma::mat A){
 
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 Rcpp::List gev_cpp(arma::mat A, 
                    arma::mat B){ 
@@ -243,7 +235,6 @@ Rcpp::List gev_cpp(arma::mat A,
 // For doing inverse of sym pos-def mat
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat inv_sympd_cpp(arma::mat A){ 
   
@@ -256,7 +247,6 @@ arma::mat inv_sympd_cpp(arma::mat A){
 // For doing sqrt of sym pos-def mat
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat sqrtmat_cpp(arma::mat A){ 
   
@@ -270,7 +260,6 @@ arma::mat sqrtmat_cpp(arma::mat A){
 // For doing chol decom of mat
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat chol_cpp(arma::mat A ){ 
   
@@ -285,7 +274,6 @@ arma::mat chol_cpp(arma::mat A ){
 // Standardizing a random matrix or variable is an example of this
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat solve_cpp(arma::mat A,
                     arma::mat B){ 
@@ -302,7 +290,6 @@ arma::mat solve_cpp(arma::mat A,
 ///////////////////////////////////////////
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::vec gauss_kern_cpp(arma::mat centered_data, double bw ) {
   // do not need the exact pdf since the bandwidth h is proporitional anywas
@@ -329,7 +316,6 @@ arma::vec gauss_kern_cpp(arma::mat centered_data, double bw ) {
 // #####################################################
 //' @noRd
 //' @export
-// [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat wls_cpp(arma::mat x_matrix, 
                   arma::mat y_matrix,
