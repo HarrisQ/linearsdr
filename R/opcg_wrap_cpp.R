@@ -447,7 +447,7 @@ opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
   
-  # x=X; y=c(Y); d; bw; 
+  # x=X; y=c(Y); d; bw;
   # ytype ='cat';
   # method="cg"; parallelize=T;
   # r_mat=NULL;
@@ -459,7 +459,7 @@ opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
     
   } 
   
-  if ( dim(y)[2] != dim(x)[1] ){
+  if ( dim(y)[2] == dim(x)[1] ){
     beta=opcg_wrap(x_matrix = x, y_matrix = y, d, bw,lambda, ytype,
                    method, parallelize, r_mat,
                    control_list)$opcg 
