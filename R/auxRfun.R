@@ -19,7 +19,7 @@
 #' 
 #' @noRd
 #' 
-#' @export
+# @export
 #' 
 matpower=function(a,alpha, lead=NULL, ignore=10^(-15)){
   a=(a+t(a))/2

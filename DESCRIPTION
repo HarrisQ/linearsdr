@@ -15,7 +15,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     doParallel,
-    Rcpp (>= 1.0.5),
+    Rcpp,
     foreach,
     iterators,
     parallel,
@@ -24,4 +24,10 @@ Imports:
     Rdpack
 RdMacros: Rdpack
 LinkingTo: 
-    Rcpp (>= 1.0.5), RcppArmadillo, foreach, parallel, doParallel, ggplot2, plotly
+    Rcpp,
+    RcppArmadillo,
+    foreach,
+    parallel,
+    doParallel,
+    ggplot2,
+    plotly
