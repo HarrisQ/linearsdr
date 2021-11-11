@@ -2,162 +2,162 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 center_cpp <- function(x, center = NULL) {
-    .Call(`_linearsdr_center_cpp`, x, center)
+    .Call('_linearsdr_center_cpp', PACKAGE = 'linearsdr', x, center)
 }
 
 stand_vec_cpp <- function(x) {
-    .Call(`_linearsdr_stand_vec_cpp`, x)
+    .Call('_linearsdr_stand_vec_cpp', PACKAGE = 'linearsdr', x)
 }
 
 normalize_cpp <- function(x) {
-    .Call(`_linearsdr_normalize_cpp`, x)
+    .Call('_linearsdr_normalize_cpp', PACKAGE = 'linearsdr', x)
 }
 
 euc_norm_cpp <- function(x) {
-    .Call(`_linearsdr_euc_norm_cpp`, x)
+    .Call('_linearsdr_euc_norm_cpp', PACKAGE = 'linearsdr', x)
 }
 
 list_sum <- function(listA, listB) {
-    .Call(`_linearsdr_list_sum`, listA, listB)
+    .Call('_linearsdr_list_sum', PACKAGE = 'linearsdr', listA, listB)
 }
 
 matpower_cpp <- function(A, alpha) {
-    .Call(`_linearsdr_matpower_cpp`, A, alpha)
+    .Call('_linearsdr_matpower_cpp', PACKAGE = 'linearsdr', A, alpha)
 }
 
 matcenter_cpp <- function(x_matrix, index = NULL, x0 = NULL) {
-    .Call(`_linearsdr_matcenter_cpp`, x_matrix, index, x0)
+    .Call('_linearsdr_matcenter_cpp', PACKAGE = 'linearsdr', x_matrix, index, x0)
 }
 
 eigen_cpp <- function(A) {
-    .Call(`_linearsdr_eigen_cpp`, A)
+    .Call('_linearsdr_eigen_cpp', PACKAGE = 'linearsdr', A)
 }
 
 gev_cpp <- function(A, B) {
-    .Call(`_linearsdr_gev_cpp`, A, B)
+    .Call('_linearsdr_gev_cpp', PACKAGE = 'linearsdr', A, B)
 }
 
 inv_sympd_cpp <- function(A) {
-    .Call(`_linearsdr_inv_sympd_cpp`, A)
+    .Call('_linearsdr_inv_sympd_cpp', PACKAGE = 'linearsdr', A)
 }
 
 sqrtmat_cpp <- function(A) {
-    .Call(`_linearsdr_sqrtmat_cpp`, A)
+    .Call('_linearsdr_sqrtmat_cpp', PACKAGE = 'linearsdr', A)
 }
 
 chol_cpp <- function(A) {
-    .Call(`_linearsdr_chol_cpp`, A)
+    .Call('_linearsdr_chol_cpp', PACKAGE = 'linearsdr', A)
 }
 
 solve_cpp <- function(A, B) {
-    .Call(`_linearsdr_solve_cpp`, A, B)
+    .Call('_linearsdr_solve_cpp', PACKAGE = 'linearsdr', A, B)
 }
 
 gauss_kern_cpp <- function(centered_data, bw) {
-    .Call(`_linearsdr_gauss_kern_cpp`, centered_data, bw)
+    .Call('_linearsdr_gauss_kern_cpp', PACKAGE = 'linearsdr', centered_data, bw)
 }
 
 wls_cpp <- function(x_matrix, y_matrix, weights, reg) {
-    .Call(`_linearsdr_wls_cpp`, x_matrix, y_matrix, weights, reg)
+    .Call('_linearsdr_wls_cpp', PACKAGE = 'linearsdr', x_matrix, y_matrix, weights, reg)
 }
 
 mgauss_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_mgauss_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+    .Call('_linearsdr_mgauss_loss_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat)
 }
 
 mgauss_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
-    .Call(`_linearsdr_mgauss_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
+    .Call('_linearsdr_mgauss_loss_made', PACKAGE = 'linearsdr', c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
 }
 
 mgauss_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_mgauss_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+    .Call('_linearsdr_mgauss_score_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat)
 }
 
 mgauss_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
-    .Call(`_linearsdr_mgauss_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+    .Call('_linearsdr_mgauss_info_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat)
 }
 
 mnY_to_mvY <- function(mn_y, m_classes, ytype) {
-    .Call(`_linearsdr_mnY_to_mvY`, mn_y, m_classes, ytype)
+    .Call('_linearsdr_mnY_to_mvY', PACKAGE = 'linearsdr', mn_y, m_classes, ytype)
 }
 
 emp_logit <- function(y_matrix, k_vec, tune) {
-    .Call(`_linearsdr_emp_logit`, y_matrix, k_vec, tune)
+    .Call('_linearsdr_emp_logit', PACKAGE = 'linearsdr', y_matrix, k_vec, tune)
 }
 
 emp_adcat <- function(y_matrix, tune) {
-    .Call(`_linearsdr_emp_adcat`, y_matrix, tune)
+    .Call('_linearsdr_emp_adcat', PACKAGE = 'linearsdr', y_matrix, tune)
 }
 
 dot_b_multinom <- function(lin_can_par, k_i, link) {
-    .Call(`_linearsdr_dot_b_multinom`, lin_can_par, k_i, link)
+    .Call('_linearsdr_dot_b_multinom', PACKAGE = 'linearsdr', lin_can_par, k_i, link)
 }
 
 mn_loss_j <- function(c, vj, y_datta, wj, lambda, link, k) {
-    .Call(`_linearsdr_mn_loss_j`, c, vj, y_datta, wj, lambda, link, k)
+    .Call('_linearsdr_mn_loss_j', PACKAGE = 'linearsdr', c, vj, y_datta, wj, lambda, link, k)
 }
 
 mn_score_j <- function(c, vj, y_datta, wj, lambda, link, k) {
-    .Call(`_linearsdr_mn_score_j`, c, vj, y_datta, wj, lambda, link, k)
+    .Call('_linearsdr_mn_score_j', PACKAGE = 'linearsdr', c, vj, y_datta, wj, lambda, link, k)
 }
 
 mn_info_j <- function(c, vj, y_datta, wj, lambda, link, k) {
-    .Call(`_linearsdr_mn_info_j`, c, vj, y_datta, wj, lambda, link, k)
+    .Call('_linearsdr_mn_info_j', PACKAGE = 'linearsdr', c, vj, y_datta, wj, lambda, link, k)
 }
 
 mn_loss_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
-    .Call(`_linearsdr_mn_loss_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
+    .Call('_linearsdr_mn_loss_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat, link, k)
 }
 
 mn_loss_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat) {
-    .Call(`_linearsdr_mn_loss_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
+    .Call('_linearsdr_mn_loss_made', PACKAGE = 'linearsdr', c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
 }
 
 mn_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
-    .Call(`_linearsdr_mn_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
+    .Call('_linearsdr_mn_score_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat, link, k)
 }
 
 mn_score_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat) {
-    .Call(`_linearsdr_mn_score_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
+    .Call('_linearsdr_mn_score_made', PACKAGE = 'linearsdr', c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, link, k, r_mat)
 }
 
 mn_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat, link, k) {
-    .Call(`_linearsdr_mn_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat, link, k)
+    .Call('_linearsdr_mn_info_j_made', PACKAGE = 'linearsdr', c, xj, y_matrix, wj, ahat, Dhat, link, k)
 }
 
 list_mean <- function(est_list) {
-    .Call(`_linearsdr_list_mean`, est_list)
+    .Call('_linearsdr_list_mean', PACKAGE = 'linearsdr', est_list)
 }
 
 aD_j_newton <- function(init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test) {
-    .Call(`_linearsdr_aD_j_newton`, init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test)
+    .Call('_linearsdr_aD_j_newton', PACKAGE = 'linearsdr', init, vj, y_datta, wj, lambda, link, k, tol, max_iter, test)
 }
 
 vecB_hat <- function(c0, score_list, info_list) {
-    .Call(`_linearsdr_vecB_hat`, c0, score_list, info_list)
+    .Call('_linearsdr_vecB_hat', PACKAGE = 'linearsdr', c0, score_list, info_list)
 }
 
 aD_j_cg <- function(init, vj, y_datta, wj, lambda, link, k, control_list, test) {
-    .Call(`_linearsdr_aD_j_cg`, init, vj, y_datta, wj, lambda, link, k, control_list, test)
+    .Call('_linearsdr_aD_j_cg', PACKAGE = 'linearsdr', init, vj, y_datta, wj, lambda, link, k, control_list, test)
 }
 
 vecB_cg <- function(init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test) {
-    .Call(`_linearsdr_vecB_cg`, init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test)
+    .Call('_linearsdr_vecB_cg', PACKAGE = 'linearsdr', init, x_datta, y_datta, bw, ahat_list, Dhat_list, link, k, r_mat, control_list, test)
 }
 
 rcpparma_hello_world <- function() {
-    .Call(`_linearsdr_rcpparma_hello_world`)
+    .Call('_linearsdr_rcpparma_hello_world', PACKAGE = 'linearsdr')
 }
 
 rcpparma_outerproduct <- function(x) {
-    .Call(`_linearsdr_rcpparma_outerproduct`, x)
+    .Call('_linearsdr_rcpparma_outerproduct', PACKAGE = 'linearsdr', x)
 }
 
 rcpparma_innerproduct <- function(x) {
-    .Call(`_linearsdr_rcpparma_innerproduct`, x)
+    .Call('_linearsdr_rcpparma_innerproduct', PACKAGE = 'linearsdr', x)
 }
 
 rcpparma_bothproducts <- function(x) {
-    .Call(`_linearsdr_rcpparma_bothproducts`, x)
+    .Call('_linearsdr_rcpparma_bothproducts', PACKAGE = 'linearsdr', x)
 }
 

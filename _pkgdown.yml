@@ -51,6 +51,7 @@ reference:
     contents:
     - opcg
     - made
+    - opcg_made
     - kfold_km_tuning 
     
   - title: Inverse SDR Methods
