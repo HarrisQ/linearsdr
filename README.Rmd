@@ -1,7 +1,4 @@
----
-title: Linear Sufficient Dimension Reduction
-output: github_document
----
+# Linear Sufficient Dimension Reduction
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(

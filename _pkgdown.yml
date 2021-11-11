@@ -115,7 +115,7 @@ navbar:
       - text: Overview to Linear SDR
         href: articles/linearsdr.html
       - text: Tuning OPCG 
-        href: articles/linearsdr.html  
+        href: articles/Tuning OPCG.html  
       # - text: Example evaluation of FOCUS Example Dataset D
       #   href: articles/FOCUS_D.html
       # - text: Example evaluation of FOCUS Laboratory Data L1 to L3
