@@ -3,6 +3,7 @@
 export(dr)
 export(kfold_km_tuning)
 export(made)
+export(matpower)
 export(opcg)
 export(opcg_made)
 export(save_sdr)

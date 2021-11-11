@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // center_cpp
 Rcpp::NumericVector center_cpp(Rcpp::NumericVector x, Rcpp::Nullable<Rcpp::NumericVector> center);
 RcppExport SEXP _linearsdr_center_cpp(SEXP xSEXP, SEXP centerSEXP) {
