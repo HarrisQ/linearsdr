@@ -9,6 +9,8 @@ using namespace arma;
 // #####################################################
 
 // ##########  Centering function for a vector
+//' @noRd
+//' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector center_cpp(Rcpp::NumericVector x, 
                          Rcpp::Nullable<Rcpp::NumericVector> center = R_NilValue) {
@@ -25,6 +27,8 @@ Rcpp::NumericVector center_cpp(Rcpp::NumericVector x,
 }
 
 // ##########  Standardizing a Vector
+//' @noRd
+//' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector stand_vec_cpp(Rcpp::NumericVector x) {
 
@@ -41,6 +45,8 @@ Rcpp::NumericVector stand_vec_cpp(Rcpp::NumericVector x) {
 
 
 // ##########  Normalizing a Vector 
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::vec normalize_cpp(arma::colvec x) {
@@ -56,7 +62,9 @@ arma::vec normalize_cpp(arma::colvec x) {
   return w;
 }
 
-// ##########  Euclidean Norm  
+// ##########  Euclidean Norm
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 double euc_norm_cpp(arma::vec x) {
@@ -66,6 +74,8 @@ double euc_norm_cpp(arma::vec x) {
 
 // For taking in a list and returning the candidate matrix for OPCG
 
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat list_sum(Rcpp::List listA, Rcpp::List listB){
@@ -99,17 +109,60 @@ arma::mat list_sum(Rcpp::List listA, Rcpp::List listB){
 /////////////////////////////////////////////////////////////////
 
 // ##########  Matrix Power  
-// the matpower function // Need the Rcpp::export always before the function
 
+//' General Matrix Power Function
+//' 
+//' This is an internal function used for computing matrix powers
+//' 
+//' @param a a square matrix 
+//' @param alpha power of matrix to be taken 
+//' @param lead number of leading eigenvalues to consider; default is all
+//' @param ignore decimal place to ignore; default is 10^(-15)
+//'
+//' @return a matrix to the power alpha
+//'
+//' @keywords internal
+//' 
+//' @noRd
+//' @export
+//' 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
-arma::mat matpower_cpp(arma::mat A, double alpha){
+arma::mat matpower_cpp(arma::mat a, double alpha,
+                       Rcpp::Nullable<double> lead = R_NilValue,
+                       Rcpp::Nullable<double> ignore = R_NilValue){
   
   // Declare Types (in Armadillo)
-  arma::vec eigval; arma::mat eigvec;
+  arma::vec eigval; arma::mat eigvec; 
   
-  // Run EigenDecomp on matrix A, symmetrized
-  eig_sym(eigval, eigvec, A = 0.5*( A + A.t() ) ) ;
+  // Run EigenDecomp on matrix a, symmetrized
+  eig_sym(eigval, eigvec, 0.5*( a + a.t() ) ) ;
+  eigvec=fliplr(eigvec); eigval=sort(eigval, "descend"); 
+  
+  
+  arma::uword p; p = eigval.n_elem; 
+  
+  // eigval.elem(find(eigval<1)).fill(0);
+  //arma::uvec ids(p);  
+  
+  
+  if ( ignore.isNotNull() ) { 
+    
+    // Need to assign the ignore value to a double;
+    double ignore_val = Rcpp::as<double>(ignore);
+    
+    eigval.elem(find(eigval<ignore_val)).fill(0);
+    
+  } 
+  
+  if ( lead.isNotNull() ) { 
+    
+    // Need to assign the ignore value to a double;
+    uword trunc_index = Rcpp::as<arma::uword>(lead);
+    
+    eigval.subvec(trunc_index,p-1).fill(0);
+  }
+  
   
   // Return Result
   return eigvec*diagmat(pow(eigval, alpha))*eigvec.t();
@@ -117,7 +170,8 @@ arma::mat matpower_cpp(arma::mat A, double alpha){
 
 // ##########  Matrix Centering  
 // centers the matrix
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat matcenter_cpp(arma::mat x_matrix, 
@@ -137,7 +191,8 @@ arma::mat matcenter_cpp(arma::mat x_matrix,
 }
 
 // For doing eigen decomp of sym pos-def mat
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 Rcpp::List eigen_cpp(arma::mat A){
@@ -157,6 +212,8 @@ Rcpp::List eigen_cpp(arma::mat A){
                             Rcpp::Named("vectors")=fliplr(eigvec) ); 
 }
 
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 Rcpp::List gev_cpp(arma::mat A, 
@@ -184,7 +241,8 @@ Rcpp::List gev_cpp(arma::mat A,
 
 
 // For doing inverse of sym pos-def mat
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat inv_sympd_cpp(arma::mat A){ 
@@ -196,7 +254,8 @@ arma::mat inv_sympd_cpp(arma::mat A){
 }
 
 // For doing sqrt of sym pos-def mat
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat sqrtmat_cpp(arma::mat A){ 
@@ -209,7 +268,8 @@ arma::mat sqrtmat_cpp(arma::mat A){
 
 
 // For doing chol decom of mat
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat chol_cpp(arma::mat A ){ 
@@ -223,7 +283,8 @@ arma::mat chol_cpp(arma::mat A ){
 
 // For doing solving linear systems
 // Standardizing a random matrix or variable is an example of this
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat solve_cpp(arma::mat A,
@@ -239,7 +300,8 @@ arma::mat solve_cpp(arma::mat A,
 //////////////////////////////////////////
 // ########## Gaussian kernel Weight Function 
 ///////////////////////////////////////////
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::vec gauss_kern_cpp(arma::mat centered_data, double bw ) {
@@ -265,7 +327,8 @@ arma::vec gauss_kern_cpp(arma::mat centered_data, double bw ) {
 // #####################################################
 // Weighted Least Squares
 // #####################################################
-
+//' @noRd
+//' @export
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat wls_cpp(arma::mat x_matrix, 

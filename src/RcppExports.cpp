@@ -69,14 +69,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // matpower_cpp
-arma::mat matpower_cpp(arma::mat A, double alpha);
-RcppExport SEXP _linearsdr_matpower_cpp(SEXP ASEXP, SEXP alphaSEXP) {
+arma::mat matpower_cpp(arma::mat a, double alpha, Rcpp::Nullable<double> lead, Rcpp::Nullable<double> ignore);
+RcppExport SEXP _linearsdr_matpower_cpp(SEXP aSEXP, SEXP alphaSEXP, SEXP leadSEXP, SEXP ignoreSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type a(aSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(matpower_cpp(A, alpha));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<double> >::type lead(leadSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<double> >::type ignore(ignoreSEXP);
+    rcpp_result_gen = Rcpp::wrap(matpower_cpp(a, alpha, lead, ignore));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -580,7 +582,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_linearsdr_normalize_cpp", (DL_FUNC) &_linearsdr_normalize_cpp, 1},
     {"_linearsdr_euc_norm_cpp", (DL_FUNC) &_linearsdr_euc_norm_cpp, 1},
     {"_linearsdr_list_sum", (DL_FUNC) &_linearsdr_list_sum, 2},
-    {"_linearsdr_matpower_cpp", (DL_FUNC) &_linearsdr_matpower_cpp, 2},
+    {"_linearsdr_matpower_cpp", (DL_FUNC) &_linearsdr_matpower_cpp, 4},
     {"_linearsdr_matcenter_cpp", (DL_FUNC) &_linearsdr_matcenter_cpp, 3},
     {"_linearsdr_eigen_cpp", (DL_FUNC) &_linearsdr_eigen_cpp, 1},
     {"_linearsdr_gev_cpp", (DL_FUNC) &_linearsdr_gev_cpp, 2},
