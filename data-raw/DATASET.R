@@ -4,6 +4,9 @@ set.seed(2021)
 #### NASA Airfoil Dataset ----
 airfoil_datta = read.table("data-raw/airfoil_self_noise.dat", header=F, skip=0)
 
+sample_set = sample(1:dim(airfoil_datta)[1], 500)
+airfoil_datta = airfoil_datta[sample_set,]
+
 usethis::use_data(airfoil_datta, overwrite = TRUE)
 
 #### Energy Efficiency Dataset ----

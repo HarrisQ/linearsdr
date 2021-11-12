@@ -1,8 +1,8 @@
 ---
-title: "Linear SDR for scalar Y, Ex 3"
+title: "Linear SDR for scalar Y, Ex3"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Linear SDR for scalar Y, Ex 3}
+  %\VignetteIndexEntry{Linear SDR for scalar Y, Ex3}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -43,7 +43,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
 
 
 
-```{r, figures-side, fig.show="hold", out.width="100%"}
+```{r, figures-side, fig.show="hold", out.width="45%"}
 # Sliced Average Variance Estimator
 
 b_hat_save = save_sdr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
@@ -65,14 +65,14 @@ reg_save_plot=linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save_reg[,1]),
                                       size=2)
 
 
-as_ggplot(do.call("grid.arrange", c(list(save_plot, reg_save_plot), nrow=1, ncol=2)))
+# as_ggplot(do.call("grid.arrange", c(list(save_plot, reg_save_plot), nrow=1, ncol=2)))
 
-# save_plot; reg_save_plot;
+save_plot; reg_save_plot;
 
 ```
 
 
-```{r, figures-side, fig.show="hold", out.width="50%"}
+```{r}
 # Directional Regression
 
 b_hat_dr = dr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
