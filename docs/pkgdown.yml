@@ -4,8 +4,10 @@ pkgdown_sha: 8122179c440692487eda000d6542d7734a37d36d
 articles:
   linearsdr: linearsdr.html
   sdr_airfoil: sdr_airfoil.html
+  sdr_energy: sdr_energy.html
+  sdr_fish: sdr_fish.html
   Tuning OPCG: Tuning OPCG.html
-last_built: 2021-11-11T23:32Z
+last_built: 2021-11-12T01:48Z
 urls:
   reference: https://github.com/HarrisQ/linearsdr/reference
   article: https://github.com/HarrisQ/linearsdr/articles
