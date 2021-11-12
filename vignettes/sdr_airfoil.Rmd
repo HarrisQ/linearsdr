@@ -35,7 +35,7 @@ b_hat_sir = sir(x=X, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
 linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
                         ytype="continuous",
                         h_lab='SIR 1', v_lab='Y',
-                        main_lab= paste0('SIR'), size=3)
+                        main_lab= paste0('SIR'), size=2.5)
 
 ```
 ```{r}
@@ -47,7 +47,7 @@ b_hat_save = save_sdr(x=X, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
 linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save[,1]), y_on_axis=T, 
                         ytype="continuous",
                         h_lab='DR 1', v_lab='Y',
-                        main_lab= paste0('DR'), size=3)
+                        main_lab= paste0('DR'), size=2.5)
 
 
 
@@ -63,7 +63,7 @@ b_hat_dr = dr(x=X, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
 linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr[,1]), y_on_axis=T, 
                         ytype="continuous",
                         h_lab='DR 1', v_lab='Y',
-                        main_lab= paste0('DR'), size=3)
+                        main_lab= paste0('DR'), size=2.5)
 
 
 
@@ -100,7 +100,7 @@ b_hat_opg = opcg(x=X_std, y=Y, bw = 5, d=2, ytype = "continuous",
 linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
                         ytype="continuous",
                         h_lab='OPG 1', v_lab='OPG 2',
-                        main_lab= paste0('OPG'), size=3)
+                        main_lab= paste0('OPG'), size=2.5)
 
 ```
 
