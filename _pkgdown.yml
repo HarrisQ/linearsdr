@@ -18,94 +18,12 @@ template:
   params:
     bootswatch: simplex
     ganalytics: G-1XP1GZGPTF
-  # includes:
-  #   in_header:
-  #     <script defer data-domain="pkgdown.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
-
+    
 code:
   width: 72
 
 development:
   mode: auto
-
-# articles:
-# - title: Customise your site
-#   navbar: ~
-#   contents:
-#   - pkgdown
-#   - customise
-#   - linking
-#   - search
-#   - metadata
-# - title: Testing
-#   desc: >
-#     These articles are used to test various pkgdown features that can not
-#     easily be tested automatically.
-#   contents:
-#   - starts_with("test")
-# 
-
-reference:
-  - title: Forward SDR Methods
-    desc:  Methods that are considered Forward SDR methods, along with their related functions
-    contents:
-    - opcg
-    - made
-    - opcg_made
-    - kfold_km_tuning 
-    
-  - title: Inverse SDR Methods
-    desc:  Methods that are considered Inverse SDR methods, along with their related functions
-    contents:
-    - sir
-    - save_sdr
-    - dr
-    
-  - title: Example Data
-    desc: Some datasets used in this package as examples 
-    contents:
-    - airfoil_datta
-    - crime_datta
-    - supercond_datta
-    - energy_datta
-    
-# - title: Build
-#   desc:  Build a complete site or one of its components.
-#   contents:
-#   - build_site
-#   - build_articles
-#   - build_favicons
-#   - build_home
-#   - build_news
-#   - build_tutorials
-#   - build_reference
-#   - build_search
-#   - init_site
-#   - preview_site
-#   - pkgdown_sitrep
-# 
-# - title: Deployment
-#   contents:
-#   - starts_with("deploy_")
-#   - build_site_github_pages
-# 
-# - title: Templates
-#   contents:
-#   - template_navbar
-#   - render_page
-# 
-# - title: Helpers
-#   contents:
-#   - clean_site
-#   - rd2html
-#   - as_pkgdown
-#   - in_pkgdown
-# 
-# - title: Regression tests
-#   contents:
-#   - starts_with("test", internal = TRUE)
-# 
-# changelog:
 
 navbar:
   # title: ~
@@ -138,6 +56,49 @@ navbar:
         
     - text: Functions and Datasets
       href: reference/index.html  
+      
     - text: changelog
       href: index.html
+      
+      
+reference:
+  - title: Forward SDR Methods
+    desc:  Methods that are considered Forward SDR methods, along with their related functions
+    contents:
+    - opcg
+    - made
+    - opcg_made
+    - kfold_km_tuning 
+    
+  - title: Inverse SDR Methods
+    desc:  Methods that are considered Inverse SDR methods, along with their related functions
+    contents:
+    - sir
+    - save_sdr
+    - dr
+    
+  - title: Example Data
+    desc: Some datasets used in this package as examples 
+    contents:
+    - airfoil_datta
+    - crime_datta
+    - supercond_datta
+    - energy_datta
 
+
+# articles:
+# - title: Customise your site
+#   navbar: ~
+#   contents:
+#   - pkgdown
+#   - customise
+#   - linking
+#   - search
+#   - metadata
+# - title: Testing
+#   desc: >
+#     These articles are used to test various pkgdown features that can not
+#     easily be tested automatically.
+#   contents:
+#   - starts_with("test")
+# 

@@ -80,8 +80,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # This is just OPG, with the WLS as the exact solution per j
     mv_Y=y_matrix; m=dim(y_matrix)[1];
     
-    linktype="continuous";
-    k_vec = rep(1, n);  
+    linktype="continuous"; # redundant; for convenience/lazy of coding
+    k_vec = rep(1, n);  # redundant; for convenience/lazy of coding
     
     # Loss function
     loss_made = function(c_param){
@@ -147,14 +147,32 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
         Xj=linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL);
         Wj=linearsdr:::gauss_kern_cpp( t(r_mat)%*%Xj,bw)
         
-        # Loss functions and related functions
         
-        score_j=linearsdr:::mn_score_j_made(c_param, Xj, mv_Y, Wj,
-                                            ahat=ahat_list[[j]], Dhat = Dhat_list[[j]],
-                                            link=linktype, k=k_vec);
-        info_j=linearsdr:::mn_info_j_made(c_param, Xj, mv_Y, Wj,
-                                          ahat=(ahat_list[[j]]), Dhat = Dhat_list[[j]],
-                                          link=linktype, k=k_vec) ;
+        
+        
+        # score and info for multinomial Y
+        if (ytype %in% c( "cat", "ord-cat") ) {
+          score_j=linearsdr:::mn_score_j_made(c_param, Xj, mv_Y, Wj,
+                                              ahat=ahat_list[[j]], Dhat = Dhat_list[[j]],
+                                              link=linktype, k=k_vec);
+          info_j=linearsdr:::mn_info_j_made(c_param, Xj, mv_Y, Wj,
+                                            ahat=(ahat_list[[j]]), Dhat = Dhat_list[[j]],
+                                            link=linktype, k=k_vec) ;
+        } else if ( ytype %in% c( "continuous" ) ) {
+          score_j=linearsdr:::mgauss_score_j_made(c=c_param, 
+                                                  xj, 
+                                                  y_matrix=mv_Y, 
+                                                  wj=Wj, 
+                                                  ahat=ahat_list[[j]], 
+                                                  Dhat = Dhat_list[[j]]);
+          info_j=linearsdr:::mgauss_info_j_made(c=c_param, 
+                                                xj, 
+                                                y_matrix=mv_Y, 
+                                                wj=Wj, 
+                                                ahat=ahat_list[[j]], 
+                                                Dhat = Dhat_list[[j]]);
+        }
+        
         
         return(list(score=score_j, info=info_j))
       } # c_list_newton_j(c_init,231)
@@ -166,7 +184,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
         # list of info
         c_list_newton = foreach::foreach(j = iterators::icount(n),
                                   .packages = "linearsdr",
-                                  .export=c("x_matrix",
+                                  .export=c("ytype",
+                                            "x_matrix",
                                             "mv_Y",
                                             "r_mat", "bw",
                                             "ahat_list" ,"Dhat_list",
