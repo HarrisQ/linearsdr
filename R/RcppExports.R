@@ -116,8 +116,16 @@ mgauss_score_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
     .Call(`_linearsdr_mgauss_score_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
 }
 
+mgauss_score_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
+    .Call(`_linearsdr_mgauss_score_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
+}
+
 mgauss_info_j_made <- function(c, xj, y_matrix, wj, ahat, Dhat) {
     .Call(`_linearsdr_mgauss_info_j_made`, c, xj, y_matrix, wj, ahat, Dhat)
+}
+
+mgauss_info_made <- function(c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat) {
+    .Call(`_linearsdr_mgauss_info_made`, c, x_matrix, y_matrix, bw, ahat_list, Dhat_list, r_mat)
 }
 
 mnY_to_mvY <- function(mn_y, m_classes, ytype) {

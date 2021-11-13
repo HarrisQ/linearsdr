@@ -60,12 +60,12 @@ arma::mat mgauss_loss_j_made(arma::vec c,
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 arma::mat mgauss_loss_made(arma::vec c, 
-                       arma::mat x_matrix, 
-                       arma::mat y_matrix, 
-                       double bw, 
-                       Rcpp::List ahat_list,
-                       Rcpp::List Dhat_list,
-                       arma::mat r_mat) { 
+                           arma::mat x_matrix, 
+                           arma::mat y_matrix, 
+                           double bw, 
+                           Rcpp::List ahat_list,
+                           Rcpp::List Dhat_list,
+                           arma::mat r_mat) { 
   
   arma::uword n=y_matrix.n_cols;  
   arma::mat mean_nll(1,1); mean_nll.zeros();  
@@ -129,6 +129,44 @@ arma::mat mgauss_score_j_made(arma::vec c,
   
 };
 
+// A score function for whole MADE 
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export]]
+arma::mat mgauss_score_made(arma::vec c, 
+                            arma::mat x_matrix, 
+                            arma::mat y_matrix, 
+                            double bw, 
+                            Rcpp::List ahat_list,
+                            Rcpp::List Dhat_list,
+                            arma::mat r_mat) { 
+  
+  arma::uword n=y_matrix.n_cols;
+  arma::uword m=y_matrix.n_rows;
+  arma::uword pm=c.n_elem;
+  arma::mat I(m,m); I.eye();
+  
+  arma::mat mean_score(pm,1); mean_score.zeros();
+  
+  // Writing the For loop instead of sapply.
+  arma::uword j;
+  
+  for (j = 0; j < n; j++ ) {
+    arma::vec ahat = ahat_list[j]; 
+    arma::mat Dhat = Dhat_list[j];
+    
+    arma::mat xj = x_matrix;
+    xj.each_col() -= xj.col(j); 
+    arma::mat Bxj = r_mat.t()*xj;
+    
+    arma::vec wj = gauss_kern_cpp(Bxj, bw); 
+    
+    mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
+  }  
+  
+  return mean_score;
+  
+  
+} ;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
@@ -165,3 +203,41 @@ arma::mat mgauss_info_j_made(arma::vec c,
   
 };
 
+// A info function for whole MADE 
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::export]]
+arma::mat mgauss_info_made(arma::vec c, 
+                           arma::mat x_matrix, 
+                           arma::mat y_matrix, 
+                           double bw, 
+                           Rcpp::List ahat_list,
+                           Rcpp::List Dhat_list,
+                           arma::mat r_mat) { 
+  
+  arma::uword n=y_matrix.n_cols;
+  arma::uword m=y_matrix.n_rows;
+  arma::uword pm=c.n_elem;
+  arma::mat I(m,m); I.eye();
+  
+  arma::mat mean_info(pm,pm); mean_info.zeros();
+  
+  // Writing the For loop instead of sapply.
+  arma::uword j;
+  
+  for (j = 0; j < n; j++ ) {
+    arma::vec ahat = ahat_list[j]; 
+    arma::mat Dhat = Dhat_list[j];
+    
+    arma::mat xj = x_matrix;
+    xj.each_col() -= xj.col(j); 
+    arma::mat Bxj = r_mat.t()*xj;
+    
+    arma::vec wj = gauss_kern_cpp(Bxj, bw); 
+    
+    mean_info += mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
+  }  
+  
+  return mean_info;
+  
+  
+} ;

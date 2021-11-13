@@ -426,8 +426,15 @@ arma::vec vecB_cg(arma::vec init,
   
   arma::mat nll_now(1,1);  
   arma::vec grad_now;
-  nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
-  grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
+  
+  if (link == "continuous"){
+    nll_now = mgauss_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
+    grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
+  } else {
+    nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
+    grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
+  }
+  
   arma::vec p_now = -grad_now; 
   
   arma::vec c_next;
@@ -454,8 +461,13 @@ arma::vec vecB_cg(arma::vec init,
       arma::vec c_search; c_search = c_now + pow(beta_bt,m_cg)*s_now*p_now;
       
       double suff_dec_ag;
-      suff_dec_ag = as_scalar( mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) 
-                                 - mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+      if (link == "continuous"){
+        suff_dec_ag = as_scalar( mgauss_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list, r_mat) 
+                                   - mgauss_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list, r_mat) );
+      } else {
+        suff_dec_ag = as_scalar( mn_loss_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) 
+                                   - mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+      }
       int armijo_cond = (suff_dec_ag <= armijo_bound);
       
       // things(3)=suff_dec_ag;
@@ -480,8 +492,11 @@ arma::vec vecB_cg(arma::vec init,
         
         // evaluation for curvature in weak wolfe
         double curv_wolfe;
-        curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
-        
+        if (link == "continuous"){
+          curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+        } else {
+          curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+        }
         wolfe_cond =+ (curv_wolfe <= wolfe_bound);
         
         // things(5)=wolfe_bound;things(6)= curv_wolfe;
@@ -505,8 +520,11 @@ arma::vec vecB_cg(arma::vec init,
     
     // #Step 2a: Compute Loss;
     arma::mat nll_next(1,1);
-    nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;
-
+    if (link == "continuous"){
+      nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;  
+    } else {
+      nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;
+    }
     double nll_dist; nll_dist = as_scalar( nll_now - nll_next);
     
     if (test) {
@@ -520,9 +538,14 @@ arma::vec vecB_cg(arma::vec init,
     } else {
 
       // #Step 2b: Compute gradient;
-      arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
+      if (link == "continuous"){
+        arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
                                             bw,ahat_list, Dhat_list,link,k,r_mat) ;
-
+        
+      } else {
+        arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
+                                              bw,ahat_list, Dhat_list,link,k,r_mat) ;
+      }
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
       double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
