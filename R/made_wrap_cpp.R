@@ -328,7 +328,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     
   } 
   
-  if ( dim(y)[1] !== dim(x)[1] ){
+  if ( dim(y)[1] != dim(x)[1] ){
     stop("This is an error message")
   }
   
