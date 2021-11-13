@@ -78,6 +78,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # This is just OPG, with the WLS as the exact solution per j
     mv_Y=y_matrix; m=dim(y_matrix)[1];
     
+    linktype="continuous";
+    
     # # Loss function
     # loss_made = function(c_param){ 
     #   mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
@@ -326,6 +328,10 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                  method=list(opcg="newton", made="newton"), parallelize=F, r_mat=NULL,
                  control_list=list()) {
   
+  # x=t(X); y=t(Y); d=3; bw=1; lambda=0; B_mat=NULL; ytype="continuous";
+  # method=list(opcg="cg", made="cg"); parallelize=T; r_mat=NULL;
+  # control_list = list(print_iter=T, max_iter_made=25)
+  
   if (!is.matrix(y)) {
     n=length(y)
     y = matrix(y, ncol=1, nrow = n )
@@ -338,10 +344,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   
   x_matrix=x; y_matrix=y
   
-  # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="cat";
-  # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="cat";
-  # method=list(opcg="newton", made="newton"); parallelize=T; r_mat=NULL;
-  # control_list=list(c_ag2=.9, print_iter=T, max_iter_made=25)
+  
   
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
