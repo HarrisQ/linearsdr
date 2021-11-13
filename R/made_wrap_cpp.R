@@ -336,6 +336,8 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     stop("This is an error message")
   }
   
+  x_matrix=x; y_matrix=y
+  
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="cat";
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="cat";
   # method=list(opcg="newton", made="newton"); parallelize=T; r_mat=NULL;
