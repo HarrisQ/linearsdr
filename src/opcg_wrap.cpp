@@ -549,9 +549,9 @@ arma::vec vecB_cg(arma::vec init,
       }
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
-      double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
-                                     ( grad_now.t()*grad_now ) );  
-      
+      // double beta_cg_fr = as_scalar( ( grad_next.t()*grad_next )/
+      //                                ( grad_now.t()*grad_now ) );  
+
       // Dai-Yuan
       double beta_cg_dy = as_scalar( ( grad_next.t()*grad_next )/
                                      ( p_now.t()*(grad_next-grad_now) ) );
