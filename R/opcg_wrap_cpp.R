@@ -50,7 +50,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
                       method="newton", parallelize=F, r_mat=NULL, 
                       control_list=list()) {
   
-  # y.matrix should be m x n, with m depending on ytype
+  # y_matrix should be n x m, 
+  # x_matrix should be n x p,
+  # We then transpose them 
   
   # Supported ytypes are 
   # continuous: Defaults to Squared Loss
@@ -68,13 +70,13 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # Transform X into p x n and Y into m x n since that's how the code
   # was originally written
   
-  if ( dim(x_matrix)[2] != dim(y_matrix)[2] ){
+  if ( dim(x_matrix)[1] != dim(y_matrix)[1] ){
     
     if( which(dim(x_matrix) %in% dim(y_matrix)) == 1 ) {
-      x_matrix = t(x_matrix)
+      y_matrix = t(y_matrix);
       
     } else if ( which(dim(x_matrix) %in% dim(y_matrix)) == 2 ) {
-      y_matrix = t(y_matrix);
+      x_matrix = t(x_matrix);
     }
       
   } 
@@ -460,6 +462,7 @@ opcg_wrap <- function(x_matrix, y_matrix, d, bw, lambda, ytype='continuous',
 opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
                  method="newton", parallelize=F, r_mat = NULL,
                  control_list=list()) {
+  # X should be 'nxp' and Y should be 'nxm'
   
   # x=X; y=c(Y); d; bw;
   # ytype ='cat';
@@ -469,11 +472,11 @@ opcg <- function(x, y, d, bw, lambda=0, ytype='continuous',
   
   if (!is.matrix(y)) {
     n=length(y)
-    y = matrix(y, ncol=n, nrow = 1 )
+    y = matrix(y, ncol=1, nrow = n )
     
   } 
   
-  if ( dim(y)[2] == dim(x)[1] ){
+  if ( dim(y)[1] == dim(x)[1] ){
     beta=opcg_wrap(x_matrix = x, y_matrix = y, d, bw,lambda, ytype,
                    method, parallelize, r_mat,
                    control_list)$opcg 

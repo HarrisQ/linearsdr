@@ -34,6 +34,21 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                        method, parallelize=F, r_mat=NULL,
                        control_list=list()) {
   
+  # y_matrix should be n x m, 
+  # x_matrix should be n x p,
+  # We then transpose them 
+  
+  if ( dim(x_matrix)[1] != dim(y_matrix)[1] ){
+    
+    if( which(dim(x_matrix) %in% dim(y_matrix)) == 1 ) {
+      y_matrix = t(y_matrix);
+      
+    } else if ( which(dim(x_matrix) %in% dim(y_matrix)) == 2 ) {
+      x_matrix = t(x_matrix);
+    }
+    
+  } 
+  
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args); 
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
@@ -303,9 +318,19 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 #'  
 #' @export
 #' 
-made <- function(x_matrix, y_matrix, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
+made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                  method=list(opcg="newton", made="newton"), parallelize=F, r_mat=NULL,
                  control_list=list()) {
+  
+  if (!is.matrix(y)) {
+    n=length(y)
+    y = matrix(y, ncol=1, nrow = n )
+    
+  } 
+  
+  if ( dim(y)[1] !== dim(x)[1] ){
+    stop("This is an error message")
+  }
   
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=B_hat_opcg; ytype="cat";
   # x_matrix=X; y_matrix=Y; d; bw; B_mat=NULL; ytype="cat";
@@ -325,7 +350,7 @@ made <- function(x_matrix, y_matrix, d, bw, lambda=0, B_mat=NULL, ytype="continu
   
   
   # Setting parameters
-  p = dim(x_matrix)[1];
+  p = dim(x_matrix)[2];
   if (is.null(B_mat)) B_mat= diag(1,p,d);
   if (is.null(r_mat)) r_mat= diag(1,p,p);
   
