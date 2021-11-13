@@ -425,7 +425,7 @@ arma::vec vecB_cg(arma::vec init,
   arma::vec c_now = init; 
   
   arma::mat nll_now(1,1);  
-  arma::vec grad_now;
+  arma::mat grad_now;
   
   if (link == "continuous"){
     nll_now = mgauss_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
@@ -539,11 +539,11 @@ arma::vec vecB_cg(arma::vec init,
 
       // #Step 2b: Compute gradient;
       if (link == "continuous"){
-        arma::vec grad_next = mgauss_score_made(c_next,x_datta,y_datta,
+        arma::mat grad_next = mgauss_score_made(c_next,x_datta,y_datta,
                                                 bw,ahat_list, Dhat_list,link,k,r_mat) ;
         
       } else {
-        arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
+        arma::mat grad_next = mn_score_made(c_next,x_datta,y_datta,
                                               bw,ahat_list, Dhat_list,link,k,r_mat) ;
       }
       // Step 3: Compute the coeffiecient
