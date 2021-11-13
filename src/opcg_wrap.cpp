@@ -429,7 +429,7 @@ arma::vec vecB_cg(arma::vec init,
   
   if (link == "continuous"){
     nll_now = mgauss_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
-    grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
+    grad_now = mgauss_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,r_mat);
   } else {
     nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
     grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
@@ -493,7 +493,7 @@ arma::vec vecB_cg(arma::vec init,
         // evaluation for curvature in weak wolfe
         double curv_wolfe;
         if (link == "continuous"){
-          curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
+          curv_wolfe = as_scalar( p_now.t()*mgauss_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
         } else {
           curv_wolfe = as_scalar( p_now.t()*mn_score_made(c_search,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) );
         }
@@ -521,7 +521,7 @@ arma::vec vecB_cg(arma::vec init,
     // #Step 2a: Compute Loss;
     arma::mat nll_next(1,1);
     if (link == "continuous"){
-      nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;  
+      nll_next=mgauss_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;  
     } else {
       nll_next=mn_loss_made(c_next,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat) ;
     }
@@ -539,8 +539,8 @@ arma::vec vecB_cg(arma::vec init,
 
       // #Step 2b: Compute gradient;
       if (link == "continuous"){
-        arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
-                                            bw,ahat_list, Dhat_list,link,k,r_mat) ;
+        arma::vec grad_next = mgauss_score_made(c_next,x_datta,y_datta,
+                                                bw,ahat_list, Dhat_list,link,k,r_mat) ;
         
       } else {
         arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
