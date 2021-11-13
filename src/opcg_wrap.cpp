@@ -538,13 +538,14 @@ arma::vec vecB_cg(arma::vec init,
     } else {
 
       // #Step 2b: Compute gradient;
+      arma::vec grad_next;
       if (link == "continuous"){
-        arma::vec grad_next = mgauss_score_made(c_next,x_datta,y_datta,
-                                                bw,ahat_list, Dhat_list,r_mat) ;
+        grad_next = mgauss_score_made(c_next,x_datta,y_datta,
+                                      bw,ahat_list, Dhat_list,r_mat) ;
         
       } else {
-        arma::vec grad_next = mn_score_made(c_next,x_datta,y_datta,
-                                              bw,ahat_list, Dhat_list,link,k,r_mat) ;
+        grad_next = mn_score_made(c_next,x_datta,y_datta,
+                                  bw,ahat_list, Dhat_list,link,k,r_mat) ;
       }
       // Step 3: Compute the coeffiecient
       // Fletcher-Reeves
