@@ -97,8 +97,8 @@
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">supercond_datta</span><span class="op">)</span>
 <span class="co">#&gt; [1] 500  82</span>
 
-<span class="va">X</span> <span class="op">=</span> <span class="va">supercond_datta</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">81</span><span class="op">]</span>
-<span class="va">Y</span> <span class="op">=</span> <span class="va">supercond_datta</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="fl">82</span><span class="op">]</span></code></pre></div>
+<span class="va">X</span> <span class="op">=</span> <span class="va">supercond_datta</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">81</span><span class="op">]</span>
+<span class="va">Y</span> <span class="op">=</span> <span class="va">supercond_datta</span><span class="op">[</span>, <span class="fl">82</span><span class="op">]</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
 
@@ -109,7 +109,7 @@
 <span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_supercond_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
@@ -123,14 +123,14 @@
 <span class="va">save_plot</span><span class="op">=</span><span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span>
 
 <span class="va">reg_save_plot</span><span class="op">=</span><span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,
                                       y_on_axis<span class="op">=</span><span class="cn">T</span>,
                                       ytype<span class="op">=</span><span class="st">"continuous"</span>,
                                       h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                                       main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized SAVE'</span><span class="op">)</span>,
-                                      size<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+                                      size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span>
 
 
 <span class="co"># as_ggplot(do.call("grid.arrange", c(list(save_plot, reg_save_plot), nrow=1, ncol=2)))</span>
@@ -158,7 +158,7 @@
 <span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_supercond_files/figure-html/unnamed-chunk-3-2.png" width="700"></p>
 <p>Forward methods using OPG</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -194,7 +194,7 @@
 <span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_supercond_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
   </div>
  <div class="col-md-3" id="pkgdown-sidebar">

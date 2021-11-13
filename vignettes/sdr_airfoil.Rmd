@@ -107,16 +107,16 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 ```{r}
 # MAVE Estimate
 n=length(Y)
-b_hat_made = made(x=t(X_std), matrix(Y, nrow = 1, ncol=n), bw=5, d=2,
-                  ytype='continuous',
-                  method=list(opcg="cg", made="cg"), B_mat = NULL,
-                  parallelize=T,
-                  control_list=list(print_iter=T) ) 
-
-
-linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
-                        ytype="continuous",
-                        h_lab='MADE 1', v_lab='Y',
-                        main_lab= paste0('MADE'), size=2.5)
+# b_hat_made = made(x=t(X_std), matrix(Y, nrow = 1, ncol=n), bw=5, d=2,
+#                   ytype='continuous',
+#                   method=list(opcg="cg", made="cg"), B_mat = NULL,
+#                   parallelize=T,
+#                   control_list=list(print_iter=T) ) 
+# 
+# 
+# linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
+#                         ytype="continuous",
+#                         h_lab='MADE 1', v_lab='Y',
+#                         main_lab= paste0('MADE'), size=2.5)
 
 ```

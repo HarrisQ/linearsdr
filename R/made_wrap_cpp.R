@@ -79,6 +79,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     mv_Y=y_matrix; m=dim(y_matrix)[1];
     
     linktype="continuous";
+    k_vec = rep(1, n);  
     
     # # Loss function
     # loss_made = function(c_param){ 
