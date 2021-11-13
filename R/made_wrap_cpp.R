@@ -34,6 +34,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                        method, parallelize=F, r_mat=NULL,
                        control_list=list()) {
   
+  # aD_list = aDhat; method="cg"
+  
   # y_matrix should be n x m, 
   # x_matrix should be n x p,
   # We then transpose them 
@@ -81,11 +83,16 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     linktype="continuous";
     k_vec = rep(1, n);  
     
-    # # Loss function
-    # loss_made = function(c_param){ 
-    #   mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
-    #                link=linktype, k=k_vec, r_mat)
-    # } # End of Loss function
+    # Loss function
+    loss_made = function(c_param){
+      linearsdr:::mgauss_loss_made(c=c_param, 
+                       x_matrix, 
+                       y_matrix=mv_Y, 
+                       bw, 
+                       ahat_list,
+                       Dhat_list,
+                       r_mat)
+    } # End of Loss function
     # loss_made(c_init)
     
 
@@ -122,7 +129,8 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
   } # end of setting up response
   
   
-  # Running Optimization algorithm
+  # Running Optimization algorithm; but this is for multinomial Y....
+  # Need to include the continuous option....
   
   if (method=="newton") {
     # Estimation using Newton-Raphson
@@ -369,7 +377,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                   method=method$opcg, parallelize, r_mat=NULL,
                   control_list);
   # Block step for B parameter
-  c_0=made_update(x_matrix, y_matrix, d, bw,
+  c_0=linearsdr:::made_update(x_matrix, y_matrix, d, bw,
                   aD_list = aDhat,
                   B_mat, ytype, method=method$made, parallelize, r_mat,
                   control_list);
