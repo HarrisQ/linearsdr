@@ -34,11 +34,26 @@ arma::mat mgauss_score_j_made(arma::vec c,
                           arma::vec ahat,
                           arma::mat Dhat);
 
+arma::mat mgauss_score_made(arma::vec c, 
+                            arma::mat xj, 
+                            arma::mat y_matrix, 
+                            arma::vec wj, 
+                            arma::vec ahat,
+                            arma::mat Dhat);
+
+
 arma::mat mgauss_info_j_made(arma::vec c, 
                          arma::mat xj, 
                          arma::mat y_matrix, 
                          arma::vec wj, 
                          arma::vec ahat,
                          arma::mat Dhat);
+
+arma::mat mgauss_info_made(arma::vec c, 
+                           arma::mat xj, 
+                           arma::mat y_matrix, 
+                           arma::vec wj, 
+                           arma::vec ahat,
+                           arma::mat Dhat);
 
 #endif
