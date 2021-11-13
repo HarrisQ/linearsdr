@@ -60,6 +60,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # ordinal: Multinomial-Ordinal GLM with ordinal link  
   # other: Custom Loss Functions - to be done at a later date
   
+  # x_matrix=t(X); y_matrix=t(Y);
+  # d=3; bw=1; lambda=0; ytype='continuous';
+  # method="cg"; parallelize=T
    
   # x_matrix=X; y_matrix=Y;
   # bw=1;  ytype="cat"; #"continuous";#"multinomial";
@@ -80,6 +83,10 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
     }
       
   } 
+  
+  # transpose them now
+  x_matrix=t(x_matrix); 
+  y_matrix=t(y_matrix)
   
   # Parameters for the problem/model
   p <- dim(x_matrix)[1]; n <- dim(x_matrix)[2]; 

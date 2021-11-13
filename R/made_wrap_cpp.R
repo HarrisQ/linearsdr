@@ -49,6 +49,10 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     
   } 
   
+  # transpose them now
+  x_matrix=t(x_matrix); 
+  y_matrix=t(y_matrix)
+  
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args); 
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
