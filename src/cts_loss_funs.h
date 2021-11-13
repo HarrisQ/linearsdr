@@ -39,7 +39,8 @@ arma::mat mgauss_score_made(arma::vec c,
                             arma::mat y_matrix, 
                             double bw, 
                             arma::vec ahat,
-                            arma::mat Dhat);
+                            arma::mat Dhat,
+                            arma::mat r_mat);
 
 
 arma::mat mgauss_info_j_made(arma::vec c, 
@@ -54,6 +55,7 @@ arma::mat mgauss_info_made(arma::vec c,
                            arma::mat y_matrix, 
                            double bw, 
                            arma::vec ahat,
-                           arma::mat Dhat);
+                           arma::mat Dhat,
+                           arma::mat r_mat);
 
 #endif
