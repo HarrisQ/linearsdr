@@ -86,12 +86,12 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # Loss function
     loss_made = function(c_param){
       linearsdr:::mgauss_loss_made(c=c_param, 
-                       x_matrix, 
-                       y_matrix=mv_Y, 
-                       bw, 
-                       ahat_list,
-                       Dhat_list,
-                       r_mat)
+                                   x_matrix, 
+                                   y_matrix=mv_Y, 
+                                   bw, 
+                                   ahat_list,
+                                   Dhat_list,
+                                   r_mat)
     } # End of Loss function
     # loss_made(c_init)
     
