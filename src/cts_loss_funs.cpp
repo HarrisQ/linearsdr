@@ -159,7 +159,7 @@ arma::mat mgauss_score_made(arma::vec c,
     
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
-    mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat); 
+    mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
     
   } 
   
@@ -271,7 +271,7 @@ arma::mat mgauss_info_made(arma::vec c,
     
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
-    mean_info += mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat); 
+    mean_info += mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
   }  
   
   return mean_info;
