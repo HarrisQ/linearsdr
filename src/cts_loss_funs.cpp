@@ -42,12 +42,12 @@ arma::mat mgauss_loss_j_made(arma::vec c,
     
     // gaussian-loss
     // the ahat*y term is free of the parameter, so we get drop it in the estimation
-    mean_nll_j += -wj(i)*( lcp.t()*y_matrix.col(i) + (ahat + lcp).t()*(ahat + lcp)/2 ) /n;
+    // mean_nll_j += -wj(i)*( lcp.t()*y_matrix.col(i) + (ahat + lcp).t()*(ahat + lcp)/2 ) /n;
     
-    // square-loss
-    // mean_nll_j += -wj(i)*( (ahat + lcp).t()* y_matrix.col(i) -
-    //    (ahat + lcp) ).t()*( (ahat + lcp).t()* y_matrix.col(i) -
-    //    (ahat + lcp) )/n;
+    // square-loss; no negative is needed
+    mean_nll_j += wj(i)*( (ahat + lcp).t()* y_matrix.col(i) -
+       (ahat + lcp) ).t()*( (ahat + lcp).t()* y_matrix.col(i) -
+       (ahat + lcp) )/n;
     
   }
   
@@ -120,7 +120,12 @@ arma::mat mgauss_score_j_made(arma::vec c,
     arma::vec lcp=tXij_tD*c;
     arma::vec mu_ij = ahat + lcp ;
     
-    mean_score_j += -wj(i)*tXij_tD.t()*( y_matrix.col(i) - mu_ij)/n;
+    // gaussian 
+    // mean_score_j += -wj(i)*tXij_tD.t()*( y_matrix.col(i) - mu_ij)/n;
+    
+    
+    // squard-loss
+    mean_score_j += -2*wj(i)*tXij_tD.t()*( y_matrix.col(i) - mu_ij)/n;
     
     // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
   }
@@ -167,43 +172,6 @@ arma::mat mgauss_score_made(arma::vec c,
   return mean_score; //pow(n,2)*
   
 } ;
-// 
-// arma::mat mgauss_score_made(arma::vec c,
-//                             arma::mat x_matrix,
-//                             arma::mat y_matrix, 
-//                             double bw,
-//                             Rcpp::List ahat_list,
-//                             Rcpp::List Dhat_list,
-//                             arma::mat r_mat) { 
-//   
-//   arma::uword n=y_matrix.n_cols;
-//   arma::uword m=y_matrix.n_rows;
-//   arma::uword pm=c.n_elem;
-//   arma::mat I(m,m); I.eye();
-//   
-//   arma::mat mean_score(pm,1); mean_score.zeros();
-//   
-//   // Writing the For loop instead of sapply.
-//   arma::uword j;
-//   
-//   for (j = 0; j < n; j++ ) {
-//     arma::vec ahat = ahat_list[j]; 
-//     arma::mat Dhat = Dhat_list[j];
-//     
-//     arma::mat xj = x_matrix;
-//     xj.each_col() -= xj.col(j); 
-//     arma::mat Bxj = r_mat.t()*xj;
-//     
-//     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
-//     
-//     mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
-//   }  
-//   
-//   return mean_score;
-//   
-//   
-// } ;
-
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
@@ -235,7 +203,12 @@ arma::mat mgauss_info_j_made(arma::vec c,
     // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n;
   }
   
-  arma::mat I_j; I_j = (mean_info_j + mean_info_j.t())/2;
+  // gaussian
+  // arma::mat I_j; I_j = (mean_info_j + mean_info_j.t())/2;
+  
+  // squared-loss
+  arma::mat I_j; I_j = 2*(mean_info_j + mean_info_j.t())/2;
+  
   return I_j;
   
 };

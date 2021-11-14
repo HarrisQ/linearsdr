@@ -107,11 +107,15 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 ```{r}
 # MAVE Estimate
 n=length(Y)
+
+start_time1 = Sys.time();
 b_hat_made = made(x=(X_std), matrix(Y, nrow = n, ncol=1), bw=5, d=2,
                   ytype='continuous',
                   method=list(opcg="cg", made="cg"), B_mat = NULL,
                   parallelize=T,
                   control_list=list(print_iter=T, max_iter_made=5) )
+
+end_time1 = Sys.time(); end_time1 - start_time1;
 
  
 linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
