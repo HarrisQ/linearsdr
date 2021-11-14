@@ -135,17 +135,16 @@ arma::mat mgauss_score_j_made(arma::vec c,
 arma::mat mgauss_score_made(arma::vec c, 
                             arma::mat x_matrix, 
                             arma::mat y_matrix, 
-                            double bw, 
+                            double bw,
                             Rcpp::List ahat_list,
                             Rcpp::List Dhat_list,
-                            arma::mat r_mat) { 
+                            arma::mat r_mat) {
   
-  arma::uword n=y_matrix.n_cols;
-  arma::uword m=y_matrix.n_rows;
-  arma::uword pm=c.n_elem;
-  arma::mat I(m,m); I.eye();
   
-  arma::mat mean_score(pm,1); mean_score.zeros();
+  arma::uword n=y_matrix.n_cols; //arma::uword m=y_matrix.n_rows;
+  arma::uword mp=c.n_elem;
+  
+  arma::mat mean_score(mp,1); mean_score.zeros();   
   
   // Writing the For loop instead of sapply.
   arma::uword j;
@@ -160,13 +159,51 @@ arma::mat mgauss_score_made(arma::vec c,
     
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
-    mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
-  }  
+    mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat); 
+    
+  } 
   
-  return mean_score;
   
+  return mean_score; //pow(n,2)*
   
 } ;
+// 
+// arma::mat mgauss_score_made(arma::vec c,
+//                             arma::mat x_matrix,
+//                             arma::mat y_matrix, 
+//                             double bw,
+//                             Rcpp::List ahat_list,
+//                             Rcpp::List Dhat_list,
+//                             arma::mat r_mat) { 
+//   
+//   arma::uword n=y_matrix.n_cols;
+//   arma::uword m=y_matrix.n_rows;
+//   arma::uword pm=c.n_elem;
+//   arma::mat I(m,m); I.eye();
+//   
+//   arma::mat mean_score(pm,1); mean_score.zeros();
+//   
+//   // Writing the For loop instead of sapply.
+//   arma::uword j;
+//   
+//   for (j = 0; j < n; j++ ) {
+//     arma::vec ahat = ahat_list[j]; 
+//     arma::mat Dhat = Dhat_list[j];
+//     
+//     arma::mat xj = x_matrix;
+//     xj.each_col() -= xj.col(j); 
+//     arma::mat Bxj = r_mat.t()*xj;
+//     
+//     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
+//     
+//     mean_score += mgauss_score_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
+//   }  
+//   
+//   return mean_score;
+//   
+//   
+// } ;
+
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
@@ -215,9 +252,9 @@ arma::mat mgauss_info_made(arma::vec c,
                            arma::mat r_mat) { 
   
   arma::uword n=y_matrix.n_cols;
-  arma::uword m=y_matrix.n_rows;
+  // arma::uword m=y_matrix.n_rows;
   arma::uword pm=c.n_elem;
-  arma::mat I(m,m); I.eye();
+  // arma::mat I(m,m); I.eye();
   
   arma::mat mean_info(pm,pm); mean_info.zeros();
   
@@ -234,7 +271,7 @@ arma::mat mgauss_info_made(arma::vec c,
     
     arma::vec wj = gauss_kern_cpp(Bxj, bw); 
     
-    mean_info += mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat)/n; 
+    mean_info += mgauss_info_j_made(c, xj, y_matrix, wj, ahat, Dhat); 
   }  
   
   return mean_info;
