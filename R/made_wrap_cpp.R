@@ -412,9 +412,9 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     linktype="continuous"
     mv_Y=y_matrix;
     
-    loss_0 = linearsdr:::mgauss_loss_made(c_0, t(x_matrix), t(mv_Y), bw, #lambda, 
-                                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-                                          r_mat)
+    # loss_0 = linearsdr:::mgauss_loss_made(c_0, t(x_matrix), t(mv_Y), bw, #lambda, 
+    #                                       ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+    #                                       r_mat)
     
   } else if (ytype=="cat" ) { 
     linktype="expit";
@@ -423,9 +423,9 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     k_vec = colSums(mv_Y);
     mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
     
-    loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
-                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-                          link=linktype, k=k_vec, r_mat)
+    # loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
+    #                       ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+    #                       link=linktype, k=k_vec, r_mat)
     
   } else if (ytype=="ord-cat" ) {
     linktype="ad-cat";
@@ -434,9 +434,9 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     k_vec = rep(1, n) #as.vector(y_matrix);
     mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
     
-    loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
-                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-                          link=linktype, k=k_vec, r_mat)
+    # loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
+    #                       ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+    #                       link=linktype, k=k_vec, r_mat)
     
   }
 
@@ -458,18 +458,18 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                                 control_list);
     
     # Loss function
-    if (ytype=="continuous") { 
-      
-      loss_1 = linearsdr:::mgauss_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda, 
-                                            ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-                                            r_mat)
-      
-    } else if (ytype %in% c("cat","ord-cat") ) {
-      
-      loss_1 = linearsdr:::mn_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda,
-                                        ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
-                                        link=linktype, k=k_vec, r_mat) 
-    }
+    # if (ytype=="continuous") { 
+    #   
+    #   loss_1 = linearsdr:::mgauss_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda, 
+    #                                         ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+    #                                         r_mat)
+    #   
+    # } else if (ytype %in% c("cat","ord-cat") ) {
+    #   
+    #   loss_1 = linearsdr:::mn_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda,
+    #                                     ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
+    #                                     link=linktype, k=k_vec, r_mat) 
+    # }
     
     
     
@@ -478,13 +478,13 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     # B_1=t(matrix(c_1, nrow=d, ncol=p));
     # subspace_dist=mat_dist(B_1, B_0);
     
-    # euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
+    euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
     
     # Loss Distance 
-    loss_dist = (loss_0 - loss_1)#/loss_0;
+    # loss_dist = (loss_0 - loss_1)#/loss_0;
     # subspace_dist; euc_dist;
-    if(print_iter) print(c("MADE: loss_dist dist is", loss_dist, iter));
-    if( loss_dist < tol_val ) {
+    if(print_iter) print(c("MADE: euc_dist dist is", euc_dist, iter));
+    if( euc_dist < tol_val ) {
       break();
     } else{
       # The new B_0 for next iteration
