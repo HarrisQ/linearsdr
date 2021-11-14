@@ -411,6 +411,11 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   if (ytype=="continuous") {
     linktype="continuous"
     mv_Y=y_matrix;
+    
+    loss_0 = linearsdr:::mgauss_loss_made(c_0, t(x_matrix), t(mv_Y), bw, #lambda, 
+                                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+                                          r_mat)
+    
   } else if (ytype=="cat" ) { 
     linktype="expit";
     mv_Y=linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
@@ -418,6 +423,9 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     k_vec = colSums(mv_Y);
     mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
     
+    loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
+                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+                          link=linktype, k=k_vec, r_mat)
     
   } else if (ytype=="ord-cat" ) {
     linktype="ad-cat";
@@ -425,14 +433,15 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     
     k_vec = rep(1, n) #as.vector(y_matrix);
     mv_Y=matrix(mv_Y[2:(m),], m-1, n) # Drop the first row now cause its all 1
-
+    
+    loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
+                          ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+                          link=linktype, k=k_vec, r_mat)
     
   }
 
   
-  loss_0 = mn_loss_made(c_0, x_matrix, mv_Y, bw, #lambda, 
-                        ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
-                        link=linktype, k=k_vec, r_mat)
+  
   
   for(iter in 1:max_iter_made){
     B_0=t(matrix(c_0, nrow=d, ncol=p));
@@ -443,15 +452,27 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
                      control_list);
     # B-block update
     
-    c_1=made_update(x_matrix, y_matrix, d,bw,
-                    aD_list = aDhat1, B_0,
-                    ytype, method=method$made, parallelize, r_mat=NULL,
-                    control_list);
+    c_1=linearsdr:::made_update(x_matrix, y_matrix, d,bw,
+                                aD_list = aDhat1, B_0,
+                                ytype, method=method$made, parallelize, r_mat=NULL,
+                                control_list);
     
     # Loss function
-    loss_1 = mn_loss_made(c_1, x_matrix, mv_Y, bw, #lambda,
-                          ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
-                          link=linktype, k=k_vec, r_mat)
+    if (ytype=="continuous") { 
+      
+      loss_1 = linearsdr:::mgauss_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda, 
+                                            ahat_list=aDhat$ahat, Dhat_list=aDhat$Dhat,
+                                            r_mat)
+      
+    } else if (ytype %in% c("cat","ord-cat") ) {
+      
+      loss_1 = linearsdr:::mn_loss_made(c_1, t(x_matrix), t(mv_Y), bw, #lambda,
+                                        ahat_list=aDhat1$ahat, Dhat_list=aDhat1$Dhat,
+                                        link=linktype, k=k_vec, r_mat) 
+    }
+    
+    
+    
     
     # A Matrix distance of B_1 to B_0;
     # B_1=t(matrix(c_1, nrow=d, ncol=p));
