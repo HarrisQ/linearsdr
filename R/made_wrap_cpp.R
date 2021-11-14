@@ -264,18 +264,27 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     # Initial c_param value
     c_init = as.vector(t(B_mat));
     
-    c_0=vecB_cg(c_init, x_matrix, mv_Y, 
-                   bw, ahat_list, Dhat_list,
-                   link=linktype, k=k_vec, r_mat,
-                   control_list=list(tol_val=tol_val,
-                                     max_iter=max_iter_made, 
-                                     init_stepsize=init_stepsize_made,
-                                     beta_bt=beta_bt_made,
-                                     c_ag1=c_ag1_made,
-                                     c_ag2=c_ag2_made,
-                                     c_wolfe=c_wolfe_made, 
-                                     max_iter_line=max_iter_line_made),
-                   test) 
+    # linearsdr:::mgauss_loss_made(c=c_init, x_matrix = x_matrix,
+    #                              y_matrix = mv_Y,
+    #                              bw = bw, ahat_list = aD_list$ahat,
+    #                              Dhat_list = aD_list$Dhat, r_mat = r_mat)
+    # linearsdr:::mgauss_score_made(c=c_init, x_matrix = x_matrix,
+    #                               y_matrix = mv_Y,
+    #                               bw = bw, ahat_list = aD_list$ahat,
+    #                               Dhat_list = aD_list$Dhat, r_mat = r_mat)
+    
+    c_0=linearsdr:::vecB_cg(c_init, x_matrix, mv_Y, 
+                            bw, ahat_list, Dhat_list,
+                            link=linktype, k=k_vec, r_mat,
+                            control_list=list(tol_val=tol_val,
+                                             max_iter=max_iter_made, 
+                                             init_stepsize=init_stepsize_made,
+                                             beta_bt=beta_bt_made,
+                                             c_ag1=c_ag1_made,
+                                             c_ag2=c_ag2_made,
+                                             c_wolfe=c_wolfe_made, 
+                                             max_iter_line=max_iter_line_made),
+                            test) 
   } # End of CG   
   return(c_0);
 
@@ -371,8 +380,6 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   }
   
   x_matrix=x; y_matrix=y
-  
-  
   
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
