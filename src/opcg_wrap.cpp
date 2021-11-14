@@ -432,7 +432,7 @@ arma::vec vecB_cg(arma::vec init,
   if (link == "continuous"){
     nll_now = mgauss_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list, r_mat);
     // grad_now = mgauss_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list, r_mat);
-    grad_now = mgauss_score_j_made(c_now, x_datta, y_matrix, wj, ahat_list[1], Dhat_list[1])
+    grad_now = mgauss_score_j_made(c_now, x_datta, y_datta, wj, ahat_list[1], Dhat_list[1])
   } else {
     nll_now = mn_loss_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
     grad_now = mn_score_made(c_now,x_datta,y_datta,bw,ahat_list, Dhat_list,link,k,r_mat);
