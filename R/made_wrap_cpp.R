@@ -478,12 +478,12 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
     # B_1=t(matrix(c_1, nrow=d, ncol=p));
     # subspace_dist=mat_dist(B_1, B_0);
     
-    euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
+    # euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
     
     # Loss Distance 
-    loss_dist = (loss_0 - loss_1)/loss_0;
+    loss_dist = (loss_0 - loss_1)#/loss_0;
     # subspace_dist; euc_dist;
-    if(print_iter) print(c("MADE: loss_dist dist is", euc_dist, iter));
+    if(print_iter) print(c("MADE: loss_dist dist is", loss_dist, iter));
     if( loss_dist < tol_val ) {
       break();
     } else{
