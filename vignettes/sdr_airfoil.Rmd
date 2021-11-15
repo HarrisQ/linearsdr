@@ -33,7 +33,7 @@ print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
 
 In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository [here](https://archive.ics.uci.edu/ml/index.php).
 
-## Airfoil Noise
+## A First Example
 
 The airfoil dataset is available [here](https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise) and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of $500$ for our estimation since the computation for MAVE can get quite slow.
 
@@ -174,7 +174,9 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 ```
 
 
-## Crime Rate and Community Survey (Regularized Inverse Methods)
+## Regularized Inverse Methods
+
+Crime Rate and Community Survey 
 
 
 ```{r}
@@ -285,7 +287,9 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 
 
 
-## Energy Efficiency (Multivariate $Y$)
+## Multivariate $Y$
+
+Energy Efficiency 
 
 ```{r}
 data('energy_datta', package="linearsdr")
