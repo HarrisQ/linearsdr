@@ -103,11 +103,7 @@ library("doParallel")
 library("foreach")
 print( paste( as.character(detectCores()), "cores detected" ) );
 # Create cluster with desired number of cores
-if ( !grepl("hxq5", getwd()) ) {
-  cl <- makePSOCKcluster(detectCores()-1)
-} else if ( grepl("hxq5", getwd()) ) {
-  cl <- parallel::makeCluster(nprocs, type=mp_type)
-}
+cl <- makePSOCKcluster(detectCores()-1)
 # Register cluster
 doParallel::registerDoParallel(cl)
 # Find out how many cores are being used

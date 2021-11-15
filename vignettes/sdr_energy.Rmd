@@ -60,27 +60,23 @@ Forward methods using OPG
 ```{r}
 # Parallelization not run because of computational time. 
 
-# library("doParallel")
-# library("foreach")
-# print( paste( as.character(detectCores()), "cores detected" ) );
-# # Create cluster with desired number of cores
-# if ( !grepl("hxq5", getwd()) ) {
-#   cl <- makePSOCKcluster(detectCores()-1)
-# } else if ( grepl("hxq5", getwd()) ) {
-#   cl <- parallel::makeCluster(nprocs, type=mp_type)
-# }
-# # Register cluster
-# doParallel::registerDoParallel(cl)
-# # Find out how many cores are being used
-# print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
-# # stopCluster(cl)
+library("doParallel")
+library("foreach")
+print( paste( as.character(detectCores()), "cores detected" ) );
+# Create cluster with desired number of cores
+cl <- makePSOCKcluster(detectCores()-1)
+# Register cluster
+doParallel::registerDoParallel(cl)
+# Find out how many cores are being used
+print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
+# stopCluster(cl)
 
 X_std=(sapply(1:dim(X)[2], FUN= function(j)
   center_cpp(X[,j], NULL) ) )%*%matpower_cpp(cov((X)) , -1/2);
 # X_std = sapply(1:dim(X)[2], FUN= function(j) center_cpp(X[,j], NULL)/sd(X[,j]) ) ;
 
 b_hat_opg = opcg(x=X_std, y=Y1, bw = 5, d=2, ytype = "continuous", 
-                 method= "cg", parallelize = F )
+                 method= "cg", parallelize = T )
 
 
 linearsdr:::ggplot_fsdr(Y1, t((X_std)%*%b_hat_opg[,1:2]), y_on_axis=F,

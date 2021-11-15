@@ -195,7 +195,7 @@
 <div class="section level2">
 <h2 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
 </h2>
-<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="ex1_mave.png"></p>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../reference/figures/ex1_mave.png"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
@@ -225,8 +225,8 @@
 <span class="co">#                                   h_lab='MADE 1', v_lab='Y',</span>
 <span class="co">#                                   main_lab= paste0('MADE'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># linearsdr:::save_sdr_plot(mave_plot,filename = paste0('figures/ex1_mave.png'),</span>
-<span class="co">#                           width = 400, height = 400, units = "px", pointsize = 12,</span>
+<span class="co"># linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),</span>
+<span class="co">#                           width = 900, height = 450, units = "px", pointsize = 12,</span>
 <span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
 </div>
 </div>

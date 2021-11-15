@@ -5,8 +5,8 @@
 \title{Minimum Average Deviance Estimation}
 \usage{
 made(
-  x_matrix,
-  y_matrix,
+  x,
+  y,
   d,
   bw,
   lambda = 0,
@@ -19,10 +19,6 @@ made(
 )
 }
 \arguments{
-\item{x_matrix}{a 'pxn' matrix of predictors;}
-
-\item{y_matrix}{a 'mxn' matrix response}
-
 \item{d}{specified the reduced dimension}
 
 \item{bw}{the bandwidth parameter for the kernel; the default kernel is gaussian}
@@ -52,6 +48,10 @@ the initial value; this is used in other functions for order determination
 \item gradients - The estimated local gradients; used in regularization of OPCG
 \item weights - The kernel weights in the local-linear GLM.
 }}
+
+\item{x_matrix}{a 'pxn' matrix of predictors;}
+
+\item{y_matrix}{a 'mxn' matrix response}
 }
 \value{
 A list containing both the estimate and candidate matrix.
