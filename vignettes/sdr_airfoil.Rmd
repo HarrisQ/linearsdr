@@ -164,8 +164,8 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 #                                   h_lab='MADE 1', v_lab='Y',
 #                                   main_lab= paste0('MADE'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(mave_plot,filename = paste0('figures/ex1_mave.png'),
-#                           width = 400, height = 400, units = "px", pointsize = 12,
+# linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),
+#                           width = 900, height = 450, units = "px", pointsize = 12,
 #                           bg = "white",  res = 100)
 
 ```
