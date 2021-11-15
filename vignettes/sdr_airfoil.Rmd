@@ -14,6 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository [here](https://archive.ics.uci.edu/ml/index.php).
+
+# Airfoil Noise
+
+The airfoil dataset is available [here](https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise) and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of $500$ for our estimation since the computation for MAVE can get quite slow.
+
 ```{r setup}
 library(ggplot2)
 library(linearsdr)
@@ -24,7 +31,12 @@ X = as.matrix(airfoil_datta[,1:5])
 Y = c(airfoil_datta[,6])
 
 pairs(X)
+
 ```
+
+## Sliced Inverse Regression (SIR)
+
+We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
 ```{r}
 # Sliced Inverse Regression
@@ -38,6 +50,12 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
                         main_lab= paste0('SIR'), size=2.5)
 
 ```
+
+
+## Sliced Average Variance Estimator (SAVE)
+
+We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
+
 ```{r}
 # Sliced Average Variance Estimator
 
@@ -53,6 +71,10 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save[,1]), y_on_axis=T,
 
 
 ```
+
+## Directional Regression (DR)
+
+We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
 ```{r}
 # Directional Regression
@@ -70,7 +92,10 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr[,1]), y_on_axis=T,
 
 ```
 
-Forward methods using OPG
+## Outer Product of Gradients (OPG)
+
+We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here. 
+
 ```{r}
 # OPG Estimate 
 
@@ -104,23 +129,43 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 
 ```
 
+
+## Minimum Average Variance Estimation (MAVE)
+
+We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, We use a $p \times d$ matrix with the upper $d \times d$ block being the identity. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response.
+![](figures/ex1_mave.png)
+
 ```{r}
 # MAVE Estimate
-n=length(Y)
 
-start_time1 = Sys.time();
-b_hat_made = made(x=(X_std), matrix(Y, nrow = n, ncol=1), bw=5, d=2,
-                  ytype='continuous',
-                  method=list(opcg="cg", made="cg"), B_mat = NULL,
-                  parallelize=T,
-                  control_list=list(print_iter=T, max_iter_made=5) )
-
-end_time1 = Sys.time(); end_time1 - start_time1;
-
- 
-linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
-                        ytype="continuous",
-                        h_lab='MADE 1', v_lab='Y',
-                        main_lab= paste0('MADE'), size=2.5)
+# n=length(Y)
+# 
+# start_time1 = Sys.time();
+# b_hat_made = made(x=(X_std), matrix(Y, nrow = n, ncol=1), bw=5, d=2,
+#                   ytype='continuous',
+#                   method=list(opcg="cg", made="cg"), B_mat = NULL,
+#                   parallelize=T,
+#                   control_list=list(print_iter=T, max_iter_made=5) )
+# 
+# end_time1 = Sys.time(); end_time1 - start_time1;
+#
+# # [1] "MADE: euc_dist dist is" "0.331801141953547"      "1"
+# # [1] "MADE: euc_dist dist is" "0.0112107472862494"     "2"
+# # [1] "MADE: euc_dist dist is" "0.0102038542211796"     "3"
+# # [1] "MADE: euc_dist dist is" "0.00497290505768543"    "4"
+# # [1] "MADE: euc_dist dist is" "0.00261423206170839"    "5"
+# # [1] "0 - non-convergence"
+# # Time difference of 22.35525 mins
+#  
+# 
+# plot saved image instead
+# mave_plot=linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
+#                                   ytype="continuous",
+#                                   h_lab='MADE 1', v_lab='Y',
+#                                   main_lab= paste0('MADE'), size=2.5)
+# 
+# linearsdr:::save_sdr_plot(mave_plot,filename = paste0('figures/ex1_mave.png'),
+#                           width = 400, height = 400, units = "px", pointsize = 12,
+#                           bg = "white",  res = 100)
 
 ```
