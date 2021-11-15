@@ -43,7 +43,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
 
 
 
-```{r, figures-side, fig.show="hold", out.width="45%"}
+```{r}
 # Sliced Average Variance Estimator
 
 b_hat_save = save_sdr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",

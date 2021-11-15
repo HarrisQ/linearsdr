@@ -133,7 +133,7 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 ## Minimum Average Variance Estimation (MAVE)
 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, We use a $p \times d$ matrix with the upper $d \times d$ block being the identity. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response.
-![](ex1_mave.png)
+![](../man/figures/ex1_mave.png)
 
 ```{r}
 # MAVE Estimate
