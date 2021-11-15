@@ -14,6 +14,22 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r setup}
+library(ggplot2)
+library(linearsdr)
+
+library("doParallel")
+library("foreach")
+print( paste( as.character(detectCores()), "cores detected" ) );
+# Create cluster with desired number of cores
+cl <- makePSOCKcluster(detectCores()-1)
+# Register cluster
+doParallel::registerDoParallel(cl)
+# Find out how many cores are being used
+print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
+# stopCluster(cl)
+```
+
 
 In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository [here](https://archive.ics.uci.edu/ml/index.php).
 
@@ -21,9 +37,8 @@ In this vignette, we demonstrate the available methods for linear Sufficient Dim
 
 The airfoil dataset is available [here](https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise) and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of $500$ for our estimation since the computation for MAVE can get quite slow.
 
-```{r setup}
-library(ggplot2)
-library(linearsdr)
+
+```{r}
 data('airfoil_datta', package="linearsdr")
 # summary(airfoil_datta)
 
@@ -99,16 +114,6 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 ```{r}
 # OPG Estimate 
 
-library("doParallel")
-library("foreach")
-print( paste( as.character(detectCores()), "cores detected" ) );
-# Create cluster with desired number of cores
-cl <- makePSOCKcluster(detectCores()-1)
-# Register cluster
-doParallel::registerDoParallel(cl)
-# Find out how many cores are being used
-print( paste( as.character(getDoParWorkers() ), "cores registered" ) )
-# stopCluster(cl)
 
 X_std=(sapply(1:dim(X)[2], FUN= function(j)
   center_cpp(X[,j], NULL) ) )%*%matpower_cpp(cov((X)) , -1/2);
@@ -165,5 +170,102 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 # linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),
 #                           width = 900, height = 450, units = "px", pointsize = 12,
 #                           bg = "white",  res = 100)
+
+```
+
+
+## Crime Rate and Community Survey
+
+
+```{r}
+data('crime_datta', package="linearsdr")
+dim(crime_datta)
+
+X = crime_datta[, 1:( dim(crime_datta)[2] - 1) ]
+Y = crime_datta[, dim(crime_datta)[2]]
+
+p = dim(X)[2]; n=dim(X)[1];
+ 
+
+```
+
+```{r}
+# Sliced Inverse Regression
+
+b_hat_sir = sir(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
+                lambda = 0)$beta
+
+
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='SIR 1', v_lab='Y',
+                        main_lab= paste0('SIR'), size=2.5)
+```
+```{r, figures-side, fig.show="hold", out.width="45%"}
+# Sliced Average Variance Estimator
+
+b_hat_save = save_sdr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
+              lambda = 0)$beta
+
+b_hat_save_reg = save_sdr(x=X, y=Y, nslices = 5, d=2, ytype = "continuous",
+                  lambda = .1)$beta
+
+par(mar=c(1, 0, 0, 1), mfrow=c(1,1))
+
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='SAVE 1', v_lab='Y',
+                        main_lab= paste0('SAVE'), size=2.5)
+
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save_reg[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='SAVE 1', v_lab='Y',
+                        main_lab= paste0('Regularized SAVE'), size=2.5)
+
+
+
+
+```
+
+```{r}
+# Directional Regression
+
+b_hat_dr = dr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
+              lambda = 0)$beta
+
+
+b_hat_dr_reg = dr(x=X, y=Y, nslices = 10, d=2, ytype = "continuous",
+                  lambda = .1)$beta
+
+
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='DR 1', v_lab='Y',
+                        main_lab= paste0('DR'), size=1)
+
+linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr_reg[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='DR 1', v_lab='Y',
+                        main_lab= paste0('Regularized DR'), size=2.5)
+
+
+
+
+```
+
+Forward methods using OPG
+```{r}
+
+X_std=(sapply(1:dim(X)[2], FUN= function(j)
+  center_cpp(X[,j], NULL) ) )%*%matpower_cpp(cov((X)) , -1/2);
+
+b_hat_opg = opcg(x=X_std, y=Y, bw = 7, d=2, ytype = "continuous", 
+                 method= "cg", parallelize = T )
+
+
+linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
+                        ytype="continuous",
+                        h_lab='OPG 1', v_lab='Y',
+                        main_lab= paste0('OPG'), size=2.5)
 
 ```
