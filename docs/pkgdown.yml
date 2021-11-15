@@ -5,9 +5,8 @@ articles:
   linearsdr: linearsdr.html
   sdr_airfoil: sdr_airfoil.html
   sdr_energy: sdr_energy.html
-  sdr_supercond: sdr_supercond.html
   Tuning OPCG: Tuning OPCG.html
-last_built: 2021-11-15T02:37Z
+last_built: 2021-11-15T02:40Z
 urls:
   reference: https://github.com/HarrisQ/linearsdr/reference
   article: https://github.com/HarrisQ/linearsdr/articles
