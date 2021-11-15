@@ -42,14 +42,14 @@ navbar:
       - text: Overview to Linear SDR
         href: articles/linearsdr.html
         
-      - text: Linear SDR for scalar Y, Ex1
-        href: articles/sdr_airfoil.html 
+      - text: Continuous Responses
+        href: articles/sdr_cts.html 
         
-      - text: Linear SDR for scalar Y, Ex2
-        href: articles/sdr_crime.html 
-        
-      - text: Linear SDR for scalar Y, Ex3 
-        href: articles/sdr_supercond.html   
+      # - text: Linear SDR for scalar Y, Ex2
+      #   href: articles/sdr_crime.html 
+      #   
+      # - text: Linear SDR for scalar Y, Ex3 
+      #   href: articles/sdr_supercond.html   
         
       - text: Tuning OPCG 
         href: articles/Tuning OPCG.html  
