@@ -64,7 +64,7 @@ We choose the number of slices to be $5$ and plot only the first sufficient pred
 b_hat_sir1 = sir(x=X1, y=Y1, nslices = 5, d=2, ytype = "continuous" )$beta
 
 
-linearsdr:::ggplot_fsdr(Y1, t((X1)%*%b_hat_sir[,1]), y_on_axis=T,
+linearsdr:::ggplot_fsdr(Y1, t((X1)%*%b_hat_sir1[,1]), y_on_axis=T,
                         ytype="continuous",
                         h_lab='SIR 1', v_lab='Y',
                         main_lab= paste0('SIR'), size=2.5)
@@ -356,14 +356,15 @@ data('energy_datta', package="linearsdr")
 # dim(energy_datta)
 
 X3 = as.matrix(energy_datta[,1:8])
-Y3_1 = as.numeric(energy_datta$Y3_1)
-Y3_2 = as.numeric(energy_datta$Y3_2)
+Y3 = cbind(energy_datta$Y1,energy_datta$Y2) 
+Y3_1 = as.numeric(energy_datta$Y1)
+Y3_2 = as.numeric(energy_datta$Y2)
 
 pairs(X3)
 ```
 
 ### Sliced Inverse Regression (SIR)
-```{r}
+```{r, fig.show="hold"}
 
 b_hat_sir3_1 = sir(x=X3, y=Y3_1, nslices = 10, d=2, 
                    ytype = "continuous" )$beta
@@ -377,7 +378,7 @@ linearsdr:::ggplot_fsdr(Y3_1, t((X3)%*%b_hat_sir3_1[,1]), y_on_axis=T,
                         h_lab='SIR 1', v_lab='SIR 2',
                         main_lab= paste0('SIR'), size=3)
 
-linearsdr:::ggplot_fsdr(Y3_3, t((X3)%*%b_hat_sir3_2[,1]), y_on_axis=T,
+linearsdr:::ggplot_fsdr(Y3_2, t((X3)%*%b_hat_sir3_2[,1]), y_on_axis=T,
                         ytype="continuous",
                         h_lab='SIR 1', v_lab='SIR 2',
                         main_lab= paste0('SIR'), size=3)
@@ -390,15 +391,15 @@ linearsdr:::ggplot_fsdr(Y3_3, t((X3)%*%b_hat_sir3_2[,1]), y_on_axis=T,
 
 We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
-```{r}
+```{r, fig.show="hold"}
 # Sliced Average Variance Estimator
 
-b_hat_save3_1 = save_sdr(x=X3, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
+b_hat_save3_1 = save_sdr(x=X3, y=Y3_1, nslices = 5, d=2, ytype = "continuous" )$beta
 
-b_hat_save3_2 = save_sdr(x=X3, y=Y, nslices = 5, d=2, ytype = "continuous" )$beta
+b_hat_save3_2 = save_sdr(x=X3, y=Y3_2, nslices = 5, d=2, ytype = "continuous" )$beta
 
 
-linearsdr:::ggplot_fsdr(Y, t((X3)%*%b_hat_save[,1]), y_on_axis=T, 
+linearsdr:::ggplot_fsdr(Y3_1, t((X3)%*%b_hat_save3_1[,1]), y_on_axis=T, 
                         ytype="continuous",
                         h_lab='DR 1', v_lab='Y',
                         main_lab= paste0('DR'), size=2.5)
@@ -409,14 +410,14 @@ linearsdr:::ggplot_fsdr(Y, t((X3)%*%b_hat_save[,1]), y_on_axis=T,
 ```
 
 ### Directional Regression (DR)
-```{r}
+```{r, fig.show="hold"}
 
-b_hat_dr3_1 = dr(x=X3, y=Y1, nslices = 10, d=2, ytype = "continuous" )$beta
+b_hat_dr3_1 = dr(x=X3, y=Y3_1, nslices = 10, d=2, ytype = "continuous" )$beta
 
-b_hat_dr3_2 = dr(x=X3, y=Y1, nslices = 10, d=2, ytype = "continuous" )$beta
+b_hat_dr3_2 = dr(x=X3, y=Y3_2, nslices = 10, d=2, ytype = "continuous" )$beta
 
 
-linearsdr:::ggplot_fsdr(Y1, t((X3)%*%b_hat_dr[,1]), y_on_axis=T,
+linearsdr:::ggplot_fsdr(Y3_1, t((X3)%*%b_hat_dr3_1[,1]), y_on_axis=T,
                         ytype="continuous",
                         h_lab='DR 1', v_lab='DR 2',
                         main_lab= paste0('DR'), size=3)

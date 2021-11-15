@@ -3,8 +3,6 @@ title: "Linear SDR"
 author: "Harris Quach"
 date: '`r Sys.Date()`'
 output:
-  includes:
-      before_body: local_tex.html
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3

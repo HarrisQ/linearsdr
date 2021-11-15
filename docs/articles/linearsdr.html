@@ -78,7 +78,7 @@
       <img src="" class="logo" alt=""><h1>Linear SDR</h1>
                         <h4 data-toc-skip class="author">Harris Quach</h4>
             
-            <h4 data-toc-skip class="date">2021-11-14</h4>
+            <h4 data-toc-skip class="date">2021-11-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/HarrisQ/linearsdr/blob/HEAD/vignettes/linearsdr.Rmd"><code>vignettes/linearsdr.Rmd</code></a></small>
       <div class="d-none name"><code>linearsdr.Rmd</code></div>
@@ -89,13 +89,22 @@
 <div class="section level1">
 <h1 id="introduction-to-linear-sdr">Introduction to Linear SDR<a class="anchor" aria-label="anchor" href="#introduction-to-linear-sdr"></a>
 </h1>
+<p>Sufficient Dimension Reduction (SDR) is the subfield of statistics focused on finding lower dimensional summaries such that relational information of interest between variables is preserved. In mathematical terms, suppose we have random elements <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>, and we are interested in seeking a lower-dimension summary of <span class="math inline">\(X\)</span> such that all the information about <span class="math inline">\(Y\)</span> that is available in <span class="math inline">\(X\)</span> is preserved. Then what we want is a summary statistic of <span class="math inline">\(X\)</span>, denoted <span class="math inline">\(s(X)\)</span>, such that <span class="math inline">\(Y\)</span> is statistically independent of <span class="math inline">\(X\)</span> given <span class="math inline">\(s(X)\)</span>, i.e. <span class="math inline">\(Y\)</span> indep <span class="math inline">\(X | s(X)\)</span>.</p>
+<p>Linear SDR is when we are interested in finding lower dimension summaries of <span class="math inline">\(X\)</span> that are linear functions of <span class="math inline">\(X\)</span>, such as <span class="math inline">\(s(X) = \beta^{\top} X\)</span> for some <span class="math inline">\(p \times d\)</span> matrix <span class="math inline">\(\beta\)</span>, where <span class="math inline">\(d\)</span> is much smaller than <span class="math inline">\(p\)</span>.</p>
+<p>This package covers methods that can be categorized into two branches of SDR: Inverse Regression methods and Forward Regression Methods.</p>
 <div class="section level2">
 <h2 id="inverse-methods">Inverse Methods<a class="anchor" aria-label="anchor" href="#inverse-methods"></a>
 </h2>
+<p>Broadly speaking, inverse regression methods for SDR involve regressing the predictor variable <span class="math inline">\(X\)</span> onto the response variable <span class="math inline">\(Y\)</span>. Methods will involve quantities such as <span class="math inline">\(E(X|Y)\)</span>.</p>
+<p>Methods in this package that fall into this category are Sliced Inverse Regression (SIR), Sliced Average Variance Estimation (SAVE) and Directional Regression (DR).</p>
+<p>When <span class="math inline">\(p\)</span> is large, we may find ourselves in a situation where regularization is necessary, so the methods for SIR, SAVE and DR come with an option to place a Tikhonov regularizer on the sample covariance matrix. This regularization for inverse methods for SDR is similar in spirit to Zhong et. al. (2007).</p>
 </div>
 <div class="section level2">
 <h2 id="forward-methods">Forward Methods<a class="anchor" aria-label="anchor" href="#forward-methods"></a>
 </h2>
+<p>Forward regression methods for SDR involve the conventional approach of regressing the response variable <span class="math inline">\(Y\)</span> onto the predictor variable <span class="math inline">\(X\)</span>. Methods will involve quantities such as <span class="math inline">\(E(Y|X)\)</span>.</p>
+<p>Methods in this package that fall into this category are the Outer Product of Gradients (OPG), Minimum Average Variance Estimation (MAVE), the Outer Product of Canonical Gradients (OPCG) and the Minimum Average Deviance Estimator (MADE).</p>
+<p>Options for L1 and L2 regularizing OPCG may be available upon request.</p>
 </div>
 </div>
   </div>

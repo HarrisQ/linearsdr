@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="linearsdr">
-<title>Linear SDR for scalar Y, Ex1 • linearsdr</title>
+<title>Linear SDR for continuous Y • linearsdr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Linear SDR for scalar Y, Ex1">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Linear SDR for continuous Y">
 <meta property="og:description" content="linearsdr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -75,7 +75,7 @@
 <script src="sdr_cts_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <img src="" class="logo" alt=""><h1>Linear SDR for scalar Y, Ex1</h1>
+      <img src="" class="logo" alt=""><h1>Linear SDR for continuous Y</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/HarrisQ/linearsdr/blob/HEAD/vignettes/sdr_cts.Rmd"><code>vignettes/sdr_cts.Rmd</code></a></small>
@@ -84,39 +84,39 @@
 
     
     
+<p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://harrisq.github.io/linearsdr/" class="external-link">linearsdr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.0.5</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://harrisq.github.io/linearsdr/" class="external-link">linearsdr</a></span><span class="op">)</span>
-
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"doParallel"</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: foreach</span>
 <span class="co">#&gt; Loading required package: iterators</span>
 <span class="co">#&gt; Loading required package: parallel</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/RevolutionAnalytics/foreach" class="external-link">"foreach"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"cores detected"</span> <span class="op">)</span> <span class="op">)</span>;
-<span class="co">#&gt; [1] "16 cores detected"</span>
+<span class="co"># check number of cores available</span>
+<span class="co"># print( paste( as.character(detectCores()), "cores detected" ) );</span>
+
 <span class="co"># Create cluster with desired number of cores</span>
 <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makePSOCKcluster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
+
 <span class="co"># Register cluster</span>
 <span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+
 <span class="co"># Find out how many cores are being used</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/getDoParWorkers.html" class="external-link">getDoParWorkers</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span>, <span class="st">"cores registered"</span> <span class="op">)</span> <span class="op">)</span>
-<span class="co">#&gt; [1] "15 cores registered"</span>
-<span class="co"># stopCluster(cl)</span></code></pre></div>
-<p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
+<span class="co"># print( paste( as.character(getDoParWorkers() ), "cores registered" ) )</span></code></pre></div>
 <div class="section level2">
 <h2 id="a-first-example">A First Example<a class="anchor" aria-label="anchor" href="#a-first-example"></a>
 </h2>
-<p>The airfoil dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
+<p>For a first example, we apply the available methods for continuous responses on the airfoil self-noise dataset. This dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'airfoil_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
 <span class="co"># summary(airfoil_datta)</span>
 
-<span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span><span class="op">)</span>
+<span class="va">X1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
+<span class="va">Y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X1</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_cts_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <div class="section level3">
 <h3 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
@@ -125,10 +125,10 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
 
-<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_sir1</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X1</span>, y<span class="op">=</span><span class="va">Y1</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
@@ -141,10 +141,10 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
 
-<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_save1</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X1</span>, y<span class="op">=</span><span class="va">Y1</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
@@ -157,10 +157,10 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Directional Regression</span>
 
-<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_dr1</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X1</span>, y<span class="op">=</span><span class="va">Y1</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
@@ -174,15 +174,15 @@
 <code class="sourceCode R"><span class="co"># OPG Estimate </span>
 
 
-<span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
-  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
+<span class="va">X1_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X1</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
+  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X1</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X1</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
 
 
-<span class="va">b_hat_opg</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X_std</span>, y<span class="op">=</span><span class="va">Y</span>, bw <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
+<span class="va">b_hat_opg1</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X1_std</span>, y<span class="op">=</span><span class="va">Y1</span>, bw <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
                  method<span class="op">=</span> <span class="st">"cg"</span>, parallelize <span class="op">=</span> <span class="cn">T</span> <span class="op">)</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X1_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
@@ -197,10 +197,10 @@
 
 <span class="co"># The code is commented out to speed up compiling of the documentation. </span>
 
-<span class="co"># n=length(Y)</span>
+<span class="co"># n=length(Y1)</span>
 <span class="co"># </span>
 <span class="co"># start_time1 = Sys.time();</span>
-<span class="co"># b_hat_made = made(x=(X_std), matrix(Y, nrow = n, ncol=1), bw=5, d=2,</span>
+<span class="co"># b_hat_made1 = made(x=(X1_std), matrix(Y1, nrow = n, ncol=1), bw=5, d=2,</span>
 <span class="co">#                   ytype='continuous',</span>
 <span class="co">#                   method=list(opcg="cg", made="cg"), B_mat = NULL,</span>
 <span class="co">#                   parallelize=T,</span>
@@ -217,13 +217,12 @@
 <span class="co"># # Time difference of 22.35525 mins</span>
 <span class="co">#  </span>
 <span class="co"># </span>
-<span class="co"># plot saved image instead</span>
-<span class="co"># mave_plot=linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,</span>
+<span class="co"># mave_plot1=linearsdr:::ggplot_fsdr(Y1, t((X1_std)%*%b_hat_made1[,1]), y_on_axis=T,</span>
 <span class="co">#                                   ytype="continuous",</span>
-<span class="co">#                                   h_lab='MAVE 1', v_lab='Y',</span>
+<span class="co">#                                   h_lab='MAVE 1', v_lab='Y1',</span>
 <span class="co">#                                   main_lab= paste0('MAVE'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),</span>
+<span class="co"># linearsdr:::save_sdr_plot(mave_plot1,filename = paste0('../man/figures/ex1_mave.png'),</span>
 <span class="co">#                           width = 900, height = 450, units = "px", pointsize = 12,</span>
 <span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
 </div>
@@ -231,184 +230,247 @@
 <div class="section level2">
 <h2 id="regularized-inverse-methods">Regularized Inverse Methods<a class="anchor" aria-label="anchor" href="#regularized-inverse-methods"></a>
 </h2>
-<p>Crime Rate and Community Survey</p>
+<p>We consider a larger number of predictors by using the Community and Crime data available <a href="https://archive.ics.uci.edu/ml/datasets/communities+and+crime" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'crime_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span>
-<span class="co">#&gt; [1] 500 100</span>
+<span class="co"># dim(crime_datta)</span>
 
-<span class="va">X</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">]</span>
-<span class="va">Y</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
+<span class="va">X2</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">]</span>
+<span class="va">Y2</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
 
-<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>; <span class="va">n</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>;
+<span class="co"># p2 = dim(X2)[2]; n2=dim(X2)[1];</span>
  </code></pre></div>
 <div class="section level3">
 <h3 id="sliced-inverse-regression-sir-1">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir-1"></a>
 </h3>
+<p>For SIR, we use 5 slices and plot the first two sufficient predictors with the colored points representing the value of the response <span class="math inline">\(Y\)</span>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
 
-<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+<span class="va">b_hat_sir2</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2</span>, y<span class="op">=</span><span class="va">Y2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
                 lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">F</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'SIR 2'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_cts_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="sliced-average-variance-estimator-save-1">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save-1"></a>
 </h3>
+<p>For SAVE, we use 5 slices and consider the first two sufficient predictors. We consider a regularized SAVE with a regularization parameter, <span class="math inline">\(\lambda\)</span> set to 1. Both the un-regularized and regularized versions of SAVE fail to estimate any directions for dimension reduction.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
 
-<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+<span class="va">b_hat_save2</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2</span>, y<span class="op">=</span><span class="va">Y2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
               lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
-<span class="va">b_hat_save_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
-                  lambda <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_save2_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2</span>, y<span class="op">=</span><span class="va">Y2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+                  lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># par(mar=c(1, 0, 0, 1), mfrow=c(1,1))</span>
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">F</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'SAVE 2'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span>
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save2_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-10-2.png" width="700"> ### Directional Regression (DR)</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-10-1.png" width="700"><img src="sdr_cts_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="directional-regression-dr-1">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr-1"></a>
+</h3>
+<p>For Directional Regression, we use 5 slices and consider the first two sufficient predictors. We consider a regularized SAVE with a regularization parameter, <span class="math inline">\(\lambda\)</span> set to 1. The un-regularized DR fails to estimate any directions for dimension reduction, while the regularized DR is able to estimate one sufficient direction for dimension reduction.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Directional Regression</span>
 
-<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+<span class="va">b_hat_dr2</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2</span>, y<span class="op">=</span><span class="va">Y2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
               lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="va">b_hat_dr_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
-                  lambda <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_dr2_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2</span>, y<span class="op">=</span><span class="va">Y2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+                  lambda <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">F</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'DR 2'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr2_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-11-1.png" width="700"><img src="sdr_cts_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="outer-product-of-gradients-opg-1">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg-1"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(4\)</span> and we consider the first two sufficient predictors against the response.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
-  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
+<span class="va">X2_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
+  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X2</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
 
-<span class="va">b_hat_opg</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X_std</span>, y<span class="op">=</span><span class="va">Y</span>, bw <span class="op">=</span> <span class="fl">7</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
+<span class="va">b_hat_opg2</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X2_std</span>, y<span class="op">=</span><span class="va">Y2</span>, bw <span class="op">=</span> <span class="fl">4</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
                  method<span class="op">=</span> <span class="st">"cg"</span>, parallelize <span class="op">=</span> <span class="cn">T</span> <span class="op">)</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X2_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">F</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'OPG 2'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_cts_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="minimum-average-variance-estimation-mave-1">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave-1"></a>
 </h3>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, we use the OPG estimator since the default <span class="math inline">\(p \times d\)</span> matrix with upper block as the identity failed to converge. The bandwidth is set to <span class="math inline">\(4\)</span> and we consider the first two sufficient predictors against the response. <img src="../reference/figures/ex2_mave.png"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># MAVE Estimate</span>
+
+<span class="co"># # The code is commented out to speed up compiling of the documentation. </span>
+<span class="co"># </span>
+<span class="co"># start_time1 = Sys.time();</span>
+<span class="co"># b_hat_made2 = made(x=(X2_std), Y2, bw=4, d=2,</span>
+<span class="co">#                   ytype='continuous',</span>
+<span class="co">#                   method=list(opcg="cg", made="cg"), B_mat = b_hat_opg2,</span>
+<span class="co">#                   parallelize=T,</span>
+<span class="co">#                   control_list=list(print_iter=T, max_iter_made=5) )</span>
+<span class="co"># </span>
+<span class="co"># end_time1 = Sys.time(); end_time1 - start_time1;</span>
+<span class="co">### For B_mat = NULL</span>
+<span class="co"># [1] "MADE: euc_dist dist is" "1.63713329933597e-15"  </span>
+<span class="co"># [3] "1"                     </span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; end_time1 = Sys.time(); end_time1 - start_time1;</span>
+<span class="co"># Time difference of 34.67113 mins</span>
+<span class="co"># </span>
+<span class="co">### For B_mat = b_hat_opg2</span>
+<span class="co"># [1] "MADE: euc_dist dist is" "0.00134310136692448"   </span>
+<span class="co"># [3] "1"                     </span>
+<span class="co"># [1] "MADE: euc_dist dist is" "4.66580981942468e-15"  </span>
+<span class="co"># [3] "2"                     </span>
+<span class="co"># &gt; </span>
+<span class="co"># &gt; end_time1 = Sys.time(); end_time1 - start_time1;</span>
+<span class="co"># Time difference of 58.74611 mins</span>
+<span class="co"># </span>
+<span class="co"># mave_plot2=linearsdr:::ggplot_fsdr(Y2, t((X2_std)%*%b_hat_made2[,1:2]),</span>
+<span class="co">#                                    y_on_axis=F,</span>
+<span class="co">#                                    ytype="continuous",</span>
+<span class="co">#                                    h_lab='MAVE 1', v_lab='Y',</span>
+<span class="co">#                                    main_lab= paste0('MAVE'), size=2.5)</span>
+<span class="co"># </span>
+<span class="co"># mave_plot2</span>
+<span class="co"># </span>
+<span class="co"># linearsdr:::save_sdr_plot(mave_plot2,filename =</span>
+<span class="co">#                             paste0('../man/figures/ex2_mave.png'),</span>
+<span class="co">#                                     width = 900, height = 450, units = "px",</span>
+<span class="co">#                                     pointsize = 12,</span>
+<span class="co">#                                     bg = "white",  res = 100)</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="multivariate-y">Multivariate <span class="math inline">\(Y\)</span><a class="anchor" aria-label="anchor" href="#multivariate-y"></a>
 </h2>
 <p>Energy Efficiency</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'energy_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
 <span class="co"># summary(energy_datta)</span>
 <span class="co"># dim(energy_datta)</span>
 
-<span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">$</span><span class="va">Y1</span><span class="op">)</span>
-<span class="va">Y2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">$</span><span class="va">Y2</span><span class="op">)</span>
+<span class="va">X3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span>
+<span class="va">Y3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">$</span><span class="va">Y1</span>,<span class="va">energy_datta</span><span class="op">$</span><span class="va">Y2</span><span class="op">)</span> 
+<span class="va">Y3_1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">$</span><span class="va">Y1</span><span class="op">)</span>
+<span class="va">Y3_2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">energy_datta</span><span class="op">$</span><span class="va">Y2</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X3</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <div class="section level3">
-<h3 id="sliced-inverse-regression-save">Sliced Inverse Regression (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-save"></a>
+<h3 id="sliced-inverse-regression-sir-2">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir-2"></a>
 </h3>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y1</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_sir3_1</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_1</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, 
+                   ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+<span class="va">b_hat_sir3_2</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_2</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, 
+                   ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">F</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y3_1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir3_1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'SIR 2'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y3_2</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir3_2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'SIR 2'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-15-1.png" width="700"><img src="sdr_cts_files/figure-html/unnamed-chunk-15-2.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="sliced-average-variance-estimator-save-2">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save-2"></a>
 </h3>
 <p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
 
-<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_save3_1</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_1</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+<span class="va">b_hat_save3_2</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_2</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y3_1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save3_1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span>
-<span class="co">#&gt; Warning in rbind(y_datta, x_datta): number of columns of result is not a</span>
-<span class="co">#&gt; multiple of vector length (arg 1)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="directional-regression-dr-1">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr-1"></a>
+<h3 id="directional-regression-dr-2">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr-2"></a>
 </h3>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y1</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+<span class="va">b_hat_dr3_1</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_1</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="va">b_hat_dr3_2</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3</span>, y<span class="op">=</span><span class="va">Y3_2</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y3_1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr3_1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'DR 2'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="outer-product-of-gradients-opg-2">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg-2"></a>
 </h3>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Parallelization not run because of computational time. </span>
 
-<span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
-  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
+<span class="va">X3_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
+  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X3</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
 
-<span class="va">b_hat_opg</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X_std</span>, y<span class="op">=</span><span class="va">Y1</span>, bw <span class="op">=</span> <span class="fl">.75</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
+<span class="va">b_hat_opg3</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X3_std</span>, y<span class="op">=</span><span class="va">Y3</span>, bw <span class="op">=</span> <span class="fl">.75</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
                  method<span class="op">=</span> <span class="st">"cg"</span>, parallelize <span class="op">=</span> <span class="cn">T</span> <span class="op">)</span>
 
 
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y3_1</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X3_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg3</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'OPG 2'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_cts_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="sdr_cts_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="minimum-average-variance-estimation-mave-2">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave-2"></a>
+</h3>
 </div>
 </div>
   </div>
