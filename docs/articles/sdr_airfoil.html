@@ -86,6 +86,11 @@
 
     
     
+<p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
+<div class="section level1">
+<h1 id="airfoil-noise">Airfoil Noise<a class="anchor" aria-label="anchor" href="#airfoil-noise"></a>
+</h1>
+<p>The airfoil dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.0.5</span>
@@ -98,6 +103,10 @@
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/setup-1.png" width="700"></p>
+<div class="section level2">
+<h2 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
+</h2>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
 
@@ -109,6 +118,11 @@
                         h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="sliced-average-variance-estimator-save">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save"></a>
+</h2>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
 
@@ -120,6 +134,11 @@
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="directional-regression-dr">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr"></a>
+</h2>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Directional Regression</span>
 
@@ -131,7 +150,11 @@
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Forward methods using OPG</p>
+</div>
+<div class="section level2">
+<h2 id="outer-product-of-gradients-opg">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg"></a>
+</h2>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># OPG Estimate </span>
 
@@ -168,23 +191,50 @@
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
+</h2>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../../../Dropbox%20(Personal)/linearsdr/articles/ex1_mave.png"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
-<span class="va">n</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span>
-<span class="co"># b_hat_made = made(x=t(X_std), matrix(Y, nrow = 1, ncol=n), bw=5, d=2,</span>
+
+<span class="co"># n=length(Y)</span>
+<span class="co"># </span>
+<span class="co"># start_time1 = Sys.time();</span>
+<span class="co"># b_hat_made = made(x=(X_std), matrix(Y, nrow = n, ncol=1), bw=5, d=2,</span>
 <span class="co">#                   ytype='continuous',</span>
 <span class="co">#                   method=list(opcg="cg", made="cg"), B_mat = NULL,</span>
 <span class="co">#                   parallelize=T,</span>
-<span class="co">#                   control_list=list(print_iter=T) ) </span>
+<span class="co">#                   control_list=list(print_iter=T, max_iter_made=5) )</span>
 <span class="co"># </span>
+<span class="co"># end_time1 = Sys.time(); end_time1 - start_time1;</span>
+<span class="co">#</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.331801141953547"      "1"</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0112107472862494"     "2"</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0102038542211796"     "3"</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.00497290505768543"    "4"</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.00261423206170839"    "5"</span>
+<span class="co"># # [1] "0 - non-convergence"</span>
+<span class="co"># # Time difference of 22.35525 mins</span>
+<span class="co">#  </span>
 <span class="co"># </span>
-<span class="co"># linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,</span>
-<span class="co">#                         ytype="continuous",</span>
-<span class="co">#                         h_lab='MADE 1', v_lab='Y',</span>
-<span class="co">#                         main_lab= paste0('MADE'), size=2.5)</span></code></pre></div>
+<span class="co"># plot saved image instead</span>
+<span class="co"># mave_plot=linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,</span>
+<span class="co">#                                   ytype="continuous",</span>
+<span class="co">#                                   h_lab='MADE 1', v_lab='Y',</span>
+<span class="co">#                                   main_lab= paste0('MADE'), size=2.5)</span>
+<span class="co"># </span>
+<span class="co"># linearsdr:::save_sdr_plot(mave_plot,filename = paste0('figures/ex1_mave.png'),</span>
+<span class="co">#                           width = 400, height = 400, units = "px", pointsize = 12,</span>
+<span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
+</div>
+</div>
   </div>
  <div class="col-md-3" id="pkgdown-sidebar">
-      </div>
+        <nav id="toc"><h2>On this page</h2>
+    </nav>
+</div>
 
 </div>
 
