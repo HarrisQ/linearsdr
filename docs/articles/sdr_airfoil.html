@@ -87,9 +87,9 @@
     
     
 <p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
-<div class="section level1">
-<h1 id="airfoil-noise">Airfoil Noise<a class="anchor" aria-label="anchor" href="#airfoil-noise"></a>
-</h1>
+<div class="section level2">
+<h2 id="airfoil-noise">Airfoil Noise<a class="anchor" aria-label="anchor" href="#airfoil-noise"></a>
+</h2>
 <p>The airfoil dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -103,9 +103,9 @@
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/setup-1.png" width="700"></p>
-<div class="section level2">
-<h2 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
-</h2>
+<div class="section level3">
+<h3 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
+</h3>
 <p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
@@ -119,9 +119,9 @@
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="sliced-average-variance-estimator-save">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save"></a>
-</h2>
+<div class="section level3">
+<h3 id="sliced-average-variance-estimator-save">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save"></a>
+</h3>
 <p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
@@ -135,9 +135,9 @@
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="directional-regression-dr">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr"></a>
-</h2>
+<div class="section level3">
+<h3 id="directional-regression-dr">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr"></a>
+</h3>
 <p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Directional Regression</span>
@@ -151,9 +151,9 @@
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="outer-product-of-gradients-opg">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg"></a>
-</h2>
+<div class="section level3">
+<h3 id="outer-product-of-gradients-opg">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg"></a>
+</h3>
 <p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># OPG Estimate </span>
@@ -166,11 +166,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"cores detected"</span> <span class="op">)</span> <span class="op">)</span>;
 <span class="co">#&gt; [1] "16 cores detected"</span>
 <span class="co"># Create cluster with desired number of cores</span>
-<span class="kw">if</span> <span class="op">(</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"hxq5"</span>, <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span> <span class="op">{</span>
-  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makePSOCKcluster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"hxq5"</span>, <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span> <span class="op">{</span>
-  <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="va">nprocs</span>, type<span class="op">=</span><span class="va">mp_type</span><span class="op">)</span>
-<span class="op">}</span>
+<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makePSOCKcluster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>
 <span class="co"># Register cluster</span>
 <span class="fu">doParallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
 <span class="co"># Find out how many cores are being used</span>
@@ -192,12 +188,14 @@
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
-</h2>
+<div class="section level3">
+<h3 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
+</h3>
 <p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../reference/figures/ex1_mave.png"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
+
+<span class="co"># The code is commented out to speed up compiling of the documentation. </span>
 
 <span class="co"># n=length(Y)</span>
 <span class="co"># </span>
@@ -222,8 +220,8 @@
 <span class="co"># plot saved image instead</span>
 <span class="co"># mave_plot=linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,</span>
 <span class="co">#                                   ytype="continuous",</span>
-<span class="co">#                                   h_lab='MADE 1', v_lab='Y',</span>
-<span class="co">#                                   main_lab= paste0('MADE'), size=2.5)</span>
+<span class="co">#                                   h_lab='MAVE 1', v_lab='Y',</span>
+<span class="co">#                                   main_lab= paste0('MAVE'), size=2.5)</span>
 <span class="co"># </span>
 <span class="co"># linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),</span>
 <span class="co">#                           width = 900, height = 450, units = "px", pointsize = 12,</span>

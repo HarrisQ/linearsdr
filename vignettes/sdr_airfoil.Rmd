@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository [here](https://archive.ics.uci.edu/ml/index.php).
 
-# Airfoil Noise
+## Airfoil Noise
 
 The airfoil dataset is available [here](https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise) and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of $500$ for our estimation since the computation for MAVE can get quite slow.
 
@@ -34,7 +34,7 @@ pairs(X)
 
 ```
 
-## Sliced Inverse Regression (SIR)
+### Sliced Inverse Regression (SIR)
 
 We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
@@ -52,7 +52,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
 ```
 
 
-## Sliced Average Variance Estimator (SAVE)
+### Sliced Average Variance Estimator (SAVE)
 
 We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
@@ -72,7 +72,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save[,1]), y_on_axis=T,
 
 ```
 
-## Directional Regression (DR)
+### Directional Regression (DR)
 
 We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
 
@@ -92,7 +92,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr[,1]), y_on_axis=T,
 
 ```
 
-## Outer Product of Gradients (OPG)
+### Outer Product of Gradients (OPG)
 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here. 
 
@@ -126,13 +126,15 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
 ```
 
 
-## Minimum Average Variance Estimation (MAVE)
+### Minimum Average Variance Estimation (MAVE)
 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, We use a $p \times d$ matrix with the upper $d \times d$ block being the identity. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response.
 ![](../man/figures/ex1_mave.png)
 
 ```{r}
 # MAVE Estimate
+
+# The code is commented out to speed up compiling of the documentation. 
 
 # n=length(Y)
 # 
@@ -157,8 +159,8 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 # plot saved image instead
 # mave_plot=linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_made[,1]), y_on_axis=T,
 #                                   ytype="continuous",
-#                                   h_lab='MADE 1', v_lab='Y',
-#                                   main_lab= paste0('MADE'), size=2.5)
+#                                   h_lab='MAVE 1', v_lab='Y',
+#                                   main_lab= paste0('MAVE'), size=2.5)
 # 
 # linearsdr:::save_sdr_plot(mave_plot,filename = paste0('../man/figures/ex1_mave.png'),
 #                           width = 900, height = 450, units = "px", pointsize = 12,
