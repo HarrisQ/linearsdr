@@ -27,7 +27,7 @@ arma::mat mgauss_loss_j_made(arma::vec c,
   
   
   arma::uword n=y_matrix.n_cols;
-  arma::uword m=y_matrix.n_rows + 1;
+  arma::uword m=y_matrix.n_rows;
   arma::mat I(m,m); I.eye();
   
   arma::mat mean_nll_j(1,1); mean_nll_j.zeros();    
@@ -53,7 +53,7 @@ arma::mat mgauss_loss_j_made(arma::vec c,
   
   return mean_nll_j;
   
-} ;
+};
 
 
 // A Loss function for whole MADE 
@@ -67,12 +67,11 @@ arma::mat mgauss_loss_made(arma::vec c,
                            Rcpp::List Dhat_list,
                            arma::mat r_mat) { 
   
-  arma::uword n=y_matrix.n_cols;  
+  arma::uword n; n=y_matrix.n_cols;  
   arma::mat mean_nll(1,1); mean_nll.zeros();  
   
   // Writing the For loop instead of sapply.
   arma::uword j;
-  
   for (j = 0; j < n; j++ ) {
     arma::vec ahat = ahat_list[j]; 
     arma::mat Dhat = Dhat_list[j];

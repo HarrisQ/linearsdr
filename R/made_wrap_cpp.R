@@ -113,10 +113,10 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
     
     # Loss function
-    loss_made = function(c_param){ 
-      mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
-                   link=linktype, k=k_vec, r_mat)
-    } # End of Loss function
+    # loss_made = function(c_param){ 
+    #   mn_loss_made(c_param, x_matrix, mv_Y, bw, ahat_list, Dhat_list,
+    #                link=linktype, k=k_vec, r_mat)
+    # } # End of Loss function
     
     # loss_made(c_init)
     
@@ -384,8 +384,8 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   # Control Parameter Defaults
   control_args=control_list; control_names=names(control_args);
   tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7;
-  max_iter_made=if ( "max_iter_made" %in% control_names ) {
-    control_args$max_iter_made
+  max_iter=if ( "max_iter" %in% control_names ) {
+    control_args$max_iter
   } else {
     25
   };
@@ -443,7 +443,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   
   
   
-  for(iter in 1:max_iter_made){
+  for(iter in 1:max_iter){
     B_0=t(matrix(c_0, nrow=d, ncol=p));
 
     # aD-block update
@@ -491,7 +491,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
       # B_0 = B_1;
       c_0=c_1;
     }  
-    if(iter==max_iter_made) print("0 - non-convergence")
+    if(iter==max_iter) print("0 - non-convergence")
 
   }
 
@@ -499,7 +499,7 @@ made <- function(x, y, d, bw, lambda=0, B_mat=NULL, ytype="continuous",
   B_hat_made = apply(B_hat_made, 2, normalize_cpp);
   return(B_hat_made)
   # return(list( estimate=B_hat_made, loss=B_hat_made_loss))
-};
+}; 
 
 
 

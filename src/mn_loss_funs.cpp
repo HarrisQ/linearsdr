@@ -617,9 +617,7 @@ arma::mat mn_loss_j_made(arma::vec c,
                          arma::vec k) {
   
   
-  arma::uword n=y_matrix.n_cols;
-  arma::uword m=y_matrix.n_rows + 1;
-  arma::mat I(m,m); I.eye();
+  arma::uword n=y_matrix.n_cols; 
   
   arma::mat mean_nll_j(1,1); mean_nll_j.zeros();   
   // arma::mat test;
