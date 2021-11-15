@@ -86,77 +86,10 @@
 
     
     
-<p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
-<div class="section level2">
-<h2 id="airfoil-noise">Airfoil Noise<a class="anchor" aria-label="anchor" href="#airfoil-noise"></a>
-</h2>
-<p>The airfoil dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.0.5</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://harrisq.github.io/linearsdr/" class="external-link">linearsdr</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'airfoil_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
-<span class="co"># summary(airfoil_datta)</span>
-
-<span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
-<span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/setup-1.png" width="700"></p>
-<div class="section level3">
-<h3 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
-</h3>
-<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
-
-<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
-
-
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
-                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-</div>
-<div class="section level3">
-<h3 id="sliced-average-variance-estimator-save">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save"></a>
-</h3>
-<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
-
-<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
-
-
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
-                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-</div>
-<div class="section level3">
-<h3 id="directional-regression-dr">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr"></a>
-</h3>
-<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Directional Regression</span>
-
-<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
-
-
-<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
-                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
-                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
-                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-</div>
-<div class="section level3">
-<h3 id="outer-product-of-gradients-opg">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg"></a>
-</h3>
-<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># OPG Estimate </span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"doParallel"</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: foreach</span>
@@ -172,7 +105,76 @@
 <span class="co"># Find out how many cores are being used</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/getDoParWorkers.html" class="external-link">getDoParWorkers</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span>, <span class="st">"cores registered"</span> <span class="op">)</span> <span class="op">)</span>
 <span class="co">#&gt; [1] "15 cores registered"</span>
-<span class="co"># stopCluster(cl)</span>
+<span class="co"># stopCluster(cl)</span></code></pre></div>
+<p>In this vignette, we demonstrate the available methods for linear Sufficient Dimension Reduction methods when working with continuous responses. The datasets are all accessible from the UCI repository <a href="https://archive.ics.uci.edu/ml/index.php" class="external-link">here</a>.</p>
+<div class="section level2">
+<h2 id="airfoil-noise">Airfoil Noise<a class="anchor" aria-label="anchor" href="#airfoil-noise"></a>
+</h2>
+<p>The airfoil dataset is available <a href="https://archive.ics.uci.edu/ml/datasets/airfoil+self-noise" class="external-link">here</a> and consists of 5 predictors and one response. The variables are measurements taken during airfoil tests and the response is the sound pressure level. Two of the predictors are discrete, which violate some theoretical assumptions for the methods applied, but we will see that the methods can still work well. A pairs plot illustrates the discreteness for some of the predictors. We randomly sample a subset of <span class="math inline">\(500\)</span> for our estimation since the computation for MAVE can get quite slow.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'airfoil_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
+<span class="co"># summary(airfoil_datta)</span>
+
+<span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
+<span class="va">Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">airfoil_datta</span><span class="op">[</span>,<span class="fl">6</span><span class="op">]</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="sliced-inverse-regression-sir">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir"></a>
+</h3>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
+
+<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="sliced-average-variance-estimator-save">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save"></a>
+</h3>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
+
+<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="directional-regression-dr">Directional Regression (DR)<a class="anchor" aria-label="anchor" href="#directional-regression-dr"></a>
+</h3>
+<p>We choose the number of slices to be <span class="math inline">\(5\)</span> and plot only the first sufficient predictor against the response.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Directional Regression</span>
+
+<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span> <span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>, 
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="outer-product-of-gradients-opg">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg"></a>
+</h3>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. We parallelize the computation out of convenience here.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># OPG Estimate </span>
+
 
 <span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
   <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
@@ -186,13 +188,13 @@
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
 </h3>
 <p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../reference/figures/ex1_mave.png"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
 <span class="co"># The code is commented out to speed up compiling of the documentation. </span>
@@ -227,6 +229,91 @@
 <span class="co">#                           width = 900, height = 450, units = "px", pointsize = 12,</span>
 <span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="crime-rate-and-community-survey">Crime Rate and Community Survey<a class="anchor" aria-label="anchor" href="#crime-rate-and-community-survey"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">'crime_datta'</span>, package<span class="op">=</span><span class="st">"linearsdr"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span>
+<span class="co">#&gt; [1] 500 100</span>
+
+<span class="va">X</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">]</span>
+<span class="va">Y</span> <span class="op">=</span> <span class="va">crime_datta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">crime_datta</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>
+
+<span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>; <span class="va">n</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>;
+ </code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
+
+<span class="va">b_hat_sir</span> <span class="op">=</span> <span class="fu"><a href="../reference/sir.html">sir</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+                lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_sir</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
+
+<span class="va">b_hat_save</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+              lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+<span class="va">b_hat_save_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/save_sdr.html">save_sdr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">5</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+                  lambda <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span>
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_save_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/figures-side-1.png" width="45%"><img src="sdr_airfoil_files/figure-html/figures-side-2.png" width="45%"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Directional Regression</span>
+
+<span class="va">b_hat_dr</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+              lambda <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="va">b_hat_dr_reg</span> <span class="op">=</span> <span class="fu"><a href="../reference/dr.html">dr</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X</span>, y<span class="op">=</span><span class="va">Y</span>, nslices <span class="op">=</span> <span class="fl">10</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>,
+                  lambda <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">$</span><span class="va">beta</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_dr_reg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
+<p>Forward methods using OPG</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
+  <span class="fu">center_cpp</span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">j</span><span class="op">]</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">)</span> <span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="fu">matpower_cpp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> , <span class="op">-</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>;
+
+<span class="va">b_hat_opg</span> <span class="op">=</span> <span class="fu"><a href="../reference/opcg.html">opcg</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">X_std</span>, y<span class="op">=</span><span class="va">Y</span>, bw <span class="op">=</span> <span class="fl">7</span>, d<span class="op">=</span><span class="fl">2</span>, ytype <span class="op">=</span> <span class="st">"continuous"</span>, 
+                 method<span class="op">=</span> <span class="st">"cg"</span>, parallelize <span class="op">=</span> <span class="cn">T</span> <span class="op">)</span>
+
+
+<span class="fu">linearsdr</span><span class="fu">:::</span><span class="fu">ggplot_fsdr</span><span class="op">(</span><span class="va">Y</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="op">(</span><span class="va">X_std</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span><span class="va">b_hat_opg</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>, y_on_axis<span class="op">=</span><span class="cn">T</span>,
+                        ytype<span class="op">=</span><span class="st">"continuous"</span>,
+                        h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
+                        main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
+<p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
   </div>
  <div class="col-md-3" id="pkgdown-sidebar">

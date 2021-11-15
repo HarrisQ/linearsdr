@@ -188,6 +188,7 @@ p = dim(X)[2]; n=dim(X)[1];
  
 
 ```
+### Sliced Inverse Regression (SIR)
 
 ```{r}
 # Sliced Inverse Regression
@@ -201,6 +202,10 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_sir[,1]), y_on_axis=T,
                         h_lab='SIR 1', v_lab='Y',
                         main_lab= paste0('SIR'), size=2.5)
 ```
+
+### Sliced Average Variance Estimator (SAVE)
+
+
 ```{r, figures-side, fig.show="hold", out.width="45%"}
 # Sliced Average Variance Estimator
 
@@ -226,6 +231,7 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_save_reg[,1]), y_on_axis=T,
 
 
 ```
+### Directional Regression (DR)
 
 ```{r}
 # Directional Regression
@@ -253,7 +259,8 @@ linearsdr:::ggplot_fsdr(Y, t((X)%*%b_hat_dr_reg[,1]), y_on_axis=T,
 
 ```
 
-Forward methods using OPG
+### Outer Product of Gradients (OPG)
+
 ```{r}
 
 X_std=(sapply(1:dim(X)[2], FUN= function(j)
@@ -269,3 +276,5 @@ linearsdr:::ggplot_fsdr(Y, t((X_std)%*%b_hat_opg[,1]), y_on_axis=T,
                         main_lab= paste0('OPG'), size=2.5)
 
 ```
+
+### Minimum Average Variance Estimation (MAVE)
