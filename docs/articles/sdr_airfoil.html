@@ -243,6 +243,9 @@
 
 <span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>; <span class="va">n</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>;
  </code></pre></div>
+<div class="section level3">
+<h3 id="sliced-inverse-regression-sir-1">Sliced Inverse Regression (SIR)<a class="anchor" aria-label="anchor" href="#sliced-inverse-regression-sir-1"></a>
+</h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Inverse Regression</span>
 
@@ -255,6 +258,10 @@
                         h_lab<span class="op">=</span><span class="st">'SIR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'SIR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="sliced-average-variance-estimator-save-1">Sliced Average Variance Estimator (SAVE)<a class="anchor" aria-label="anchor" href="#sliced-average-variance-estimator-save-1"></a>
+</h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Sliced Average Variance Estimator</span>
 
@@ -275,7 +282,7 @@
                         ytype<span class="op">=</span><span class="st">"continuous"</span>,
                         h_lab<span class="op">=</span><span class="st">'SAVE 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized SAVE'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
-<p><img src="sdr_airfoil_files/figure-html/figures-side-1.png" width="45%"><img src="sdr_airfoil_files/figure-html/figures-side-2.png" width="45%"></p>
+<p><img src="sdr_airfoil_files/figure-html/figures-side-1.png" width="45%"><img src="sdr_airfoil_files/figure-html/figures-side-2.png" width="45%"> ### Directional Regression (DR)</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Directional Regression</span>
 
@@ -299,7 +306,10 @@
                         h_lab<span class="op">=</span><span class="st">'DR 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Regularized DR'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-10-2.png" width="700"></p>
-<p>Forward methods using OPG</p>
+</div>
+<div class="section level3">
+<h3 id="outer-product-of-gradients-opg-1">Outer Product of Gradients (OPG)<a class="anchor" aria-label="anchor" href="#outer-product-of-gradients-opg-1"></a>
+</h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">X_std</span><span class="op">=</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, FUN<span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span>
@@ -314,6 +324,11 @@
                         h_lab<span class="op">=</span><span class="st">'OPG 1'</span>, v_lab<span class="op">=</span><span class="st">'Y'</span>,
                         main_lab<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'OPG'</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2.5</span><span class="op">)</span></code></pre></div>
 <p><img src="sdr_airfoil_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="minimum-average-variance-estimation-mave-1">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave-1"></a>
+</h3>
+</div>
 </div>
   </div>
  <div class="col-md-3" id="pkgdown-sidebar">
