@@ -3,6 +3,8 @@ title: "Linear SDR"
 author: "Harris Quach"
 date: '`r Sys.Date()`'
 output:
+  includes:
+      before_body: local_tex.html
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
@@ -20,19 +22,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction to Linear SDR
 
+Sufficient Dimension Reduction (SDR) is the subfield of statistics focused on finding lower dimensional summaries such that relational information of interest between variables is preserved.
+In mathematical terms, suppose we have random elements $Y$ and $X$, and we are interested in seeking a lower-dimension summary of $X$ such that all the information about $Y$ that is available in $X$ is preserved. Then what we want is a summary statistic of $X$, denoted $s(X)$, such that $Y$ is statistically independent of $X$ given $s(X)$, i.e. $Y$ indep $X | s(X)$.
 
+Linear SDR is when we are interested in finding lower dimension summaries of $X$ that are linear functions of $X$, such as $s(X) = \beta^{\top} X$ for some $p \times d$ matrix $\beta$, where $d$ is much smaller than $p$. 
+
+
+This package covers methods that can be categorized into two branches of SDR: Inverse Regression methods and Forward Regression Methods. 
 
 
 
 ## Inverse Methods
 
+Broadly speaking, inverse regression methods for SDR involve regressing the predictor variable $X$ onto the response variable $Y$. Methods will involve quantities such as $E(X|Y)$.
 
+Methods in this package that fall into this category are Sliced Inverse Regression (SIR), Sliced Average Variance Estimation (SAVE) and Directional Regression (DR).
 
+When $p$ is large, we may find ourselves in a situation where regularization is necessary, so the methods for SIR, SAVE and DR come with an option to place a Tikhonov regularizer on the sample covariance matrix. This regularization for inverse methods for SDR is similar in spirit to Zhong et. al. (2007).
 
 
 ## Forward Methods
 
+Forward regression methods for SDR involve the conventional approach of regressing the response variable $Y$ onto the predictor variable $X$. Methods will involve quantities such as $E(Y|X)$.
 
+Methods in this package that fall into this category are the Outer Product of Gradients (OPG), Minimum Average Variance Estimation (MAVE), the Outer Product of Canonical Gradients (OPCG) and the Minimum Average Deviance Estimator (MADE).
+
+Options for L1 and L2 regularizing OPCG may be available upon request.
 
 
 
