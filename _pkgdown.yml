@@ -26,44 +26,44 @@ development:
   mode: auto
 
 navbar:
-  # title: ~
-  # type: default
-  # structure:
-    # left:  [home, articles, reference, news]
-    # right:  [github]
-  # right:
-  #   - text: github
-  #     href: index.html
+  title: ~
+  type: default
   left:
     - text: Home
       href: index.html
-    - text: Articles
+      
+    - text: Vignettes
+      # href: articles/index.html
       menu:
       - text: Overview to Linear SDR
         href: articles/linearsdr.html
-        
+  
       - text: Continuous Responses
-        href: articles/sdr_cts.html 
-      
+        href: articles/sdr_cts.html
+  
       - text: Categorical Responses
-        href: articles/sdr_cat.html 
-        
-      # - text: Linear SDR for scalar Y, Ex2
-      #   href: articles/sdr_crime.html 
-      #   
-      # - text: Linear SDR for scalar Y, Ex3 
-      #   href: articles/sdr_supercond.html   
-        
-      - text: Tuning OPCG 
-        href: articles/Tuning OPCG.html  
-        
+        href: articles/sdr_cat.html
+  
+      - text: Tuning OPCG
+        href: articles/Tuning OPCG.html
+  
     - text: Functions and Datasets
-      href: reference/index.html  
-      
+      href: reference/index.html
+    
     - text: changelog
-      href: index.html
+      href: News.html
       
-      
+# articles:
+# - title: Some vignettes demonstrating the methods in the package
+#   navbar: ~
+#   contents:
+#   - linearsdr
+#   - sdr_cts
+#   - sdr_cat
+#   - Tuning OPCG
+
+
+
 reference:
   - title: Forward SDR Methods
     desc:  Methods that are considered Forward SDR methods, along with their related functions
@@ -89,19 +89,3 @@ reference:
     - pendigits_datta
 
 
-# articles:
-# - title: Customise your site
-#   navbar: ~
-#   contents:
-#   - pkgdown
-#   - customise
-#   - linking
-#   - search
-#   - metadata
-# - title: Testing
-#   desc: >
-#     These articles are used to test various pkgdown features that can not
-#     easily be tested automatically.
-#   contents:
-#   - starts_with("test")
-# 

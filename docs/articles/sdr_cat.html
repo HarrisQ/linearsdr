@@ -28,7 +28,7 @@
     <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">linearsdr</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1</small>
@@ -43,8 +43,8 @@
   <a class="nav-link" href="../index.html">Home</a>
 </li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-vignettes">Vignettes</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-vignettes">
     <a class="dropdown-item" href="../articles/linearsdr.html">Overview to Linear SDR</a>
     <a class="dropdown-item" href="../articles/sdr_cts.html">Continuous Responses</a>
     <a class="dropdown-item" href="../articles/sdr_cat.html">Categorical Responses</a>
@@ -55,7 +55,7 @@
   <a class="nav-link" href="../reference/index.html">Functions and Datasets</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="../index.html">changelog</a>
+  <a class="nav-link" href="../News.html">changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -201,7 +201,9 @@
 <h3 id="outer-product-of-canonical-gradients-opcg">Outer Product of Canonical Gradients (OPCG)<a class="anchor" aria-label="anchor" href="#outer-product-of-canonical-gradients-opcg"></a>
 </h3>
 <p>For OPCG, we use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to <span class="math inline">\(1.42\)</span> using the Tuning method for OPCG proposed in the paper. We parallelize the computation to make OPCG relatively competitive with the inverse methods in terms of computation. For convenience, we set <span class="math inline">\(d=9\)</span>; this has no effect on the estimation. The code is not run due to the compiling speed for this site.</p>
-<p><img src="../reference/figures/cat/ex1_opcg1.png"><img src="../reference/figures/cat/ex1_opcg2.png"><img src="../reference/figures/cat/ex1_opcg3.png"></p>
+<!-- ![](../man/figures/cat/ex1_opcg1.png) -->
+<!-- ![](../man/figures/cat/ex1_opcg2.png) -->
+<!-- ![](../man/figures/cat/ex1_opcg3.png) -->
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># OPG Estimate </span>
 
@@ -209,39 +211,50 @@
 <span class="co"># X1_std=(sapply(1:dim(X1)[2], FUN= function(j)</span>
 <span class="co">#   center_cpp(X1[,j], NULL) ) )%*%matpower_cpp(cov((X1)) , -1/2);</span>
 <span class="co"># </span>
+<span class="co"># X1_test_std=(sapply(1:dim(X1_test)[2], FUN= function(j)</span>
+<span class="co">#   center_cpp(X1_test[,j], NULL) ) )%*%matpower_cpp(cov((X1_test)) , -1/2);</span>
 <span class="co"># </span>
-<span class="co"># b_hat_opcg1 = opcg(x=X1_std, y=Y1, bw = 1.42, d=9, ytype = "cat", </span>
+<span class="co"># </span>
+<span class="co"># </span>
+<span class="co"># b_hat_opcg1 = opcg(x=X1_std, y=Y1, bw = 1.42, d=9, ytype = "cat",</span>
 <span class="co">#                   method= "cg", parallelize = T )</span>
 <span class="co"># </span>
-<span class="co"># </span>
-<span class="co"># opcg_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(1,2)]),</span>
+<span class="co"># opcg_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,2)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                      ytype="multinomial",</span>
 <span class="co">#                                      h_lab='OPCG 1', v_lab='OPCG 2',</span>
 <span class="co">#                                      main_lab= paste0('OPCG'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># opcg_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(2,3)]),</span>
+<span class="co"># opcg_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(2,3)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                       ytype="multinomial",</span>
 <span class="co">#                                       h_lab='OPCG 2', v_lab='OPCG 3',</span>
 <span class="co">#                                       main_lab= paste0('OPCG'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># opcg_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(1,3)]),</span>
+<span class="co"># opcg_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,3)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                       ytype="multinomial",</span>
 <span class="co">#                                       h_lab='OPCG 1', v_lab='OPCG 3',</span>
 <span class="co">#                                       main_lab= paste0('OPCG'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># linearsdr:::save_sdr_plot(opcg_plot1_2,</span>
-<span class="co">#                           filename = paste0('../man/figures/cat/ex1_opcg2.png'),</span>
+<span class="co"># linearsdr:::save_sdr_plot(opcg_plot1_1,</span>
+<span class="co">#                           filename = paste0('../man/figures/cat/ex1_opcg1.png'),</span>
 <span class="co">#                           width = 800, height = 450, units = "px", pointsize = 12,</span>
-<span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
+<span class="co">#                           bg = "white",  res = 125)</span>
+
+
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_opcg1.png'</span><span class="op">)</span>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_opcg2.png'</span><span class="op">)</span>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_opcg3.png'</span><span class="op">)</span></code></pre></div>
+<p><img src="../reference/figures/cat/ex1_opcg1.png" width="100%"><img src="../reference/figures/cat/ex1_opcg2.png" width="100%"><img src="../reference/figures/cat/ex1_opcg3.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
 </h3>
 <p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(1.42\)</span> and we set <span class="math inline">\(d=9\)</span> since this is the estimated dimension according to the Predictor Augmentation method.</p>
-<p><img src="../reference/figures/cat/ex1_made1.png"><img src="../reference/figures/cat/ex1_made2.png"><img src="../reference/figures/cat/ex1_made3.png"></p>
+<!-- ![](../man/figures/cat/ex1_made1.png) -->
+<!-- ![](../man/figures/cat/ex1_made2.png) -->
+<!-- ![](../man/figures/cat/ex1_made3.png) -->
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
@@ -258,46 +271,63 @@
 <span class="co"># </span>
 <span class="co"># end_time1 = Sys.time(); end_time1 - start_time1;</span>
 <span class="co"># </span>
-<span class="co"># # [1] "2021-11-16 00:14:12 EST"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.343483075608127"      "1"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.26444545390969"       "2"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.216705259641036"      "3"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.18994894599904"       "4"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.153602241573158"      "5"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.126204506547097"      "6"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.117781922425232"      "7"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.102576841906797"      "8"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.0897011392715833"     "9"</span>
-<span class="co"># # [1] "MADE: euc_dist dist is" "0.0813778799489298"     "10"</span>
+<span class="co"># # [1] "2021-11-16 01:29:42 EST"</span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.35643430105849"       "1"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.272035485981084"      "2"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.216755954406661"      "3"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.178830986051283"      "4"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.14704936221923"       "5"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.127637259541059"      "6"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.109017830098574"      "7"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0950488016216115"     "8"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0786731005862281"     "9"                     </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0713249829082496"     "10"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0528917610230475"     "11"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0574909160293049"     "12"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0455500055604227"     "13"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0389085098426421"     "14"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0334073908028235"     "15"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0324984800139471"     "16"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0277371426019481"     "17"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0289097573928742"     "18"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.016257684884142"      "19"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0147111771624944"     "20"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0172574114573619"     "21"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0157875498645283"     "22"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0171129086535496"     "23"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0128793550013778"     "24"                    </span>
+<span class="co"># # [1] "MADE: euc_dist dist is" "0.0126152738822231"     "25"                    </span>
 <span class="co"># # [1] "0 - non-convergence"</span>
-<span class="co"># # Time difference of 1.159333 hours on 39 cores</span>
+<span class="co"># # Time difference of 3.811436 hours on 39 cores</span>
+<span class="co">#</span>
 <span class="co"># </span>
-<span class="co"># </span>
-<span class="co">#  </span>
-<span class="co"># </span>
-<span class="co"># </span>
-<span class="co"># made_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(1,2)]),</span>
+<span class="co"># made_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,2)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                      ytype="multinomial",</span>
 <span class="co">#                                      h_lab='MADE 1', v_lab='MADE 2',</span>
 <span class="co">#                                      main_lab= paste0('MADE'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># made_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(2,3)]),</span>
+<span class="co"># made_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(2,3)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                       ytype="multinomial",</span>
 <span class="co">#                                       h_lab='MADE 2', v_lab='MADE 3',</span>
 <span class="co">#                                       main_lab= paste0('MADE'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># made_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(1,3)]),</span>
+<span class="co"># made_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,3)]),</span>
 <span class="co">#                                      y_on_axis=F,</span>
 <span class="co">#                                       ytype="multinomial",</span>
 <span class="co">#                                       h_lab='MADE 1', v_lab='MADE 3',</span>
 <span class="co">#                                       main_lab= paste0('MADE'), size=2.5)</span>
 <span class="co"># </span>
-<span class="co"># linearsdr:::save_sdr_plot(made_plot1_3,</span>
-<span class="co">#                           filename = paste0('../man/figures/cat/ex1_made3.png'),</span>
+<span class="co"># linearsdr:::save_sdr_plot(made_plot1_1,</span>
+<span class="co">#                           filename = paste0('../man/figures/cat/ex1_made1.png'),</span>
 <span class="co">#                           width = 800, height = 450, units = "px", pointsize = 12,</span>
-<span class="co">#                           bg = "white",  res = 100)</span></code></pre></div>
+<span class="co">#                           bg = "white",  res = 125)</span>
+
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_made1.png'</span><span class="op">)</span>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_made2.png'</span><span class="op">)</span>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">'../man/figures/cat/ex1_made3.png'</span><span class="op">)</span></code></pre></div>
+<p><img src="../reference/figures/cat/ex1_made1.png" width="100%"><img src="../reference/figures/cat/ex1_made2.png" width="100%"><img src="../reference/figures/cat/ex1_made3.png" width="100%"></p>
 </div>
 </div>
   </div>

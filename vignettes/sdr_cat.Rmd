@@ -147,44 +147,51 @@ linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_dr1[,c(1,3)]), y_on_axis=F,
 
 For OPCG, we use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to $1.42$ using the Tuning method for OPCG proposed in the paper. We parallelize the computation to make OPCG relatively competitive with the inverse methods in terms of computation. For convenience, we set $d=9$; this has no effect on the estimation. The code is not run due to the compiling speed for this site.  
 
-![](../man/figures/cat/ex1_opcg1.png)
-![](../man/figures/cat/ex1_opcg2.png)
-![](../man/figures/cat/ex1_opcg3.png)
-```{r, fig.show="hold"}
+<!-- ![](../man/figures/cat/ex1_opcg1.png) -->
+<!-- ![](../man/figures/cat/ex1_opcg2.png) -->
+<!-- ![](../man/figures/cat/ex1_opcg3.png) -->
+```{r, fig.show="hold", out.width="100%"}
 # OPG Estimate 
 
  
 # X1_std=(sapply(1:dim(X1)[2], FUN= function(j)
 #   center_cpp(X1[,j], NULL) ) )%*%matpower_cpp(cov((X1)) , -1/2);
 # 
+# X1_test_std=(sapply(1:dim(X1_test)[2], FUN= function(j)
+#   center_cpp(X1_test[,j], NULL) ) )%*%matpower_cpp(cov((X1_test)) , -1/2);
 # 
-# b_hat_opcg1 = opcg(x=X1_std, y=Y1, bw = 1.42, d=9, ytype = "cat", 
+# 
+# 
+# b_hat_opcg1 = opcg(x=X1_std, y=Y1, bw = 1.42, d=9, ytype = "cat",
 #                   method= "cg", parallelize = T )
 # 
-# 
-# opcg_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(1,2)]),
+# opcg_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,2)]),
 #                                      y_on_axis=F,
 #                                      ytype="multinomial",
 #                                      h_lab='OPCG 1', v_lab='OPCG 2',
 #                                      main_lab= paste0('OPCG'), size=2.5)
 # 
-# opcg_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(2,3)]),
+# opcg_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(2,3)]),
 #                                      y_on_axis=F,
 #                                       ytype="multinomial",
 #                                       h_lab='OPCG 2', v_lab='OPCG 3',
 #                                       main_lab= paste0('OPCG'), size=2.5)
 # 
-# opcg_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_opcg1[,c(1,3)]),
+# opcg_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,3)]),
 #                                      y_on_axis=F,
 #                                       ytype="multinomial",
 #                                       h_lab='OPCG 1', v_lab='OPCG 3',
 #                                       main_lab= paste0('OPCG'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(opcg_plot1_2,
-#                           filename = paste0('../man/figures/cat/ex1_opcg2.png'),
+# linearsdr:::save_sdr_plot(opcg_plot1_1,
+#                           filename = paste0('../man/figures/cat/ex1_opcg1.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
-#                           bg = "white",  res = 100)
+#                           bg = "white",  res = 125)
 
+
+knitr::include_graphics('../man/figures/cat/ex1_opcg1.png')
+knitr::include_graphics('../man/figures/cat/ex1_opcg2.png')
+knitr::include_graphics('../man/figures/cat/ex1_opcg3.png')
 
 ```
 
@@ -194,11 +201,11 @@ For OPCG, we use a Gaussian kernel for the local linear weights and standardize 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, We use a $p \times d$ matrix with the upper $d \times d$ block being the identity. 
 The bandwidth is set to $1.42$ and we set $d=9$ since this is the estimated dimension according to the Predictor Augmentation method. 
 
-![](../man/figures/cat/ex1_made1.png)
-![](../man/figures/cat/ex1_made2.png)
-![](../man/figures/cat/ex1_made3.png)
+<!-- ![](../man/figures/cat/ex1_made1.png) -->
+<!-- ![](../man/figures/cat/ex1_made2.png) -->
+<!-- ![](../man/figures/cat/ex1_made3.png) -->
 
-```{r,  fig.show="hold"}
+```{r,  fig.show="hold", out.width="100%"}
 # MAVE Estimate
 
 # The code is commented out to speed up compiling of the documentation. 
@@ -214,45 +221,61 @@ The bandwidth is set to $1.42$ and we set $d=9$ since this is the estimated dime
 # 
 # end_time1 = Sys.time(); end_time1 - start_time1;
 # 
-# # [1] "2021-11-16 00:14:12 EST"
-# # [1] "MADE: euc_dist dist is" "0.343483075608127"      "1"
-# # [1] "MADE: euc_dist dist is" "0.26444545390969"       "2"
-# # [1] "MADE: euc_dist dist is" "0.216705259641036"      "3"
-# # [1] "MADE: euc_dist dist is" "0.18994894599904"       "4"
-# # [1] "MADE: euc_dist dist is" "0.153602241573158"      "5"
-# # [1] "MADE: euc_dist dist is" "0.126204506547097"      "6"
-# # [1] "MADE: euc_dist dist is" "0.117781922425232"      "7"
-# # [1] "MADE: euc_dist dist is" "0.102576841906797"      "8"
-# # [1] "MADE: euc_dist dist is" "0.0897011392715833"     "9"
-# # [1] "MADE: euc_dist dist is" "0.0813778799489298"     "10"
+# # [1] "2021-11-16 01:29:42 EST"
+# # [1] "MADE: euc_dist dist is" "0.35643430105849"       "1"                     
+# # [1] "MADE: euc_dist dist is" "0.272035485981084"      "2"                     
+# # [1] "MADE: euc_dist dist is" "0.216755954406661"      "3"                     
+# # [1] "MADE: euc_dist dist is" "0.178830986051283"      "4"                     
+# # [1] "MADE: euc_dist dist is" "0.14704936221923"       "5"                     
+# # [1] "MADE: euc_dist dist is" "0.127637259541059"      "6"                     
+# # [1] "MADE: euc_dist dist is" "0.109017830098574"      "7"                     
+# # [1] "MADE: euc_dist dist is" "0.0950488016216115"     "8"                     
+# # [1] "MADE: euc_dist dist is" "0.0786731005862281"     "9"                     
+# # [1] "MADE: euc_dist dist is" "0.0713249829082496"     "10"                    
+# # [1] "MADE: euc_dist dist is" "0.0528917610230475"     "11"                    
+# # [1] "MADE: euc_dist dist is" "0.0574909160293049"     "12"                    
+# # [1] "MADE: euc_dist dist is" "0.0455500055604227"     "13"                    
+# # [1] "MADE: euc_dist dist is" "0.0389085098426421"     "14"                    
+# # [1] "MADE: euc_dist dist is" "0.0334073908028235"     "15"                    
+# # [1] "MADE: euc_dist dist is" "0.0324984800139471"     "16"                    
+# # [1] "MADE: euc_dist dist is" "0.0277371426019481"     "17"                    
+# # [1] "MADE: euc_dist dist is" "0.0289097573928742"     "18"                    
+# # [1] "MADE: euc_dist dist is" "0.016257684884142"      "19"                    
+# # [1] "MADE: euc_dist dist is" "0.0147111771624944"     "20"                    
+# # [1] "MADE: euc_dist dist is" "0.0172574114573619"     "21"                    
+# # [1] "MADE: euc_dist dist is" "0.0157875498645283"     "22"                    
+# # [1] "MADE: euc_dist dist is" "0.0171129086535496"     "23"                    
+# # [1] "MADE: euc_dist dist is" "0.0128793550013778"     "24"                    
+# # [1] "MADE: euc_dist dist is" "0.0126152738822231"     "25"                    
 # # [1] "0 - non-convergence"
-# # Time difference of 1.159333 hours on 39 cores
+# # Time difference of 3.811436 hours on 39 cores
+#
 # 
-# 
-#  
-# 
-# 
-# made_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(1,2)]),
+# made_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,2)]),
 #                                      y_on_axis=F,
 #                                      ytype="multinomial",
 #                                      h_lab='MADE 1', v_lab='MADE 2',
 #                                      main_lab= paste0('MADE'), size=2.5)
 # 
-# made_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(2,3)]),
+# made_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(2,3)]),
 #                                      y_on_axis=F,
 #                                       ytype="multinomial",
 #                                       h_lab='MADE 2', v_lab='MADE 3',
 #                                       main_lab= paste0('MADE'), size=2.5)
 # 
-# made_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_made1[,c(1,3)]),
+# made_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,3)]),
 #                                      y_on_axis=F,
 #                                       ytype="multinomial",
 #                                       h_lab='MADE 1', v_lab='MADE 3',
 #                                       main_lab= paste0('MADE'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(made_plot1_3,
-#                           filename = paste0('../man/figures/cat/ex1_made3.png'),
+# linearsdr:::save_sdr_plot(made_plot1_1,
+#                           filename = paste0('../man/figures/cat/ex1_made1.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
-#                           bg = "white",  res = 100)
+#                           bg = "white",  res = 125)
+
+knitr::include_graphics('../man/figures/cat/ex1_made1.png')
+knitr::include_graphics('../man/figures/cat/ex1_made2.png')
+knitr::include_graphics('../man/figures/cat/ex1_made3.png')
 ```
 
