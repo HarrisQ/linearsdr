@@ -192,7 +192,7 @@
 <div class="section level3">
 <h3 id="minimum-average-variance-estimation-mave">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave"></a>
 </h3>
-<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../reference/figures/ex1_mave.png"></p>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, We use a <span class="math inline">\(p \times d\)</span> matrix with the upper <span class="math inline">\(d \times d\)</span> block being the identity. The bandwidth is set to <span class="math inline">\(5\)</span> and we plot only the first sufficient predictor against the response. <img src="../reference/figures/cts/ex1_mave.png"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
@@ -333,7 +333,7 @@
 <div class="section level3">
 <h3 id="minimum-average-variance-estimation-mave-1">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave-1"></a>
 </h3>
-<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, we use the OPG estimator since the default <span class="math inline">\(p \times d\)</span> matrix with upper block as the identity failed to converge. The bandwidth is set to <span class="math inline">\(4\)</span> and we consider the first two sufficient predictors against the response. <img src="../reference/figures/ex2_mave.png"></p>
+<p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, we use the OPG estimator since the default <span class="math inline">\(p \times d\)</span> matrix with upper block as the identity failed to converge. The bandwidth is set to <span class="math inline">\(4\)</span> and we consider the first two sufficient predictors against the response. <img src="../reference/figures/cts/ex2_mave.png"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
@@ -522,8 +522,8 @@
 <h3 id="minimum-average-variance-estimation-mave-2">Minimum Average Variance Estimation (MAVE)<a class="anchor" aria-label="anchor" href="#minimum-average-variance-estimation-mave-2"></a>
 </h3>
 <p>We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the <span class="math inline">\(\beta\)</span> matrix, we use the default <span class="math inline">\(p \times d\)</span> matrix with upper block as the identity. The bandwidth is set to <span class="math inline">\(1.5\)</span> and we consider the first two sufficient predictors against the bivariate response.</p>
-<p><img src="../reference/figures/ex3_mave1.png"></p>
-<p><img src="../reference/figures/ex3_mave2.png"><img src="../reference/figures/ex3_mave3.png"></p>
+<p><img src="../reference/figures/cts/ex3_mave1.png"></p>
+<p><img src="../reference/figures/cts/ex3_mave2.png"><img src="../reference/figures/cts/ex3_mave3.png"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># MAVE Estimate</span>
 
