@@ -180,10 +180,10 @@ For OPCG, we use a Gaussian kernel for the local linear weights and standardize 
 #                                       h_lab='OPCG 1', v_lab='OPCG 3',
 #                                       main_lab= paste0('OPCG'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(opcg_plot1_3,
-#                           filename = paste0('../man/figures/cat/ex1_opcg3.png'),
+# linearsdr:::save_sdr_plot(opcg_plot1_2,
+#                           filename = paste0('../man/figures/cat/ex1_opcg2.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
-#                           bg = "white",  res = 150)
+#                           bg = "white",  res = 100)
 
 
 ```
@@ -250,9 +250,9 @@ The bandwidth is set to $1.42$ and we set $d=9$ since this is the estimated dime
 #                                       h_lab='MADE 1', v_lab='MADE 3',
 #                                       main_lab= paste0('MADE'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(made_plot1_1,
-#                           filename = paste0('../man/figures/cat/ex1_made1.png'),
+# linearsdr:::save_sdr_plot(made_plot1_3,
+#                           filename = paste0('../man/figures/cat/ex1_made3.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
-#                           bg = "white",  res = 150)
+#                           bg = "white",  res = 100)
 ```
 
