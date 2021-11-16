@@ -153,7 +153,8 @@ We use a Gaussian kernel for the local linear weights and standardize the predic
 #                   ytype='continuous',
 #                   method=list(opcg="cg", made="cg"), B_mat = NULL,
 #                   parallelize=T,
-#                   control_list=list(print_iter=T, max_iter_made=5) )
+#                   control_list=list(print_iter=T, 
+#                                     max_iter=5, max_iter_made=5) )
 # 
 # end_time1 = Sys.time(); end_time1 - start_time1;
 #
@@ -293,6 +294,7 @@ linearsdr:::ggplot_fsdr(Y2, t((X2_std)%*%b_hat_opg2[,1:2]), y_on_axis=F,
 ```
 
 ### Minimum Average Variance Estimation (MAVE)
+
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, we use the OPG estimator since the default $p \times d$ matrix with upper block as the identity failed to converge. 
 The bandwidth is set to $4$ and we consider the first two sufficient predictors against the response.
 ![](../man/figures/ex2_mave.png)
@@ -307,7 +309,8 @@ The bandwidth is set to $4$ and we consider the first two sufficient predictors 
 #                   ytype='continuous',
 #                   method=list(opcg="cg", made="cg"), B_mat = b_hat_opg2,
 #                   parallelize=T,
-#                   control_list=list(print_iter=T, max_iter_made=5) )
+#                   control_list=list(print_iter=T, 
+#                                     max_iter=5, max_iter_made=5) )
 # 
 # end_time1 = Sys.time(); end_time1 - start_time1;
 ### For B_mat = NULL
@@ -348,7 +351,13 @@ The bandwidth is set to $4$ and we consider the first two sufficient predictors 
 
 ## Multivariate $Y$
 
-Energy Efficiency 
+For demonstrating the linear SDR methods on multivariate responses, we consider the Energy Efficiency dataset available [here](https://archive.ics.uci.edu/ml/datasets/Energy+efficiency).
+There are 8 predictors, and from a pairs plot, we can see a number are discrete.
+The response is bivariate, with the first response being the heating load, and the second response being the cooling load.
+
+For the inverse SDR methods, we apply the SDR methods component-wise to the response. The first sufficient predictor for each component of the response is taken as a sufficient dimension reduction direction. This is similar to the approach of Cook and Setodji. 
+For the forward methods, we consider the entire response simultaneously.
+
 
 ```{r}
 data('energy_datta', package="linearsdr")
@@ -364,6 +373,9 @@ pairs(X3)
 ```
 
 ### Sliced Inverse Regression (SIR)
+
+For SIR, we use 5 slices and estimate 2 sufficient directions per component. We take the first direction of each component to get two sufficient predictors.  
+
 ```{r, fig.show="hold"}
 
 b_hat_sir3_1 = sir(x=X3, y=Y3_1, nslices = 5, d=2, 
@@ -385,7 +397,7 @@ linearsdr:::ggplot_fsdr(Y3_2, t((X3)%*%b_hat_sir3_2[,1]), y_on_axis=T,
 
 linearsdr:::ggplot_fsdr(Y3_1, 
                         t((X3)%*%cbind(b_hat_sir3_1[,1], b_hat_sir3_2[,1])),
-                        y_on_axis=T, 
+                        y_on_axis=F, 
                         ytype="continuous",
                         h_lab='SIR 1', v_lab='SIR 2',
                         main_lab= paste0('SIR'), size=2.5)
@@ -396,7 +408,7 @@ linearsdr:::ggplot_fsdr(Y3_1,
 
 ### Sliced Average Variance Estimator (SAVE)
 
-We choose the number of slices to be $5$ and plot only the first sufficient predictor against the response.
+For SAVE, we use 5 slices, the same as SIR, and plot the two estimated sufficient predictors.
 
 ```{r, fig.show="hold"}
 # Sliced Average Variance Estimator
@@ -457,13 +469,17 @@ linearsdr:::ggplot_fsdr(Y3_1,
 ```
 
 ### Outer Product of Gradients (OPG)
+
+We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to $1.5$ and we consider the first two sufficient predictors against the bivariate response. 
+
+
 ```{r, fig.show="hold"}
 # Parallelization not run because of computational time. 
 
 X3_std=(sapply(1:dim(X3)[2], FUN= function(j)
   center_cpp(X3[,j], NULL) ) )%*%matpower_cpp(cov((X3)) , -1/2);
 
-b_hat_opg3 = opcg(x=X3_std, y=Y3, bw = .75, d=2, ytype = "continuous", 
+b_hat_opg3 = opcg(x=X3_std, y=Y3, bw = 1.5, d=2, ytype = "continuous", 
                  method= "cg", parallelize = T )
 
 linearsdr:::ggplot_fsdr(Y3_1, t((X3_std)%*%b_hat_opg3[,1]), y_on_axis=T,
@@ -487,122 +503,70 @@ linearsdr:::ggplot_fsdr(Y3_2, t((X3_std)%*%b_hat_opg3[,1:2]), y_on_axis=F,
 
 ### Minimum Average Variance Estimation (MAVE)
 
+We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, we use the default $p \times d$ matrix with upper block as the identity. 
+The bandwidth is set to $1.5$ and we consider the first two sufficient predictors against the bivariate response.
+
+![](../man/figures/ex3_mave1.png)
+
+![](../man/figures/ex3_mave2.png)
+![](../man/figures/ex3_mave3.png)
+
 
 ```{r, fig.show="hold"}
 # MAVE Estimate
 
 # # The code is commented out to speed up compiling of the documentation. 
 # 
-start_time1 = Sys.time();
-b_hat_made2 = made(x=(X3_std), Y3, bw=1.5, d=2,
-                  ytype='continuous',
-                  method=list(opcg="cg", made="cg"), B_mat = NULL,
-                  parallelize=T,
-                  control_list=list(print_iter=T, max_iter_made=5) )
-end_time1 = Sys.time(); end_time1 - start_time1;
-
-
-opcg_list=opcg_made(X3_std, Y3, bw=2, lambda=0,B_mat=diag(1, p, 2), ytype='continuous',
-                    method="cg", parallelize=T, r_mat=NULL, 
-                    control_list=list())
-
-linearsdr:::made_update(X3_std, Y3, d=2,bw=2,
-                        aD_list = opcg_list, B_mat=b_hat_opg3,
-                        ytype='continuous', method="cg", 
-                        parallelize=T, r_mat=NULL,
-                        control_list=list(max_iter_made=5));
-
-n=dim(X3_std)[1]; 
-p=dim(X3_std)[2]
-c_init=c(b_hat_opg3)
-tx3=t(X3_std)
-ty3=t(Y3)
-k_vec=rep(1,n )
-r_mat=diag(1,p,p)
-
-control_args=list(); control_names=names(control_args); 
-  tol_val=if ( "tol_val" %in% control_names ) control_args$tol_val else 1e-7; 
-  max_iter=if ( "max_iter" %in% control_names ) control_args$max_iter else 25 ;
-  max_iter_made=if ( "max_iter_made" %in% control_names ) {
-    control_args$max_iter_made
-  } else {
-    25
-  };
-  print_iter_made=if ( "print_iter_made" %in% control_names ) control_args$print_iter_made else F;
-
-
-    test=if ( "test" %in% control_names ) control_args$test else F ; 
-    max_iter_made=if ( "max_iter_made" %in% control_names ) control_args$max_iter_made else 25 ; 
-    init_stepsize_made=if ( "init_stepsize_made" %in% control_names ) control_args$init_stepsize_made else rep(n,max_iter_made); 
-    beta_bt_made=if ( "beta_bt_made" %in% control_names ) control_args$beta_bt_made else 0.5;
-    c_ag1_made=if ( "c_ag1_made" %in% control_names ) control_args$c_ag1_made else 10e-3;
-    c_ag2_made=if ( "c_ag2_made" %in% control_names ) control_args$c_ag2_made else 0.9;
-    c_wolfe_made=if ( "c_wolfe_made" %in% control_names ) control_args$c_wolfe_made else 0; # 0.1 wiki-recom 
-    max_iter_line_made=if ( "max_iter_line_made" %in% control_names ) control_args$max_iter_line_made else 100;
-
-
-
-tester=linearsdr:::vecB_cg(init = c_init,
-                            x_datta = tx3,
-                            y_datta = ty3,
-                            bw=2,
-                            ahat_list=opcg_list$ahat, 
-                            Dhat_list=opcg_list$Dhat,
-                            link="continuous",
-                            k=k_vec,
-                            r_mat=r_mat, 
-                            control_list=list(tol_val=tol_val,
-                                             max_iter=max_iter_made, 
-                                             init_stepsize=init_stepsize_made,
-                                             beta_bt=beta_bt_made,
-                                             c_ag1=c_ag1_made,
-                                             c_ag2=c_ag2_made,
-                                             c_wolfe=c_wolfe_made, 
-                                            max_iter_line=max_iter_line_made),
-                            test=F)
-
-linearsdr:::mgauss_loss_made(c=c_init, x_matrix = tx3,
-                             y_matrix = ty3,
-                             bw = 2, ahat_list = opcg_list$ahat,
-                             Dhat_list = opcg_list$Dhat, r_mat = r_mat)
-
-mgauss_loss_made(c=c_init, x_matrix = tx3,
-                  y_matrix = ty3,
-                  bw = 2, ahat_list = opcg_list$ahat,
-                  Dhat_list = opcg_list$Dhat, r_mat = r_mat)
-
-mgauss_loss_j_made(c=c_init, xj=tx3, 
-                   y_matrix=ty3, wj=k_vec, 
-                   ahat=opcg_list$ahat[[1]],
-                   Dhat=opcg_list$Dhat[[1]] )
-
-
-### For B_mat = NULL
-# [1] "MADE: euc_dist dist is" "1.63713329933597e-15"  
+# start_time1 = Sys.time();
+# b_hat_made3 = made(x=(X3_std), Y3, bw=1.5, d=2,
+#                   ytype='continuous',
+#                   method=list(opcg="cg", made="cg"), B_mat = NULL,
+#                   parallelize=T,
+#                   control_list=list(print_iter=T, 
+#                                     max_iter=5, max_iter_made=5) )
+# end_time1 = Sys.time(); end_time1 - start_time1;
+#### For B_mat = NULL
+# [1] "MADE: euc_dist dist is" "0.131175506718606"     
 # [3] "1"                     
-# > 
-# > end_time1 = Sys.time(); end_time1 - start_time1;
-# Time difference of 34.67113 mins
-# 
-### For B_mat = b_hat_opg2
-# [1] "MADE: euc_dist dist is" "0.00134310136692448"   
-# [3] "1"                     
-# [1] "MADE: euc_dist dist is" "4.66580981942468e-15"  
+# [1] "MADE: euc_dist dist is" "0.0436618536536756"    
 # [3] "2"                     
-# > 
+# [1] "MADE: euc_dist dist is" "0.0152859202750813"    
+# [3] "3"                     
+# [1] "MADE: euc_dist dist is" "0.00468325544335494"   
+# [3] "4"                     
+# [1] "MADE: euc_dist dist is" "0.000958786277942029"  
+# [3] "5"                     
+# [1] "0 - non-convergence"
 # > end_time1 = Sys.time(); end_time1 - start_time1;
-# Time difference of 58.74611 mins
+# Time difference of 18.72442 mins
+#
 # 
-# mave_plot2=linearsdr:::ggplot_fsdr(Y2, t((X2_std)%*%b_hat_made2[,1:2]),
+# mave_plot3_1=linearsdr:::ggplot_fsdr(Y3_1, t((X3_std)%*%b_hat_made3[,1]),
+#                                      y_on_axis=T,
+#                                      ytype="continuous",
+#                                      h_lab='MAVE 1', v_lab='Y1',
+#                                      main_lab= paste0('MAVE'), size=2.5)
+# 
+# mave_plot3_2=linearsdr:::ggplot_fsdr(Y3_2, t((X3_std)%*%b_hat_made3[,1]),
+#                                      y_on_axis=T,
+#                                      ytype="continuous",
+#                                      h_lab='MAVE 1', v_lab='Y2',
+#                                      main_lab= paste0('MAVE'), size=2.5)
+# 
+# mave_plot3=linearsdr:::ggplot_fsdr(Y3_1, t((X3_std)%*%b_hat_made3[,1:2]),
 #                                    y_on_axis=F,
 #                                    ytype="continuous",
-#                                    h_lab='MAVE 1', v_lab='Y',
+#                                    h_lab='MAVE 1', v_lab='MAVE 2',
 #                                    main_lab= paste0('MAVE'), size=2.5)
 # 
-# mave_plot2
+# linearsdr:::ggplot_fsdr(Y3_2, t((X3_std)%*%b_hat_made3[,1]),
+#                                    y_on_axis=T,
+#                                    ytype="continuous",
+#                                    h_lab='MAVE 1', v_lab='MAVE 2',
+#                                    main_lab= paste0('MAVE'), size=2.5)
 # 
-# linearsdr:::save_sdr_plot(mave_plot2,filename =
-#                             paste0('../man/figures/ex2_mave.png'),
+# linearsdr:::save_sdr_plot(mave_plot3_2,filename =
+#                             paste0('../man/figures/ex3_mave2.png'),
 #                                     width = 900, height = 450, units = "px",
 #                                     pointsize = 12,
 #                                     bg = "white",  res = 100)
