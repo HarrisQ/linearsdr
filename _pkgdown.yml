@@ -44,6 +44,9 @@ navbar:
         
       - text: Continuous Responses
         href: articles/sdr_cts.html 
+      
+      - text: Categorical Responses
+        href: articles/sdr_cat.html 
         
       # - text: Linear SDR for scalar Y, Ex2
       #   href: articles/sdr_crime.html 
@@ -82,8 +85,8 @@ reference:
     contents:
     - airfoil_datta
     - crime_datta
-    - supercond_datta
     - energy_datta
+    - pendigits_datta
 
 
 # articles:

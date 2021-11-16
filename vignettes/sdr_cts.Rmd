@@ -139,7 +139,7 @@ linearsdr:::ggplot_fsdr(Y1, t((X1_std)%*%b_hat_opg1[,1]), y_on_axis=T,
 ### Minimum Average Variance Estimation (MAVE)
 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, We use a $p \times d$ matrix with the upper $d \times d$ block being the identity. The bandwidth is set to $5$ and we plot only the first sufficient predictor against the response.
-![](../man/figures/ex1_mave.png)
+![](../man/figures/cts/ex1_mave.png)
 
 ```{r}
 # MAVE Estimate
@@ -297,7 +297,7 @@ linearsdr:::ggplot_fsdr(Y2, t((X2_std)%*%b_hat_opg2[,1:2]), y_on_axis=F,
 
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, we use the OPG estimator since the default $p \times d$ matrix with upper block as the identity failed to converge. 
 The bandwidth is set to $4$ and we consider the first two sufficient predictors against the response.
-![](../man/figures/ex2_mave.png)
+![](../man/figures/cts/ex2_mave.png)
 
 ```{r}
 # MAVE Estimate
@@ -506,10 +506,10 @@ linearsdr:::ggplot_fsdr(Y3_2, t((X3_std)%*%b_hat_opg3[,1:2]), y_on_axis=F,
 We use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. For the starting value of the $\beta$ matrix, we use the default $p \times d$ matrix with upper block as the identity. 
 The bandwidth is set to $1.5$ and we consider the first two sufficient predictors against the bivariate response.
 
-![](../man/figures/ex3_mave1.png)
+![](../man/figures/cts/ex3_mave1.png)
 
-![](../man/figures/ex3_mave2.png)
-![](../man/figures/ex3_mave3.png)
+![](../man/figures/cts/ex3_mave2.png)
+![](../man/figures/cts/ex3_mave3.png)
 
 
 ```{r, fig.show="hold"}

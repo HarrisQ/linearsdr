@@ -43,3 +43,19 @@ crime_datta = sapply(1:dim(crime_datta)[2],
                      function(k) as.numeric(crime_datta[,k]))
 
 usethis::use_data(crime_datta, overwrite = TRUE)
+
+
+#### Pen digit ----
+
+set.seed(2020)
+pendigit_train_all=as.data.frame(read.csv('data-raw/pendigits_tra.txt', header = F, sep = ','))
+pendigit_test_all=as.data.frame(read.csv('data-raw/pendigits_tes.txt', header = F, sep = ','))
+
+train_set=sample(1:dim(pendigit_train_all)[1],1000) #1:dim(uspsdigit_train)[1];#
+test_set=sample(1:dim(pendigit_test_all)[1],1000) #1:dim(uspsdigit_train)[1];#
+
+pendigits_datta = rbind(pendigit_train_all[train_set,],
+                        pendigit_test_all[test_set,] )
+
+usethis::use_data(pendigits_datta, overwrite = TRUE)
+
