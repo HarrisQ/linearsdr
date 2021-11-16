@@ -37,7 +37,7 @@ arma::mat mgauss_loss_j_made(arma::vec c,
   
   for (i = 0; i < n; i++ ) {
     
-    arma::mat tXij_tD=kron( (xj.col(i)).t(),Dhat.t());
+    arma::mat tXij_tD=kron( (xj.col(i)).t(), Dhat.t());
     arma::vec lcp=tXij_tD*c;
     
     // gaussian-loss
@@ -45,9 +45,8 @@ arma::mat mgauss_loss_j_made(arma::vec c,
     // mean_nll_j += -wj(i)*( lcp.t()*y_matrix.col(i) + (ahat + lcp).t()*(ahat + lcp)/2 ) /n;
     
     // square-loss; no negative is needed
-    mean_nll_j += wj(i)*( (ahat + lcp).t()* y_matrix.col(i) -
-       (ahat + lcp) ).t()*( (ahat + lcp).t()* y_matrix.col(i) -
-       (ahat + lcp) )/n;
+    mean_nll_j += wj(i)*( y_matrix.col(i) - (ahat + lcp) ).t()*
+      ( y_matrix.col(i) - (ahat + lcp) )/n;
     
   }
   
@@ -115,7 +114,7 @@ arma::mat mgauss_score_j_made(arma::vec c,
   arma::uword i;
   for (i = 0; i < n; i++ ) {
     
-    arma::mat tXij_tD=kron( (xj.col(i)).t(),Dhat.t());
+    arma::mat tXij_tD=kron( (xj.col(i)).t(), Dhat.t());
     arma::vec lcp=tXij_tD*c;
     arma::vec mu_ij = ahat + lcp ;
     

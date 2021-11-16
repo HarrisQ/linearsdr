@@ -502,7 +502,7 @@ b_hat_made2 = made(x=(X3_std), Y3, bw=1.5, d=2,
 end_time1 = Sys.time(); end_time1 - start_time1;
 
 
-opcg_list=opcg_made(X3_std, Y3, bw=2, lambda=0,B_mat=NULL, ytype='continuous',
+opcg_list=opcg_made(X3_std, Y3, bw=2, lambda=0,B_mat=diag(1, p, 2), ytype='continuous',
                     method="cg", parallelize=T, r_mat=NULL, 
                     control_list=list())
 
@@ -565,21 +565,17 @@ linearsdr:::mgauss_loss_made(c=c_init, x_matrix = tx3,
                              y_matrix = ty3,
                              bw = 2, ahat_list = opcg_list$ahat,
                              Dhat_list = opcg_list$Dhat, r_mat = r_mat)
-linearsdr:::mgauss_score_made(c=c_init, x_matrix = tx3,
-                              y_matrix = ty3,
-                              bw = 2, ahat_list = opcg_list$ahat,
-                              Dhat_list = opcg_list$Dhat, r_mat = r_mat)
+
+mgauss_loss_made(c=c_init, x_matrix = tx3,
+                  y_matrix = ty3,
+                  bw = 2, ahat_list = opcg_list$ahat,
+                  Dhat_list = opcg_list$Dhat, r_mat = r_mat)
 
 mgauss_loss_j_made(c=c_init, xj=tx3, 
                    y_matrix=ty3, wj=k_vec, 
                    ahat=opcg_list$ahat[[1]],
                    Dhat=opcg_list$Dhat[[1]] )
 
-
-mgauss_loss_j_made(c=c_init, xj=tx3, 
-                   y_matrix=ty3, wj=k_vec, 
-                   ahat=opcg_list$ahat[[1]],
-                   Dhat=t(opcg_list$Dhat[[1]]) )
 
 ### For B_mat = NULL
 # [1] "MADE: euc_dist dist is" "1.63713329933597e-15"  
