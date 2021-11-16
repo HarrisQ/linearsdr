@@ -145,53 +145,63 @@ linearsdr:::ggplot_fsdr(Y1_test, t((X1_test)%*%b_hat_dr1[,c(1,3)]), y_on_axis=F,
 
 ### Outer Product of Canonical Gradients (OPCG)
 
+::: {.hidden}
+```{r, fig.show="hold", out.width="100%"}
+# OPG Estimate 
+
+load('opcg_pendigit_made_est.Rdata')
+b_hat_opcg1 = B_hat_opcg
+b_hat_made1 = B_hat_made
+
+```
+:::
+
 For OPCG, we use a Gaussian kernel for the local linear weights and standardize the predictors so that the kernel choice is more appropriate. The bandwidth is set to $1.42$ using the Tuning method for OPCG proposed in the paper. We parallelize the computation to make OPCG relatively competitive with the inverse methods in terms of computation. For convenience, we set $d=9$; this has no effect on the estimation. The code is not run due to the compiling speed for this site.  
 
 <!-- ![](../man/figures/cat/ex1_opcg1.png) -->
 <!-- ![](../man/figures/cat/ex1_opcg2.png) -->
 <!-- ![](../man/figures/cat/ex1_opcg3.png) -->
-```{r, fig.show="hold", out.width="100%"}
+```{r, fig.show="hold"}
 # OPG Estimate 
 
  
-# X1_std=(sapply(1:dim(X1)[2], FUN= function(j)
-#   center_cpp(X1[,j], NULL) ) )%*%matpower_cpp(cov((X1)) , -1/2);
-# 
-# X1_test_std=(sapply(1:dim(X1_test)[2], FUN= function(j)
-#   center_cpp(X1_test[,j], NULL) ) )%*%matpower_cpp(cov((X1_test)) , -1/2);
-# 
-# 
-# 
+X1_std=(sapply(1:dim(X1)[2], FUN= function(j)
+  center_cpp(X1[,j], NULL) ) )%*%matpower_cpp(cov((X1)) , -1/2);
+
+X1_test_std=(sapply(1:dim(X1_test)[2], FUN= function(j)
+  center_cpp(X1_test[,j], NULL) ) )%*%matpower_cpp(cov((X1_test)) , -1/2);
+ 
 # b_hat_opcg1 = opcg(x=X1_std, y=Y1, bw = 1.42, d=9, ytype = "cat",
 #                   method= "cg", parallelize = T )
 # 
-# opcg_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,2)]),
-#                                      y_on_axis=F,
-#                                      ytype="multinomial",
-#                                      h_lab='OPCG 1', v_lab='OPCG 2',
-#                                      main_lab= paste0('OPCG'), size=2.5)
-# 
-# opcg_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(2,3)]),
-#                                      y_on_axis=F,
-#                                       ytype="multinomial",
-#                                       h_lab='OPCG 2', v_lab='OPCG 3',
-#                                       main_lab= paste0('OPCG'), size=2.5)
-# 
-# opcg_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,3)]),
-#                                      y_on_axis=F,
-#                                       ytype="multinomial",
-#                                       h_lab='OPCG 1', v_lab='OPCG 3',
-#                                       main_lab= paste0('OPCG'), size=2.5)
-# 
+
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,2)]),
+                                     y_on_axis=F,
+                                     ytype="multinomial",
+                                     h_lab='OPCG 1', v_lab='OPCG 2',
+                                     main_lab= paste0('OPCG'), size=2.5)
+
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(2,3)]),
+                                     y_on_axis=F,
+                                      ytype="multinomial",
+                                      h_lab='OPCG 2', v_lab='OPCG 3',
+                                      main_lab= paste0('OPCG'), size=2.5)
+
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_opcg1[,c(1,3)]),
+                                     y_on_axis=F,
+                                      ytype="multinomial",
+                                      h_lab='OPCG 1', v_lab='OPCG 3',
+                                      main_lab= paste0('OPCG'), size=2.5)
+
 # linearsdr:::save_sdr_plot(opcg_plot1_1,
 #                           filename = paste0('../man/figures/cat/ex1_opcg1.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
 #                           bg = "white",  res = 125)
-
-
-knitr::include_graphics('../man/figures/cat/ex1_opcg1.png')
-knitr::include_graphics('../man/figures/cat/ex1_opcg2.png')
-knitr::include_graphics('../man/figures/cat/ex1_opcg3.png')
+# 
+# 
+# knitr::include_graphics('../man/figures/cat/ex1_opcg1.png')
+# knitr::include_graphics('../man/figures/cat/ex1_opcg2.png')
+# knitr::include_graphics('../man/figures/cat/ex1_opcg3.png')
 
 ```
 
@@ -205,7 +215,7 @@ The bandwidth is set to $1.42$ and we set $d=9$ since this is the estimated dime
 <!-- ![](../man/figures/cat/ex1_made2.png) -->
 <!-- ![](../man/figures/cat/ex1_made3.png) -->
 
-```{r,  fig.show="hold", out.width="100%"}
+```{r,  fig.show="hold"}
 # MAVE Estimate
 
 # The code is commented out to speed up compiling of the documentation. 
@@ -251,31 +261,31 @@ The bandwidth is set to $1.42$ and we set $d=9$ since this is the estimated dime
 # # Time difference of 3.811436 hours on 39 cores
 #
 # 
-# made_plot1_1=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,2)]),
-#                                      y_on_axis=F,
-#                                      ytype="multinomial",
-#                                      h_lab='MADE 1', v_lab='MADE 2',
-#                                      main_lab= paste0('MADE'), size=2.5)
-# 
-# made_plot1_2=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(2,3)]),
-#                                      y_on_axis=F,
-#                                       ytype="multinomial",
-#                                       h_lab='MADE 2', v_lab='MADE 3',
-#                                       main_lab= paste0('MADE'), size=2.5)
-# 
-# made_plot1_3=linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,3)]),
-#                                      y_on_axis=F,
-#                                       ytype="multinomial",
-#                                       h_lab='MADE 1', v_lab='MADE 3',
-#                                       main_lab= paste0('MADE'), size=2.5)
-# 
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,2)]),
+                                     y_on_axis=F,
+                                     ytype="multinomial",
+                                     h_lab='MADE 1', v_lab='MADE 2',
+                                     main_lab= paste0('MADE'), size=2.5)
+
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(2,3)]),
+                                     y_on_axis=F,
+                                      ytype="multinomial",
+                                      h_lab='MADE 2', v_lab='MADE 3',
+                                      main_lab= paste0('MADE'), size=2.5)
+
+linearsdr:::ggplot_fsdr(Y1_test, t((X1_test_std)%*%b_hat_made1[,c(1,3)]),
+                                     y_on_axis=F,
+                                      ytype="multinomial",
+                                      h_lab='MADE 1', v_lab='MADE 3',
+                                      main_lab= paste0('MADE'), size=2.5)
+
 # linearsdr:::save_sdr_plot(made_plot1_1,
 #                           filename = paste0('../man/figures/cat/ex1_made1.png'),
 #                           width = 800, height = 450, units = "px", pointsize = 12,
 #                           bg = "white",  res = 125)
-
-knitr::include_graphics('../man/figures/cat/ex1_made1.png')
-knitr::include_graphics('../man/figures/cat/ex1_made2.png')
-knitr::include_graphics('../man/figures/cat/ex1_made3.png')
+# 
+# knitr::include_graphics('../man/figures/cat/ex1_made1.png')
+# knitr::include_graphics('../man/figures/cat/ex1_made2.png')
+# knitr::include_graphics('../man/figures/cat/ex1_made3.png')
 ```
 
