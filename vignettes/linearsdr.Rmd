@@ -10,12 +10,18 @@ output:
       %\VignetteIndexEntry{Linear SDR}
       %\VignetteEngine{knitr::rmarkdown}
       %\VignetteEncoding{UTF-8}
-    includes:
-      before_body: local_tex.html
+    
 ---
 
+::: {.hidden}
+$$
+\newcommand\independenT{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1{\mathrel{\rlap{#1}\mkern2mu{#1}}}
+\def\indep{\independenT{\perp}}
+$$
+:::
 
-
+      
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
