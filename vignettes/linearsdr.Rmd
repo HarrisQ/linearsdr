@@ -10,6 +10,8 @@ output:
       %\VignetteIndexEntry{Linear SDR}
       %\VignetteEngine{knitr::rmarkdown}
       %\VignetteEncoding{UTF-8}
+    includes:
+      before_body: local_tex.html
 ---
 
 
@@ -21,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction to Linear SDR
 
 Sufficient Dimension Reduction (SDR) is the subfield of statistics focused on finding lower dimensional summaries such that relational information of interest between variables is preserved.
-In mathematical terms, suppose we have random elements $Y$ and $X$, and we are interested in seeking a lower-dimension summary of $X$ such that all the information about $Y$ that is available in $X$ is preserved. Then what we want is a summary statistic of $X$, denoted $s(X)$, such that $Y$ is statistically independent of $X$ given $s(X)$, i.e. $Y$ indep $X | s(X)$.
+In mathematical terms, suppose we have random elements $Y$ and $X$, and we are interested in seeking a lower-dimension summary of $X$ such that all the information about $Y$ that is available in $X$ is preserved. Then what we want is a summary statistic of $X$, denoted $s(X)$, such that $Y$ is statistically independent of $X$ given $s(X)$, i.e. $Y \indep X | s(X)$.
 
 Linear SDR is when we are interested in finding lower dimension summaries of $X$ that are linear functions of $X$, such as $s(X) = \beta^{\top} X$ for some $p \times d$ matrix $\beta$, where $d$ is much smaller than $p$. 
 

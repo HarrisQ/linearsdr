@@ -38,10 +38,10 @@ Current State of Package:
     + Inverse Linear SDR methods: SIR, DR, SAVE with options for
       regularization
     + Forward Linear SDR methods: OPG, MAVE, OPCG, MADE  
+    + Some vignettes demonstrating the use of methods in package
     
 * Immediate tasks to complete:
-    + Write Vignettes/Examples  
-    + Finish code for Multivariate Continuous Response  
+    + Finish code for Multivariate Continuous Response for inverse methods
     + Write more Documentation for functions
 
 * Not-so pressing tasks to complete:

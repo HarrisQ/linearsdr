@@ -88,25 +88,17 @@
     
     
 <div class="section level2">
-<h2 id="r-markdown">R Markdown<a class="anchor" aria-label="anchor" href="#r-markdown"></a>
+<h2 id="tuning-opcg">Tuning OPCG<a class="anchor" aria-label="anchor" href="#tuning-opcg"></a>
 </h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="external-link uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##      speed           dist       </span>
-<span class="co">##  Min.   : 4.0   Min.   :  2.00  </span>
-<span class="co">##  1st Qu.:12.0   1st Qu.: 26.00  </span>
-<span class="co">##  Median :15.0   Median : 36.00  </span>
-<span class="co">##  Mean   :15.4   Mean   : 42.98  </span>
-<span class="co">##  3rd Qu.:19.0   3rd Qu.: 56.00  </span>
-<span class="co">##  Max.   :25.0   Max.   :120.00</span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="including-plots">Including Plots<a class="anchor" aria-label="anchor" href="#including-plots"></a>
-</h2>
-<p>You can also embed plots, for example:</p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<p>We can tune the bandwidth in the Outer Product of Canonical Gradients (OPCG) using the “supervised k-means”-like approach.</p>
+<ol style="list-style-type: decimal">
+<li>For a given <span class="math inline">\(h\)</span>, we estimate <span class="math inline">\(\hat \beta\)</span> using some training set;</li>
+<li>Construct the sufficient predictors for the given <span class="math inline">\(h\)</span> on some tuning/validation set, denote <span class="math inline">\(\hat \beta^{\top} X^{(v)}\)</span>;</li>
+<li>Pick <span class="math inline">\(h\)</span> that minimizes a k-means-like criterion;</li>
+</ol>
+<p>Below is an interactive figure illustrating the methods on some synthetic data. We generate the data from five clusters that are labeled into 3 groups. By moving the slider, you will notice that the minimum of the criterion functions corresponds with very good separation of the labels.</p>
+<iframe src="tuning_sc.html" height="600" width="850" style="border: 1px solid #464646;" allowfullscreen allow="autoplay" data-external="1">
+</iframe>
 </div>
   </div>
  <div class="col-md-3" id="pkgdown-sidebar">

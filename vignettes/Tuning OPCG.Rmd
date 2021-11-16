@@ -18,32 +18,20 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Tuning OPCG
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+We can tune the bandwidth in the Outer Product of Canonical Gradients (OPCG) using the "supervised k-means"-like approach.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+  1. For a given $h$, we estimate $\hat \beta$ using some training set;
+  2. Construct the sufficient predictors for the given $h$ on some tuning/validation set, denote $\hat \beta^{\top} X^{(v)}$;
+  3. Pick $h$ that minimizes a k-means-like criterion;
 
-```{r cars}
-summary(cars)
-```
+Below is an interactive figure illustrating the methods on some synthetic data. We generate the data from five clusters that are labeled into 3 groups. By moving the slider, you will notice that the minimum of the criterion functions corresponds with very good separation of the labels. 
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-# plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+<iframe src="tuning_sc.html" height="600" width="850" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay" data-external="1"></iframe>
 
 
-```{r knitr_opts, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = "center"
-)
-```
+
+
+
 

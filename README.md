@@ -26,15 +26,16 @@ devtools::install_github("HarrisQ/linearsdr")
 ## Current State of Package:
 
   - Current features of the package:
-      - Forward Linear SDR methods: OPG/OPCG, MADE, Tuning OPCG  
       - Inverse Linear SDR methods: SIR, DR, SAVE with options for
         regularization
+      - Forward Linear SDR methods: OPG, MAVE, OPCG, MADE  
+      - Some vignettes demonstrating the use of methods in package
   - Immediate tasks to complete:
-      - Write Vignettes/Examples  
-      - Finish code for MAVE code
-      - Finish code for Multivariate Continuous Response  
+      - Finish code for Multivariate Continuous Response for inverse
+        methods
       - Write more Documentation for functions
   - Not-so pressing tasks to complete:
       - Clean up OPG/OPCG and MAVE/MADE code  
       - Limit function exports to just the ones people will use  
+      - Speed up MAVE’s Code
         <!-- + Clean Regularized OPG/OPCG (RADE) Code   -->
