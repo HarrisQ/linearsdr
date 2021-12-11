@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- # pkgdown <img src="man/figures/logo.png" align="right" alt="" width="120" /> -->
 
-The 'linearsdr' package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper "Generalized Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses".
+The 'linearsdr' package contains popular methods for sufficient dimension reduction as well as some more recent methods in the forthcoming paper "On Forward Sufficient Dimension Reduction for Categorical and Ordinal Responses".
 
 
 ## Installation
