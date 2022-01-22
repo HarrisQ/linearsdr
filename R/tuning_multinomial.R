@@ -7,8 +7,8 @@
 tuning_km=function(x_datta, n_hlist, edr_list, centers, iter.max=100, nstart = 5){
   
   tune_km = lapply(1:n_hlist, function(k) #k=5; x_datta=x; centers=n_centers
-    (kmeans(t( t(edr_list[[k]])%*%x_datta ), centers, iter.max, nstart)$tot.withinss)/
-      (kmeans(t( t(edr_list[[k]])%*%x_datta ), centers, iter.max, nstart)$betweenss)
+    (kmeans(t( t(edr_list[[k]])%*%t(x_datta) ), centers, iter.max, nstart)$tot.withinss)/
+      (kmeans(t( t(edr_list[[k]])%*%t(x_datta) ), centers, iter.max, nstart)$betweenss)
   )
   return(Reduce('c', tune_km))
 }
@@ -32,7 +32,8 @@ tuning_skm <- function(x, y, d, class_labels, n_cpc, n_hlist, edr_list,
     km_ss=lapply(1:n_classes, function(l) {
       # l=3
       # SDR Predictors, "n x p" format
-      sdr_pred=t( t(edr_list[[k]][,1:d])%*%x[,which(y==class_labels[l])] );
+      sdr_pred=t( t(edr_list[[k]][,1:d])%*%
+                    t(x[which(y==class_labels[l]),]) );
       class_grand_mean=colMeans(sdr_pred);
       
       km=kmeans(sdr_pred, centers=n_cpc_vec[l], iter.max = iter.max, nstart = nstart )
@@ -205,8 +206,8 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
                          control_list=list(),
                          iter.max = 100, nstart = 100) {
 
-  n=dim(x_datta)[2]; n_hlist = length(h_list);
-  p=dim(x_datta)[1];
+  n=dim(x_datta)[1]; n_hlist = length(h_list);
+  p=dim(x_datta)[2];
   
   # k = 3;
   # x_datta=X; y_datta=Y; ytype="multinomial"; parallelize=T
@@ -228,8 +229,8 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
     # fold=2;
     X_tune=X_folds[[fold]]; Y_tune=Y_folds[[fold]];
 
-    X_train=x_datta[,-which(partitions==fold) ];
-    Y_train=matrix(y_datta[,-which(partitions==fold) ] , 1, ncol=(n-dim(X_tune)[2]) ) ;
+    X_train=x_datta[-which(partitions==fold), ];
+    Y_train=y_datta[-which(partitions==fold) ] ;
 
     if (std=="cov") {
       X_train=matpower_cpp(cov(t(X_train)), -1/2)%*%
