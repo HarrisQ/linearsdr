@@ -213,18 +213,12 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
   # class_labels=m_classes; iter.max = 100; nstart = 100
   # method="cg"; control_list=list();
 
-  # partition1=1:250#sample(1:n, round(n/2,0), replace = F)
-  # partitions=list(sort(partition1), (1:n)[-partition1])
   partitions=sample(1:(k),size=n,replace=T,prob=rep(1/(k),(k) ) );
-  # n==length(partitions); table(partitions)
-
-  X_folds=lapply(1:k, function(fold) x_datta[,which(partitions==fold)])
-  Y_folds=lapply(1:k, function(fold) matrix(y_datta[,which(partitions==fold)], 1,
-                 table(partitions)[fold]) )
-
-  # X_folds=lapply(1:k, function(fold) x_datta[,partitions[[fold]] ])
-  # Y_folds=lapply(1:k, function(fold) matrix(y_datta[, partitions[[fold]] ], 1,
-  #                length(partitions[[fold]]) ) )
+  
+  X_folds=lapply(1:k, function(fold) x_datta[which(partitions==fold),])
+  Y_folds=lapply(1:k, function(fold) y_datta[which(partitions==fold)])
+  # Y_folds=lapply(1:k, function(fold) matrix(y_datta[,which(partitions==fold)], 1,
+  #                table(partitions)[fold]) )
 
   # edr_whole=list();
   km_whole=list();
@@ -260,7 +254,7 @@ kfold_km_tuning=function(h_list, k, x_datta, y_datta, d, ytype,
 
     edr_list=list()
     for (iter in 1:n_hlist) {
-      edr_iter=opcg(x_matrix=X_train, y_matrix=Y_train, d=d, bw=h_list[iter],
+      edr_iter=opcg(x=X_train, y=Y_train, d=d, bw=h_list[iter],
                     ytype=ytype, method=method, parallelize=parallelize,
                     control_list=control_list)
       edr_list[[iter]]=edr_iter;
