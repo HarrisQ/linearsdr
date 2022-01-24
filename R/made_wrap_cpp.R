@@ -238,7 +238,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                                   "euc_dist is", euc_dist,
                                   # "subspace_dist is", subspace_dist,
                                   "Iter:", iter));
-      if( loss_dist < tol_val ) {
+      if( euc_dist < tol_val ) {
         break();
       } else {
         # The new B_0 for next iteration
