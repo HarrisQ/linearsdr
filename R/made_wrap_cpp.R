@@ -84,15 +84,15 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     k_vec = rep(1, n);  # redundant; for convenience/lazy of coding
     
     # Loss function
-    loss_made = function(c_param){
-      linearsdr:::mgauss_loss_made(c=c_param, 
-                                   x_matrix, 
-                                   y_matrix=mv_Y, 
-                                   bw, 
-                                   ahat_list,
-                                   Dhat_list,
-                                   r_mat)
-    } # End of Loss function
+    # loss_made = function(c_param){
+    #   linearsdr:::mgauss_loss_made(c=c_param, 
+    #                                x_matrix, 
+    #                                y_matrix=mv_Y, 
+    #                                bw, 
+    #                                ahat_list,
+    #                                Dhat_list,
+    #                                r_mat)
+    # } # End of Loss function
     # loss_made(c_init)
     
 
@@ -213,13 +213,14 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
     
     
     c_0 = c_next(c_init);
-    loss_0 = loss_made(c_0);
+    # loss_0 = loss_made(c_0);
     
     for(iter in 1:max_iter_made){ #print_B_iter=T
       
       B_0=t(matrix(c_0, nrow=d, ncol=p));
       
-      c_1=c_next(c_0); loss_1 = loss_made(c_1);
+      c_1=c_next(c_0); 
+      # loss_1 = loss_made(c_1);
       
       B_1=t(matrix(c_1, nrow=d, ncol=p));
       
@@ -230,18 +231,20 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
       euc_dist=euc_norm_cpp(c_0 - c_1)/euc_norm_cpp(c_0);
       
       # Loss Distance 
-      loss_dist = (loss_0 - loss_1)/loss_0;
+      # loss_dist = (loss_0 - loss_1)/loss_0;
       
-      if(print_iter_made) print(c("B Update: loss_dist is", loss_dist, 
-                               "euc_dist is", euc_dist,
-                               "subspace_dist is", subspace_dist,
-                               "Iter:", iter));
+      if(print_iter_made) print(c("B Update:,", 
+                                  # "loss_dist is", loss_dist, 
+                                  "euc_dist is", euc_dist,
+                                  # "subspace_dist is", subspace_dist,
+                                  "Iter:", iter));
       if( loss_dist < tol_val ) {
         break();
       } else {
         # The new B_0 for next iteration
-        # B_0 = B_1;
-        c_0=c_1; loss_0=loss_1; 
+        B_0 = B_1;
+        c_0=c_1; 
+        #loss_0=loss_1; 
       }
       
     }
