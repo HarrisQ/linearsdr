@@ -65,8 +65,9 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   # method="cg"; parallelize=T
    
   # x_matrix=X; y_matrix=Y;
-  # bw=1;  ytype="cat"; #"continuous";#"multinomial";
+  # bw=1;  ytype="multinom"; #"cat"; #"continuous";#"multinomial";
   # tol_val= 1e-07; max_iter=25;
+  # lambda=0;
   # B_mat = NULL ; method="cg"; parallelize=T; r_mat=NULL; control_list=list();
   # control_list = list() #control_list = list(); # B_mat=init_mat;
   
@@ -164,12 +165,14 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
     }
     # hi=aD_j(1,T)  
   } else if (ytype %in% 
-             c("cat", "ord-cat", "clogit","cprobit","cloglog") ) {
+             c("cat", "ord-cat", 
+               "clogit","cprobit","cloglog",
+               "multinom") ) {
     # y.matrix should be 1 x n 
     
-    m_classes=as.numeric(levels(as.factor(y_matrix)));
-    m=length(m_classes); 
     if (ytype=="cat" ) { 
+      m_classes=as.numeric(levels(as.factor(y_matrix)));
+      m=length(m_classes); 
       mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
       linktype="expit";
       
@@ -181,6 +184,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       
       
     } else if (ytype=="ord-cat" ) {
+      m_classes=as.numeric(levels(as.factor(y_matrix)));
+      m=length(m_classes); 
       mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype="ord-cat");
       linktype="ad-cat";
       
@@ -191,6 +196,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       link_mv_y=linearsdr:::emp_adcat( mv_Y, tune=0.05 ); #
       # emp_adcat( mv_Y[,980:1000], k_vec, tune=0.05 );
     } else if (ytype %in% c("clogit", "cprobit", "cloglog" ) ) { 
+      m_classes=as.numeric(levels(as.factor(y_matrix)));
+      m=length(m_classes); 
       mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype="ord-cat");
       linktype=ytype;
       
@@ -206,10 +213,12 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       #   return(log( (1-mv_Y[,j] )/mv_Y[,j] ) );
       #   } ); #
     } else if (ytype=="multinom" ) { 
-      mv_Y=Y;
+      m=dim(y_matrix)[1]; # y_matrix was transposed to mxn
+      mv_Y=y_matrix;
       linktype="expit";
       
       k_vec = colSums(mv_Y); 
+      mv_Y=matrix(mv_Y[1:(m-1),], m-1, n)
       
       # Empirical Logit Transform of the response
       link_mv_y=linearsdr:::emp_logit( mv_Y, k_vec, tune=0.05 ) ;
@@ -243,7 +252,8 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       # We want its transpose, a (m-1)x(d+1) matrix wls_reg
       
      
-      c_j_ls=as.vector(t(linearsdr:::wls_cpp(Vj,link_mv_y,Wj, reg= wls_reg)));
+      c_j_ls=as.vector(t(linearsdr:::wls_cpp(
+        Vj, link_mv_y, Wj, reg= wls_reg)));
       
       # mn_loss_pen(c_j_ls, Vj, mv_Y, Wj, lambda=3, linktype, k_vec  )
                 
