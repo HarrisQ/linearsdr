@@ -205,6 +205,16 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
       #   mv_Y[which( mv_Y[,j]==0 ),j] = 0.05;
       #   return(log( (1-mv_Y[,j] )/mv_Y[,j] ) );
       #   } ); #
+    } else if (ytype=="multinom" ) { 
+      mv_Y=Y;
+      linktype="expit";
+      
+      k_vec = colSums(mv_Y); 
+      
+      # Empirical Logit Transform of the response
+      link_mv_y=linearsdr:::emp_logit( mv_Y, k_vec, tune=0.05 ) ;
+      
+      
     }
     
     
@@ -339,11 +349,6 @@ opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuo
   
 } 
 
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="multinomial", #"ordinal",
-#           method="cg", parallelize, r_mat, control_list)$Dhat
-
-# opcg_made(x_matrix, y_matrix, bw, B_mat=NULL, ytype="clogit",
-#           method="cg", parallelize, r_mat, control_list)$Dhat
 
 ############### OPCG Candidate Matrix #########################
 #' This is an internal function called by opcg 
