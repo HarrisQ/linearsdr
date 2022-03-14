@@ -160,13 +160,13 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
                                             link=linktype, k=k_vec) ;
         } else if ( ytype %in% c( "continuous" ) ) {
           score_j=linearsdr:::mgauss_score_j_made(c=c_param, 
-                                                  xj, 
+                                                  Xj, 
                                                   y_matrix=mv_Y, 
                                                   wj=Wj, 
                                                   ahat=ahat_list[[j]], 
                                                   Dhat = Dhat_list[[j]]);
           info_j=linearsdr:::mgauss_info_j_made(c=c_param, 
-                                                xj, 
+                                                Xj, 
                                                 y_matrix=mv_Y, 
                                                 wj=Wj, 
                                                 ahat=ahat_list[[j]], 
