@@ -16,9 +16,22 @@
 # 
 # x_matrix=X; y_matrix=Y; bw=1.25; ytype="cat"; B_mat = diag(1,p,d);
 # method=list(opcg="cg", made="cg"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
-# aD_list=opcg_made(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous', 
-#                   method="newton", parallelize=F, r_mat=NULL, 
+# aD_list=opcg_made(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous',
+#                   method="newton", parallelize=F, r_mat=NULL,
 #                   control_list=list())
+# ahat_list = aD_list$ahat;  Dhat_list = aD_list$Dhat;
+
+#
+# x_matrix=t(c_x); 
+# y_matrix=t(c_y); 
+# bw=bw;  
+# B_mat=tmp_fit$tpg$suff_bases$vectors[,1:d_0]; 
+# ytype="continuous";
+# method="newton"; #method$made,  list(opcg="cg", made="cg")
+# parallelize=parallel;
+# r_mat=NULL;
+# control_list=list();
+# aD_list = aDhat
 # ahat_list = aD_list$ahat;  Dhat_list = aD_list$Dhat;
 
 #### MADE Block update ----
