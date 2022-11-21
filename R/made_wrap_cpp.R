@@ -13,12 +13,17 @@
 
 ############################## MADE wrappers ##################################
 
-# 
-# x_matrix=X; y_matrix=Y; bw=1.25; ytype="cat"; B_mat = diag(1,p,d);
+ 
+# x_matrix=X; y_matrix=(as.matrix(Y)); bw=0.85; ytype="ord-cat"; 
+# B_mat = diag(1,p,d);
 # method=list(opcg="cg", made="cg"); parallelize = T; r_mat=NULL; control_list=list(c_ag2=.9);
-# aD_list=opcg_made(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous',
-#                   method="newton", parallelize=F, r_mat=NULL,
+# 
+# aD_list=opcg_made((x_matrix), y_matrix, bw=1, lambda=0,
+#                   B_mat=B_mat, ytype='ord-cat',
+#                   method="cg", parallelize=T, r_mat=NULL,
 #                   control_list=list())
+# # aD_list$Dhat[[1]]
+# 
 # ahat_list = aD_list$ahat;  Dhat_list = aD_list$Dhat;
 
 #
@@ -46,8 +51,6 @@
 made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="continuous",
                        method, parallelize=F, r_mat=NULL,
                        control_list=list()) {
-  
-  # aD_list = aDhat; method="cg"
   
   # y_matrix should be n x m, 
   # x_matrix should be n x p,
@@ -114,7 +117,7 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
 
     m_classes=as.numeric(levels(as.factor(y_matrix)));
     m=length(m_classes);
-    mv_Y = mnY_to_mvY( y_matrix, m_classes, ytype);
+    mv_Y = linearsdr:::mnY_to_mvY( y_matrix, m_classes, ytype);
 
     # Don't need Empirical Link Transforms for MADE block step
     if (ytype=="cat" ) {
@@ -155,18 +158,21 @@ made_update = function(x_matrix, y_matrix, d, bw, aD_list ,B_mat,  ytype="contin
       # This will need all loss, score and info over j and i
       
       # For each j
-      c_list_newton_j=function(c_param, j){ # j=10; c_param=c_init;
+      c_list_newton_j=function(c_param, j){ 
+        # j=10; c_param=c_init;
         
         Xj=linearsdr:::matcenter_cpp(x_matrix, index=j,x0=NULL);
-        Wj=linearsdr:::gauss_kern_cpp( t(r_mat)%*%Xj,bw)
-        
-        
-        
+        Wj=linearsdr:::gauss_kern_cpp( t(r_mat)%*%Xj,bw) 
         
         # score and info for multinomial Y
         if (ytype %in% c( "cat", "ord-cat") ) {
+          # kronecker(t(Xj[,1]), (Dhat_list[[1]]))
+          # kronecker(t(Xj[,1]), (Dhat_list[[1]]))%*%c_param
+          # kronecker(t(Xj[,1]), (Dhat_list[[1]]))%*%c_param + ahat_list[[1]]
+          
           score_j=linearsdr:::mn_score_j_made(c_param, Xj, mv_Y, Wj,
-                                              ahat=ahat_list[[j]], Dhat = Dhat_list[[j]],
+                                              ahat = ahat_list[[j]], 
+                                              Dhat = (Dhat_list[[j]]),
                                               link=linktype, k=k_vec);
           info_j=linearsdr:::mn_info_j_made(c_param, Xj, mv_Y, Wj,
                                             ahat=(ahat_list[[j]]), Dhat = Dhat_list[[j]],

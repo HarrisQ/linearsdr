@@ -590,7 +590,50 @@ arma::mat mn_info_j(arma::vec c,
       mean_info_j += wj(i)*tVij_I.t()*(E_syml - mu_ij*mu_ij.t())*tVij_I/(k(i)*n)/n;
       
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
-    }
+    } else if (link=="clogit") {
+      // Writing the For loop instead of sapply.
+      arma::uword i;
+      for (i = 0; i < n; i++ ) {
+        
+        arma::mat tVij_I=kron( (vj.col(i)).t(),I);
+        arma::vec lcp=tVij_I*c;
+        // arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
+        
+        // arma::vec v_m(m); v_m.ones(); //vec of ones
+        // arma::mat E; E = v_m*mu_ij.t();
+        // arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+        // 
+        // mean_info_j += wj(i)*tVij_I.t()*
+        //   (E_syml - mu_ij*mu_ij.t())*
+        //   tVij_I/(k(i)*n)/n;
+        
+        /// inverse link
+        arma::vec psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
+        
+        // var function on inverse psi
+        arma::vec v_m(m); v_m.ones(); //vec of ones
+        arma::mat E; E = v_m*psi_inv.t();
+        arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+        arma::mat var_psi_inv = pinv(E_syml - psi_inv*psi_inv.t());
+        
+        
+        // inverse dot psi
+        arma::mat tmp = -( (1 - psi_inv)*psi_inv.t() );
+        arma::mat dot_psi_inv = diagmat( tmp.diag() );
+        
+        
+        // mean_score_j += -wj(i)*tVij_I.t()*dot_psi_inv*
+        //   var_psi_inv*
+        //   ( y_datta.col(i) - psi_inv)/n;  
+        
+        mean_info_j += wj(i)*tVij_I.t()*
+          dot_psi_inv*
+          var_psi_inv*
+          dot_psi_inv.t()*
+          tVij_I/n;
+        
+        // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
+      }
     
     
   }

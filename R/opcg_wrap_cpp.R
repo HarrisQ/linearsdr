@@ -46,7 +46,7 @@
 # @noRd
 #  
 
-opcg_made <- function(x_matrix, y_matrix, bw, lambda,B_mat=NULL, ytype='continuous', 
+opcg_made <- function(x_matrix, y_matrix, bw, lambda, B_mat=NULL, ytype='continuous', 
                       method="newton", parallelize=F, r_mat=NULL, 
                       control_list=list()) {
   
