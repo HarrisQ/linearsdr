@@ -607,7 +607,7 @@ arma::mat mn_info_j(arma::vec c,
         //   (E_syml - mu_ij*mu_ij.t())*
         //   tVij_I/(k(i)*n)/n;
         
-        /// inverse link
+        /// an expit function here
         arma::vec psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
         
         // var function on inverse psi
@@ -626,9 +626,18 @@ arma::mat mn_info_j(arma::vec c,
         //   var_psi_inv*
         //   ( y_datta.col(i) - psi_inv)/n;  
         
-        mean_info_j += wj(i)*tVij_I.t()*
-          dot_psi_inv*
+        // mean_info_j += wj(i)*tVij_I.t()*
+        //   dot_psi_inv*
+        //   var_psi_inv*
+        //   dot_psi_inv.t()*
+        //   tVij_I/n;
+        
+        mean_info_j += wj(i)*
+          tVij_I.t()*dot_psi_inv*
           var_psi_inv*
+          ( y_datta.col(i) - psi_inv)*
+          ( y_datta.col(i) - psi_inv).t()*
+          var_psi_inv.t()*
           dot_psi_inv.t()*
           tVij_I/n;
         
