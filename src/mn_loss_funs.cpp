@@ -651,11 +651,12 @@ arma::mat mn_info_j(arma::vec c,
         //   var_psi_inv*
         //   ( y_datta.col(i) - psi_inv)/n;  
         
-        mean_info_j += wj(i)*tVij_I.t()*
-          dot_tau.t()*
-          var_fn*
-          dot_tau*
-          tVij_I/n;
+        mean_info_j += wj(i)*
+          // tVij_I.t()*
+          // dot_tau*
+          var_fn
+          // dot_tau.t()*
+          // tVij_I/n;
         
         // mean_info_j += wj(i)*
         //   tVij_I.t()*dot_tau*
