@@ -588,7 +588,7 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       mean_info_j += wj(i)*tVij_I.t()*(E_syml - mu_ij*mu_ij.t())*tVij_I/(k(i)*n)/n;
-      
+    }
       // test = -wj(i)*tVij_I.t()*( y_datta.col(i) - mu_ij)/n; 
     } else if (link=="clogit") {
       // Writing the For loop instead of sapply.
