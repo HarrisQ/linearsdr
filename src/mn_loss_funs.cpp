@@ -449,7 +449,7 @@ arma::mat mn_score_j(arma::vec c,
       
       mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
         var_tau*
-        ( y_datta.col(i) - psi_inv)/n; 
+        ( y_datta.col(i) - tau)/n; 
     }
     
     // end of clogit
