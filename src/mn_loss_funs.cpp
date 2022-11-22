@@ -636,7 +636,7 @@ arma::mat mn_info_j(arma::vec c,
       
       // dot tau
       arma::mat tau_tmp = (1 - tau)*tau.t();
-      arma::mat dot_tau = tau_tmp.diag(); //diagmat( tau_tmp.diag() );
+      arma::mat dot_tau = tau_tmp; //diagmat( tau_tmp.diag() );
       
       
       // mean_info_j +=  wj(i)* 
@@ -654,11 +654,11 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat E; E = v_m*tau.t();
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       arma::mat var_tau = pinv(E_syml - tau*tau.t());
-
- 
+      
+      
       
       mean_info_j += wj(i)*
-        tVij_I.t()*dot_tau*
+        tVij_I.t()*dot_tau.t()*
         var_tau*
         // ( y_datta.col(i) - tau)*
         // ( y_datta.col(i) - tau).t()*
@@ -666,6 +666,7 @@ arma::mat mn_info_j(arma::vec c,
         dot_tau.t()*
         tVij_I/n;
       
+      // mean_info_j += tVij_I.t()*dot_tau.t()*var_tau*dot_tau*tVij_I;
       
       
     }
