@@ -443,8 +443,8 @@ arma::mat mn_score_j(arma::vec c,
       
       
       // inverse dot psi
-      arma::mat tmp = ( (1 - tau)*tau.t() );
-      arma::mat dot_tau = tmp; //diagmat( tmp.diag() );
+      arma::mat tmp = -( (1 - tau)*tau.t() );
+      arma::mat dot_tau = diagmat( tmp.diag() );
       
       
       mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
@@ -635,8 +635,8 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat var_fn = diagmat(L*L*P*L*exp( L*theta ) );   
       
       // dot tau
-      arma::mat tau_tmp = (1 - tau)*tau.t();
-      arma::mat dot_tau = tau_tmp; //diagmat( tau_tmp.diag() );
+      arma::mat tau_tmp = -(1 - tau)*tau.t();
+      arma::mat dot_tau = diagmat( tau_tmp.diag() );
       
       
       // mean_info_j +=  wj(i)* 
