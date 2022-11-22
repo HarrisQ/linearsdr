@@ -629,11 +629,10 @@ arma::mat mn_info_j(arma::vec c,
       
       /// an expit function here
       arma::vec tau = exp( lcp )/(1 + sum( exp( lcp ) ) );
-      arma::vec theta_tmp = (pinv(P) - I)*(v_m - tau) ;
+      arma::vec theta_tmp = ( P.t() - I)*(v_m - tau) ;
       arma::vec theta = log( diagmat( 1/theta_tmp )*theta_tmp );
       
-      arma::mat var_fn = diagmat(L*L.t()*P*L*exp( L*theta ) );  
-      
+      arma::mat var_fn = diagmat(L*L*P*L*exp( L*theta ) );   
       
       // dot tau
       arma::mat tau_tmp = (1 - tau)*tau.t();
