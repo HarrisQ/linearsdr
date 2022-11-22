@@ -660,9 +660,9 @@ arma::mat mn_info_j(arma::vec c,
       mean_info_j += wj(i)*
         tVij_I.t()*dot_tau.t()*
         var_tau*
-        // ( y_datta.col(i) - tau)*
-        // ( y_datta.col(i) - tau).t()*
-        // var_tau.t()*
+        ( y_datta.col(i) - tau)*
+        ( y_datta.col(i) - tau).t()*
+        var_tau.t()*
         dot_tau.t()*
         tVij_I/n;
       
