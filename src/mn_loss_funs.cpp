@@ -444,7 +444,7 @@ arma::mat mn_score_j(arma::vec c,
       
       // inverse dot psi
       arma::mat tmp = ( (1 - tau)*tau.t() );
-      arma::mat dot_tau = diagmat( tmp.diag() );
+      arma::mat dot_tau = tmp; //diagmat( tmp.diag() );
       
       
       mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
