@@ -47,11 +47,12 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
       
       arma::vec Y_i ; Y_i.zeros(m);
       arma::uvec ids = find(m_classes<=mn_y(i)); 
-      Y_i.elem(ids).fill(1);
-      //arma::vec cum_Y_i = cumsum(Y_i); // This is for summing over T
+      arma::vec cum_Y_i = cumsum(Y_i); // This is for summing over T
       
-      //mv_Y.col(i) = cum_Y_i/max(cum_Y_i); // This is for normalizing to get empirical CDF
-      mv_Y.col(i) = Y_i;
+      mv_Y.col(i) = cum_Y_i; // max(cum_Y_i); // This is for normalizing to get empirical CDF
+      
+      //Y_i.elem(ids).fill(1);
+      //mv_Y.col(i) = Y_i;
     }
   }
   return mv_Y;
@@ -440,8 +441,7 @@ arma::mat mn_score_j(arma::vec c,
       arma::mat var_tau_inv = pinv(E_syml - tau*tau.t());
       
       // dot tau
-      //arma::mat tau_tmp = (1 - tau)*tau.t();
-      arma::mat tau_tmp = -((1 - tau)%tau )*v_m.t();
+      arma::mat tau_tmp = -(1/((1 - tau)%tau) )*v_m.t();
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
   
@@ -628,8 +628,7 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat var_tau_inv = pinv(E_syml - tau*tau.t());
       
       // dot tau
-      //arma::mat tau_tmp = (1 - tau)*tau.t();
-      arma::mat tau_tmp = -((1 - tau)%tau )*v_m.t();
+      arma::mat tau_tmp = -(1/((1 - tau)%tau) )*v_m.t();
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
