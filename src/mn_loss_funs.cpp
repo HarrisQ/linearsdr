@@ -445,7 +445,7 @@ arma::mat mn_score_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
   
-      mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
+      mean_score_j += -wj(i)*tVij_I.t()*dot_tau.t()*
         var_tau_inv*
         ( y_datta.col(i) - tau)/n; 
     }
@@ -632,7 +632,7 @@ arma::mat mn_info_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
-      mean_info_j += wj(i)*tVij_I.t()*dot_tau*var_tau_inv*dot_tau.t()*tVij_I/n;
+      mean_info_j += wj(i)*tVij_I.t()*dot_tau.t()*var_tau_inv*dot_tau*tVij_I/n;
       
       
     }
