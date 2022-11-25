@@ -428,27 +428,25 @@ arma::mat mn_score_j(arma::vec c,
       
       arma::mat tVij_I=kron( (vj.col(i)).t(),I);
       arma::vec lcp=tVij_I*c;
-      // arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
       
-      
-      // inverse link
-      // arma::vec psi_inv = exp( lcp )/(1 + sum( exp( lcp ) ) );
+      /// an expit function here
       arma::vec tau = exp( lcp )/(1 + sum( exp( lcp ) ) );
       
-      // var function on inverse psi
+      // // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
       arma::mat E; E = v_m*tau.t();
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      arma::mat var_tau = pinv(E_syml - tau*tau.t());
       
+      arma::mat var_tau_inv = pinv(E_syml - tau*tau.t());
       
-      // inverse dot psi
-      arma::mat tmp = -( (1 - tau)*tau.t() );
-      arma::mat dot_tau = diagmat( tmp.diag() );
-      
-      
+      // dot tau
+      //arma::mat tau_tmp = (1 - tau)*tau.t();
+      arma::mat tau_tmp = -((1 - tau)%tau )*v_m.t();
+      tau_tmp.diag() = -tau_tmp.diag();
+      arma::mat dot_tau = tau_tmp; 
+  
       mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
-        var_tau*
+        var_tau_inv*
         ( y_datta.col(i) - tau)/n; 
     }
     
@@ -619,54 +617,23 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat tVij_I=kron( (vj.col(i)).t(),I);
       arma::vec lcp=tVij_I*c;
       
-      // arma::vec mu_ij = dot_b_multinom(lcp, k(i), link);
-      // arma::mat E; E = v_m*mu_ij.t();
-      // arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      // 
-      // mean_info_j += wj(i)*tVij_I.t()*
-      //   (E_syml - mu_ij*mu_ij.t())*
-      //   tVij_I/(k(i)*n)/n;
-      
       /// an expit function here
       arma::vec tau = exp( lcp )/(1 + sum( exp( lcp ) ) );
-      arma::vec theta_tmp = ( P.t() - I)*(v_m - tau) ;
-      arma::vec theta = log( diagmat( 1/theta_tmp )*theta_tmp );
-      
-      arma::mat var_fn = diagmat(L*L*P*L*exp( L*theta ) );   
-      
-      // dot tau
-      arma::mat tau_tmp = -(1 - tau)*tau.t();
-      arma::mat dot_tau = diagmat( tau_tmp.diag() );
-      
-      
-      // mean_info_j +=  wj(i)* 
-      //   tVij_I.t()*
-      //   dot_tau*
-      //   //var_fn*
-      //   dot_tau.t()*tVij_I/n;
-      
-      // // For convenience, we could use expected score squared 
-      // // to approximate the fisher information because the
-      // // bartlett equalities should hold (?)
       
       // // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
       arma::mat E; E = v_m*tau.t();
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      arma::mat var_tau = pinv(E_syml - tau*tau.t());
       
+      arma::mat var_tau_inv = pinv(E_syml - tau*tau.t());
       
+      // dot tau
+      //arma::mat tau_tmp = (1 - tau)*tau.t();
+      arma::mat tau_tmp = -((1 - tau)%tau )*v_m.t();
+      tau_tmp.diag() = -tau_tmp.diag();
+      arma::mat dot_tau = tau_tmp; 
       
-      mean_info_j += wj(i)*
-        tVij_I.t()*dot_tau.t()*
-        var_tau*
-        ( y_datta.col(i) - tau)*
-        ( y_datta.col(i) - tau).t()*
-        var_tau.t()*
-        dot_tau.t()*
-        tVij_I/n;
-      
-      // mean_info_j += tVij_I.t()*dot_tau.t()*var_tau*dot_tau*tVij_I;
+      mean_info_j += wj(i)*tVij_I.t()*dot_tau*var_tau_inv*dot_tau.t()*tVij_I/n;
       
       
     }
