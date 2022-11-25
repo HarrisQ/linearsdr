@@ -639,7 +639,7 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat W = pinv(dot_eta.t()*(E_syml - tau*tau.t())*dot_eta);      
       
       arma::mat score_j = -tVij_I.t()*(dot_eta)*W*
-        ( y_datta.col(i) - tau)/n;
+        ( y_datta.col(i) - tau);
       
       mean_info_j += wj(i)*score_j*score_j.t()/n;
       // mean_info_j += wj(i)*tVij_I.t()*W*tVij_I/n;
