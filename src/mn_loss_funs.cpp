@@ -437,13 +437,17 @@ arma::mat mn_score_j(arma::vec c,
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot tau 
-      arma::mat tau_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
-      arma::mat dot_tau = trimatl(tau_tmp); 
+      arma::mat tau_tmp = tau*tau.t(); 
+      arma::mat dot_tau = tau_tmp - diagmat(tau); 
       
-      // W = inv(dot psi V_tau dot_psi)
+      // dot eta
+      arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
+      arma::mat dot_eta = trimatl(eta_tmp); 
+      
+      // W = dot tau inv(V_tau) dot_tau
       arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);
       
-      mean_score_j += -wj(i)*tVij_I.t()*pinv(dot_tau)*W*( y_datta.col(i) - tau)/n;  
+      mean_score_j += -wj(i)*tVij_I.t()*(dot_eta)*W*( y_datta.col(i) - tau)/n;  
     }
     
     // end of clogit
@@ -622,8 +626,10 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot tau 
-      arma::mat tau_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
-      arma::mat dot_tau = trimatl(tau_tmp); 
+      arma::mat tau_tmp = tau*tau.t(); 
+      arma::mat dot_tau = tau_tmp - diagmat(tau); 
+      
+      
       
       // W = inv(dot psi V_tau dot_psi)
       arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
