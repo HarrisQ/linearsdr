@@ -45,14 +45,12 @@ arma::mat mnY_to_mvY(arma::mat mn_y,
     arma::uword i;
     for (i = 0; i < n; i++ ) {
       
-      arma::vec Y_i ; Y_i.zeros(m);
-      arma::uvec ids = find(m_classes<=mn_y(i)); 
-      arma::vec cum_Y_i = cumsum(Y_i); // This is for summing over T
+      arma::mat Y_i(m,1) ; Y_i.zeros();
+      arma::uvec ids = find(m_classes==mn_y(i));
+      Y_i.rows(ids).fill(1);
       
-      mv_Y.col(i) = cum_Y_i; // max(cum_Y_i); // This is for normalizing to get empirical CDF
+      mv_Y.col(i) = Y_i;
       
-      //Y_i.elem(ids).fill(1);
-      //mv_Y.col(i) = Y_i;
     }
   }
   return mv_Y;
@@ -445,7 +443,7 @@ arma::mat mn_score_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
   
-      mean_score_j += -wj(i)*tVij_I.t()*dot_tau.t()*
+      mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
         var_tau_inv*
         ( y_datta.col(i) - tau)/n; 
     }
@@ -632,7 +630,7 @@ arma::mat mn_info_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
-      mean_info_j += wj(i)*tVij_I.t()*dot_tau.t()*var_tau_inv*dot_tau*tVij_I/n;
+      mean_info_j += wj(i)*tVij_I.t()*dot_tau*var_tau_inv*dot_tau.t()*tVij_I/n;
       
       
     }
