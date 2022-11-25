@@ -437,7 +437,7 @@ arma::mat mn_score_j(arma::vec c,
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot tau inv ( derivative of eta wrt mean )
-      arma::mat tau_tmp = -(1/((1 - tau)%tau) )*v_m.t();
+      arma::mat tau_tmp = (1/((1 - tau)%tau) )*v_m.t();
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
@@ -624,7 +624,7 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot tau 
-      arma::mat tau_tmp = -(1/((1 - tau)%tau) )*v_m.t();
+      arma::mat tau_tmp = (1/((1 - tau)%tau) )*v_m.t();
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
