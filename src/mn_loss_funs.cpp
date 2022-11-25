@@ -447,7 +447,7 @@ arma::mat mn_score_j(arma::vec c,
       arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau); 
       
       // W = dot tau inv(V_tau) dot_tau
-      arma::mat W = (dot_tau*pinv(E_syml - tau*tau.t())*dot_tau.t());
+      arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);
       
       mean_score_j += -wj(i)*tVij_I.t()*(dot_eta)*W*( y_datta.col(i) - tau)/n;  
     }
@@ -636,7 +636,7 @@ arma::mat mn_info_j(arma::vec c,
       arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau);  
       
       // W = inv(dot psi V_tau dot_psi)
-      arma::mat W = (dot_tau*pinv(E_syml - tau*tau.t())*dot_tau.t());      
+      arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
       
       mean_info_j += wj(i)*tVij_I.t()*W*tVij_I/n;
       
