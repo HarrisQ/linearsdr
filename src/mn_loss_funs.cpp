@@ -431,6 +431,11 @@ arma::mat mn_score_j(arma::vec c,
       /// an expit function here
       arma::vec tau = exp( lcp )/(1 + sum( exp( lcp ) ) );
       
+      // // var function on inverse psi
+      arma::vec v_m(m); v_m.ones(); //vec of ones
+      arma::mat E; E = v_m*tau.t();
+      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+      
       // dot tau inv ( derivative of eta wrt mean )
       arma::mat tau_tmp = -(1/((1 - tau)%tau) )*v_m.t();
       tau_tmp.diag() = -tau_tmp.diag();
