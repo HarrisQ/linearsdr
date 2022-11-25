@@ -441,11 +441,11 @@ arma::mat mn_score_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
-      arma::mat var_tau_inv = pinv(dot_tau*(E_syml - tau*tau.t())*dot_tau.t());
+      // W = inv(dot psi V_tau dot_psi)
+      arma::mat W = pinv(dot_tau*(E_syml - tau*tau.t())*dot_tau.t());
       
-      mean_score_j += -wj(i)*tVij_I.t()*dot_tau*
-        var_tau_inv*
-        ( y_datta.col(i) - tau)/n;  
+      mean_score_j += -wj(i)*tVij_I.t()*dot_tau.t()*
+        W*( y_datta.col(i) - tau)/n;  
     }
     
     // end of clogit
@@ -628,9 +628,10 @@ arma::mat mn_info_j(arma::vec c,
       tau_tmp.diag() = -tau_tmp.diag();
       arma::mat dot_tau = tau_tmp; 
       
-      arma::mat var_tau_inv = pinv(dot_tau*(E_syml - tau*tau.t())*dot_tau.t());      
+      // W = inv(dot psi V_tau dot_psi)
+      arma::mat W = pinv(dot_tau*(E_syml - tau*tau.t())*dot_tau.t());      
       
-      mean_info_j += wj(i)*tVij_I.t()*var_tau_inv*tVij_I/n;
+      mean_info_j += wj(i)*tVij_I.t()*W*tVij_I/n;
       
       
     }
