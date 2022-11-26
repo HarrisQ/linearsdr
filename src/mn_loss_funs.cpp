@@ -433,9 +433,14 @@ arma::mat mn_score_j(arma::vec c,
       
       // // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
+      
       // dot eta
-      arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
-      arma::mat dot_eta = trimatl(eta_tmp); 
+      // arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
+      // arma::mat dot_eta = trimatl(eta_tmp); 
+      
+      // dot tau 
+      arma::mat tau_tmp = tau*tau.t();
+      arma::mat dot_tau = tau_tmp - diagmat(tau); // pinv(dot_eta); //
       
       
       // creating Permutation and Differencing Matrices, P, Q
@@ -452,10 +457,7 @@ arma::mat mn_score_j(arma::vec c,
       
       
       
-      // dot tau 
-      // arma::mat tau_tmp = tau*tau.t(); 
-      arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau);
-      
+            
       // W = dot psi inv(V_tau) dot_psi
       // arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
       // arma::mat W = (dot_tau*V_inv*dot_tau.t());
@@ -642,8 +644,12 @@ arma::mat mn_info_j(arma::vec c,
       // arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot eta
-      arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
-      arma::mat dot_eta = trimatl(eta_tmp); 
+      // arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
+      // arma::mat dot_eta = trimatl(eta_tmp); 
+      
+      // dot tau 
+      arma::mat tau_tmp = tau*tau.t();
+      arma::mat dot_tau = tau_tmp - diagmat(tau); // pinv(dot_eta); //
       
       
       // creating Permutation and Differencing Matrices, P, Q
@@ -656,20 +662,12 @@ arma::mat mn_info_j(arma::vec c,
       arma::vec tmp_v = ((I - P.t())*tau);
       arma::vec tmp_v2 = -1/(tmp_v.elem(ind));
       V_inv.diag() = 1/((P - I)*tau); 
-      V_inv.diag(1) = tmp_v2;
+      V_inv.diag(1) = tmp_v2; 
       
-      
-      
-      // dot tau 
-      // arma::mat tau_tmp = tau*tau.t(); 
-      arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau);
-      
+            
       // W = dot psi inv(V_tau) dot_psi
       // arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
-      arma::mat W = (dot_tau*V_inv*dot_tau.t());
-      
-      
-      
+      arma::mat W = (dot_tau*V_inv*dot_tau.t()); 
       
       // arma::mat score_j = -tVij_I.t()*(dot_eta)*W*
       //   ( y_datta.col(i) - tau);
