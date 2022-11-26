@@ -433,21 +433,32 @@ arma::mat mn_score_j(arma::vec c,
       
       // // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
-      arma::mat E; E = v_m*tau.t();
-      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
-      
-      
-      
       // dot eta
       arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
       arma::mat dot_eta = trimatl(eta_tmp); 
       
+      
+      // creating Permutation and Differencing Matrices, P, Q
+      arma::mat I(m,m); I.eye();
+      arma::mat P(m,m); P.zeros(); 
+      P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+      
+      arma::mat V_inv(m,m); V_inv.zeros(); 
+      arma::uvec ind = linspace<uvec>(0, m-2, m-1);
+      arma::vec tmp_v = ((I - P.t())*tau);
+      arma::vec tmp_v2 = -1/(tmp_v.elem(ind));
+      V_inv.diag() = 1/((P - I)*tau); 
+      V_inv.diag(1) = tmp_v2;
+      
+      
+      
       // dot tau 
       // arma::mat tau_tmp = tau*tau.t(); 
-      // arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau); 
+      // arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau);  
       
-      // W = dot tau inv(V_tau) dot_tau
-      arma::mat W = pinv(dot_eta.t()*(E_syml - tau*tau.t())*dot_eta);
+      // W = dot psi inv(V_tau) dot_psi
+      // arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
+      arma::mat W = (dot_tau.t()*V_inv*dot_tau);
       
       mean_score_j += -wj(i)*tVij_I.t()*(dot_eta)*W*( y_datta.col(i) - tau)/n;  
     }
@@ -624,25 +635,44 @@ arma::mat mn_info_j(arma::vec c,
       
       // // var function on inverse psi
       arma::vec v_m(m); v_m.ones(); //vec of ones
-      arma::mat E; E = v_m*tau.t();
-      arma::mat E_syml = symmatu(E); // copies Upper tri to lower
+      // arma::mat E; E = v_m*tau.t();
+      // arma::mat E_syml = symmatu(E); // copies Upper tri to lower
       
       // dot eta
       arma::mat eta_tmp = v_m*(-1/((1 - tau)%tau) ).t(); 
       arma::mat dot_eta = trimatl(eta_tmp); 
       
+      
+      // creating Permutation and Differencing Matrices, P, Q
+      arma::mat I(m,m); I.eye();
+      arma::mat P(m,m); P.zeros(); 
+      P.cols(0,m-2) = I.cols(1,m-1); P.row(0) = I.row(m-1);
+      
+      arma::mat V_inv(m,m); V_inv.zeros(); 
+      arma::uvec ind = linspace<uvec>(0, m-2, m-1);
+      arma::vec tmp_v = ((I - P.t())*tau);
+      arma::vec tmp_v2 = -1/(tmp_v.elem(ind));
+      V_inv.diag() = 1/((P - I)*tau); 
+      V_inv.diag(1) = tmp_v2;
+      
+      
+      
       // dot tau 
       // arma::mat tau_tmp = tau*tau.t(); 
       // arma::mat dot_tau = pinv(dot_eta); //tau_tmp - diagmat(tau);  
       
-      // W = inv(dot psi V_tau dot_psi)
-      arma::mat W = pinv(dot_eta.t()*(E_syml - tau*tau.t())*dot_eta);      
+      // W = dot psi inv(V_tau) dot_psi
+      // arma::mat W = (dot_tau.t()*pinv(E_syml - tau*tau.t())*dot_tau);      
+      arma::mat W = (dot_tau.t()*V_inv*dot_tau);
       
-      arma::mat score_j = -tVij_I.t()*(dot_eta)*W*
-        ( y_datta.col(i) - tau);
       
-      mean_info_j += wj(i)*score_j*score_j.t()/n;
-      // mean_info_j += wj(i)*tVij_I.t()*W*tVij_I/n;
+      
+      
+      // arma::mat score_j = -tVij_I.t()*(dot_eta)*W*
+      //   ( y_datta.col(i) - tau);
+      
+      // mean_info_j += wj(i)*score_j*score_j.t()/n;
+      mean_info_j += wj(i)*tVij_I.t()*W*tVij_I/n;
       
       
     }
